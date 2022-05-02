@@ -30,7 +30,12 @@
     }
 }
 <li class="@liClass">
-    <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">@Model.Category.Name
+    @{
+        var url = Model.Category.SeName.Contains("/") ?
+            Url.RouteUrl("CategoryWithPath", new {Path = Model.Category.SeName.GetPathFromSeName(), SeName = Model.Category.SeName.GetSeNameWithoutPath()}) :
+            Url.RouteUrl("Category", new {Model.Category.SeName});
+    }
+    <a href="@url">@Model.Category.Name
         @if (Model.Category.NumberOfProducts.HasValue)
         {
             <text> </text>@T("Categories.TotalProducts", Model.Category.NumberOfProducts.Value)

@@ -20,7 +20,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="order">Order</param>
         /// <returns>Order details model</returns>
-        OrderDetailsModel PrepareOrderDetailsModel(Order order);
+        OrderDetailsModel PrepareOrderDetailsModel(Order order, ShopOrder shopOrder = null);
 
         /// <summary>
         /// Prepare the shipment details model

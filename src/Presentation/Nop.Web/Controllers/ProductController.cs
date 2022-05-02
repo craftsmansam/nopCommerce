@@ -22,6 +22,7 @@ using Nop.Services.Stores;
 using Nop.Web.Factories;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Models.Catalog;
@@ -319,7 +320,8 @@ namespace Nop.Web.Controllers
                 pageSize: _catalogSettings.NewProductsNumber);
             foreach (var product in products)
             {
-                var productUrl = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) }, _webHelper.CurrentRequestProtocol);
+                var seName = _urlRecordService.GetSeName(product);
+                var productUrl = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() }, _webHelper.CurrentRequestProtocol);
                 var productName = _localizationService.GetLocalized(product, x => x.Name);
                 var productDescription = _localizationService.GetLocalized(product, x => x.ShortDescription);
                 var item = new RssItem(productName, productDescription, new Uri(productUrl), $"urn:store:{_storeContext.CurrentStore.Id}:newProducts:product:{product.Id}", product.CreatedOnUtc);

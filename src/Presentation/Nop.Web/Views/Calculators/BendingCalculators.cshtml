@@ -1,0 +1,169 @@
+﻿@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("Bending Calculators").Text);
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/calculators.css");
+    Html.AppendMetaDescriptionParts("Need bending calculations? Visit our website today to get all the tools you need to calculate arc length and the radius of a bend.");
+}
+
+<h2>Bending Calculators </h2>
+
+<br />
+<div id="bendingcalculators">
+    <div class="row">
+        <div class="col-xs-11 col-md-4 equal-height-column">
+            <div class="calculator">
+                <h2>Calculate Arc</h2>
+                <div class="rads form-group">
+                    <label for="radius">Radius: </label>
+                    <input type="number" min="0" name="radius" id="radius" maxlength="10" class="form-control" placeholder="Radius(inches)" />
+                    <label for="degree">Degree: </label>
+                    <input type="number" min="0" name="degree" id="degree" maxlength="3" class="form-control" placeholder="Degree" />
+                    <br />
+                    <h3>Total Arc is:</h3>&nbsp;&nbsp;<span id="arcTotal" class="result">0.000</span><span> in.</span>
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="calculate" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-11 equal-height-column">
+            <div class="calculator">
+                <h2>Calculate Degree</h2>
+                <div class="rads form-group">
+                    <label for="degLength">Arc Length: </label>
+                    <input type="number" min="0" name="degLength" id="degLength" maxlength="10" class="form-control" placeholder="Arc Length" />
+                    <label for="degRadius">Radius: </label>
+                    <input type="number" min="0" name="degRadius" id="degRadius" maxlength="10" class="form-control" placeholder="Radius(inches)" />
+                    <br />
+                    <h3>Total Degree is:</h3>&nbsp;&nbsp;<span id="degTotal" class="result">0.000</span><span> deg.</span>
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="degCalculate" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-11 col-md-4 equal-height-column">
+            <div class="calculator">
+                <h2>Calculate MO / Rise</h2>
+                <div class="rads form-group">
+                    <label for="moRadius">Radius: </label>
+                    <input type="number" min="0" name="moRadius" id="moRadius" maxlength="10" class="form-control" placeholder="Radius(inches)" />
+                    <label for="moChord">Chord: </label>
+                    <input type="number" min="0" name="moChord" id="moChord" maxlength="10" class="form-control" placeholder="Chord" />
+                    <br />
+                    <h3>Total Mid-Ordinate (MO) / Rise is:</h3>
+                    <br />
+                    <span id="moTotal" class="result">0.000</span><span> in.</span>
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="moCalculate" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4 col-xs-11 equal-height-column">
+            <div class="calculator calculator-long">
+                <h2 class="h2-wide">Calculate Radius w. Chord &amp; Rise</h2>
+                <div class="rads form-group">
+                    <label for="chord">Chord:</label>
+                    <input type="number" min="0" name="chord" id="chord" maxlength="10" class="form-control" placeholder="Chord" />
+                    <label for="rise" class="left">Rise / Mid-Ordinate (MO):</label>
+                    <input type="number" min="0" name="rise" id="rise" maxlength="10" class="form-control" placeholder="Rise / MO" />
+                    <br />
+                    <h3>Total Radius is:</h3>&nbsp;&nbsp;<span id="radTotalOne" class="result">0.000</span><span> in.</span>
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="radCalculate" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+                <br />
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-11 equal-height-column">
+            <div class="calculator calculator-long">
+                <h2 class="h2-wide">Calculate Radius w. Arc &amp; Degree</h2>
+                <div class="rads form-group">
+                    <label for="arcLength">Arc Length:</label>
+                    <input type="number" min="0" name="arcLength" id="arcLength" maxlength="10" class="form-control" placeholder="Arc Length" />
+                    <label for="degreeBend" class="left">Degree of Bend:</label>
+                    <input type="number" min="0" name="degreeBend" id="degreeBend" maxlength="3" class="form-control" placeholder="Degree of Bend" />
+                    <br />
+                    <h3>Total Radius is:</h3>&nbsp;&nbsp;<span id="radTotal" class="result">0.000</span><span> in.</span>
+                    <br />
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="radCalculateB" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-11 equal-height-column">
+            <div class="calculator calculator-long">
+                <h2 class="h2-wide">Calculate Ovality</h2>
+                <div class="rads form-group">
+                    <label for="ovalityMinOD">Min OD:</label>
+                    <input type="number" min="0" name="ovalityMinOD" id="ovalityMinOD" maxlength="10" class="form-control" placeholder="Min OD" />
+                    <label for="ovalityMaxOD" class="left">Max OD:</label>
+                    <input type="number" min="0" name="ovalityMaxOD" id="ovalityMaxOD" maxlength="10" class="form-control" placeholder="Max OD" />
+                    <label for="ovalityNominalOD" class="left">Nominal OD:</label>
+                    <input type="number" min="0" name="ovalityNominalOD" id="ovalityNominalOD" maxlength="10" class="form-control" placeholder="Nominal OD" />
+                    <br />
+                    <h3>Ovality % is:</h3>&nbsp;&nbsp;<span id="ovalityTotal" class="result">0.000</span><span>%.</span>
+                    <br />
+                </div>
+                <br />
+                <div class="rads">
+                    <input type="button" class="btn btn-warning calc-button" value="Calculate" id="ovalityCalculate" />
+                    &nbsp;
+                    <input type="button" class="btn btn-danger calc-button clear" value="Clear" /><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-8 col-xs-11">
+            <div class="">
+                <ul>
+                    <li>
+                        All dimensions are entered in inches and all outputs will be in inches.
+                    </li>
+                    <li>
+                        All dimensions are to be rounded to .xxx
+                    </li>
+                    <li>
+                        Enter consistent dimensions(i.e. if you enter an inside dimension for one input, enter an inside dimension for your other inputs. Do not mix inside, outside, and centerline dimensions).
+                    </li>
+                </ul>
+                <p>**Albina takes no responsibility for the calculated results.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-xs-11">
+            <img style="margin: 12px;" class="lazyload" data-src="/images/calculatorpic_a.png" alt="Bending calculator diagram" title="Bending calculator diagram" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-xs-11">
+            <p>The developed elevation view shows the component in a flattened or unwrapped view. The degree of arc in plan relates directly to the overall run in developed elevation.</p>
+        </div>
+    </div>
+</div>

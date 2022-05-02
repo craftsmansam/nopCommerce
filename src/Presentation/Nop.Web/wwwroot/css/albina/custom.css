@@ -1,0 +1,260 @@
+/* Add here all your css styles (customizations) */
+.link {
+	/*font-size: 1.5em;*/
+	font-size: 13px !IMPORTANT;
+	color: #bb5530 !IMPORTANT;
+	display: inline !IMPORTANT;
+	margin-bottom: 0 !IMPORTANT;
+	line-height: 0 !IMPORTANT;
+}
+
+table td {
+    padding: 10px;
+    vertical-align: top;
+}
+
+.slider-inner {
+	margin: 0 auto;
+	width: 100%;
+}
+
+.vertical-alignment-helper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	pointer-events: none; /* This makes sure that we can still click outside of the modal to close it */
+}
+
+.vertical-align-center {
+	/* To center vertically */
+	display: table-cell;
+	vertical-align: middle;
+	pointer-events: none;
+}
+
+@media (max-width: 800px) {
+	.da-text { display: none; }
+}
+
+.image-link-grid-table {
+	font-size: 15px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.image-link-grid-table img {
+	height: 200px;
+	width: 270px;
+}
+
+.image-link-grid-link {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.outer-capchart {
+	width: 100%;
+	text-align: center;
+}
+
+.fathorizontalrule {
+	background-color: #126c95;
+	border: 0;
+	height: 4px;
+}
+
+#videoblock { margin-top: 25px; }
+
+
+.da-bg {
+	min-width: 100%;
+	position: relative;
+}
+.image-calc-button img {
+    width: 100%;
+}
+.image-calc-button {
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+}
+
+.image-request-quote img{
+    max-width: 350px;
+    width: 75%;
+}
+@media (min-width: 1920px) {
+	.image-calc-button img {
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 767px) {
+    .image-calc-button img {
+        max-width: 180px;
+    }
+}
+
+@media (min-width: 1001px) {
+	.manind img, .arch-struc img {
+		width: 24%;
+		max-width: 252px;
+	}
+}
+
+@media (min-width: 760px) and (max-width: 1000px) {
+	.arch-struc img, .manind img { width: 33%; }
+}
+
+@media (max-width: 600px) {
+	.shift-image-left {
+		right: 85%;
+	}
+
+	.shift-image-slightly-left {
+		right: 75%;
+	}
+}
+
+.archive-list li {
+	list-style: none;
+}
+
+.nav-link {
+	line-height: normal;
+}
+.nav-link a {
+	font-size: 15px !important;
+	line-height: normal !important;
+}
+
+.nav-link a span {
+	display: inherit !important;
+	font-size: 15px !important;
+	line-height: normal !important;
+}
+
+span.leave-reply {
+	display: inherit !important;
+	font-size: 15px !important;
+}
+
+.post-navigation a {
+	float: inherit !important;
+}
+
+.breadcrumb {
+	color: #444440;
+	margin-bottom: 0;
+}
+
+.breadcrumb a {
+	color: #444440;
+}
+
+div .gsc-control-cse {
+	padding: 0 !important;
+}
+
+.gsc-control-cse .gsc-table-result {
+	font-family : inherit;
+}
+
+.gsc-control-cse .gsc-input-box {
+	height : inherit;
+}
+
+input.gsc-input,
+.gsc-input-box,
+.gsc-input-box-hover,
+.gsc-input-box-focus,
+.gsc-search-button, input.gsc-search-button-v2 {
+	box-sizing  : content-box;
+	line-height : normal;
+	margin-top  : 0;
+	width: 200px;
+}
+
+table.gsc-search-box {
+	width: 270px !important;
+}
+
+/*Get rid of modal-backdrop covering the main page...*/
+.modal-backdrop.in {
+    z-index: 0;
+    background-color: transparent;
+}
+@media screen and (max-width: 1000px) {
+    table tr {
+        border-bottom: 1px solid #000;
+    }
+
+	.colrow, .materialcolumn {
+		width: 100% !important;
+		margin-bottom: 0 !Important;
+	}
+
+	.colrow {
+		font-style: italic;
+	}
+
+	table tr {
+		max-width: 100%;
+	}
+
+	table td {
+		text-align: center;
+	}
+
+	table td {
+		border: 0;
+		font-weight: bold;
+	}
+
+	table,
+	tbody {
+		display: block;
+	}
+
+	thead {
+		display: none;
+	}
+
+	table tr,
+	table th,
+	table td {
+		display: block;
+		padding: 0;
+		text-align: center;
+		white-space: normal;
+	}
+
+    table th[data-title]:before,
+	table td[data-title]:before {
+		content: attr(data-title) ":\00A0" !IMPORTANT;
+		font-weight: bold;
+		color: #000;
+		font-style: normal;
+	}
+
+	table td {
+		border: none;
+		color: #444;
+		margin-bottom: 6px;
+		border-top: 0 !important;
+		border-bottom: 0;
+	}
+
+		table td:empty {
+			display: none;
+		}
+}
+
+img {
+    height: auto;
+}
+
+input[type="file"] {
+    border-radius: 0;
+    font: normal 15px 'Fjalla One', sans-serif;
+}

@@ -1,0 +1,196 @@
+.capchartheader {
+	/*font-size: 52px !Important;*/
+	color: #fff !important;
+	/*padding-top: 15px;*/
+}
+
+.outer-capchart a.printer-friendly {
+    display: block;
+    text-align: left;
+    font-size: 1.1em;
+    padding: 20px 10px 10px 10px;
+    text-decoration: underline;
+}
+
+.outer-capchart a.printer-friendly img {
+  margin-right: 8px;
+}
+
+.capsprite-capacitieschartheader {
+	background-image: url(/images/capacitieschartheader.png);
+	background-repeat: repeat;
+	display: block;
+	height: 118px;
+	width: 100%;
+}
+
+.sectioncolumn {
+	border-right-color: #fadbc9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	font-size: 14px;
+	font-weight: bold;
+	width: 12%;
+}
+
+.striped tr:nth-child(even) { background-color: #fcebdb; }
+
+.striped {
+	margin-left: 0 !IMPORTANT;
+	width: 100%;
+}
+
+.threedcolumn {
+	border-right-color: #fadbc9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	width: 16%;
+}
+
+.twodcolumn {
+	border-right-color: #fadbc9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	width: 27%;
+}
+
+.photocolumn {
+	border-right-color: #fadbc9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	width: 20%;
+}
+
+.capacitiescolumn {
+	font-size: 14px;
+	width: 25%;
+}
+
+#capacitieschart table {
+	margin-right: 15px;
+	border-collapse: collapse;
+	margin-left: 15px;
+}
+
+#capacitieschart td {
+	padding-top: 5px;
+	text-align: center;
+}
+
+#capacitieschartheader { height: 118px; }
+
+#capacitieschartheader h1 {
+	color: #ffffff;
+	font-size: 52px;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.columnheader {
+	color: #FFFFFF;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#capacitieschart, #capacitieschartheader {
+	margin: 0 auto;
+	width: 100%;
+}
+
+.twodcolumn img {
+	width: 85%;
+	height: auto;
+}
+
+.threedcolumn img {
+	width: 55%;
+	height: auto;
+}
+
+@media screen and (max-width: 800px) {
+	.striped { margin-left: 0 !IMPORTANT; }
+
+	#capacitieschart, #capacitieschartheader { max-width: 95%; }
+
+	table tr { max-width: 100%; }
+
+	.sectioncolumn, .threedcolumn, .twodcolumn, .photocolumn, .capacitiescolumn { width: 100%; }
+
+	.capacitiescolumn {
+		border-right-color: #fadbc9;
+		border-right-style: solid;
+		border-right-width: 1px;
+		font-size: 15px;
+	}
+
+	.threedcolumn {
+		border-left-color: #fadbc9;
+		border-left-style: solid;
+		border-left-width: 1px;
+	}
+
+	.twodcolumn {
+		border-left-color: #fadbc9;
+		border-left-style: solid;
+		border-left-width: 1px;
+	}
+
+	.photocolumn {
+		border-left-color: #fadbc9;
+		border-left-style: solid;
+		border-left-width: 1px;
+	}
+
+	.capacitiescolumn {
+		border-left-color: #fadbc9;
+		border-left-style: solid;
+		border-left-width: 1px;
+	}
+
+
+
+	table, tbody {
+		display: block;
+		width: 100%;
+	}
+
+	thead { display: none; }
+
+	table tr, table th, table td {
+		display: block;
+		padding: 0;
+		text-align: left;
+		white-space: normal;
+	}
+
+	table td[data-title]:before {
+		content: attr(data-title) ":\00A0";
+		font-weight: bold;
+	}
+
+	table td {
+		border: none;
+		color: #444;
+		margin-bottom: 6px;
+		text-align: left;
+	}
+
+	table td:first-child {
+		color: #333;
+		font-size: 15px;
+		font-weight: bold;
+		margin-bottom: 6px;
+	}
+
+	table td:first-child:before { content: ''; }
+
+	.twodcolumn img { width: 50%; }
+
+	.threedcolumn img { width: 25%; }
+}
+
+@media screen and (max-width: 425px) {
+	h1 { font-size: 3em!Important; }
+}
+

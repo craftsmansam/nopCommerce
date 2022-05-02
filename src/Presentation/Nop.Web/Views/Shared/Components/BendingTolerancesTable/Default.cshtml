@@ -1,0 +1,53 @@
+﻿@model BendingTolerancesTableModel
+@{
+}
+
+<p class="titlerow">
+    <strong>Tolerances for @Model.HotOrCold Spiral Bending</strong><br />
+    <i>@Model.TableDescription</i>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr class="headerrow">
+            <th>True Arc Length</th>
+            <th>Plumb to Radius Line</th>
+            <th>Torpedo Level Vertical Face</th>
+            <th>Pitch in Degrees</th>
+            <th>Height at Midpoint</th>
+            <th>Height at Top</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Nop.Core.Domain.Calculators.BendingTolerancesRow row in Model.BTRows)
+        {
+        <tr>
+            <td class="colheader" data-title="True Arc Length">@row.ArcLength</td>
+            <td data-title="Plumb to Radius Line">@row.PlumbToRadiusLine</td>
+            <td data-title="Torpedo Level Vertical Face">@row.VerticalFace</td>
+            <td data-title="Pitch in Degrees">@row.PitchinDegrees</td>
+            <td data-title="Height at Midpoint">@row.HeightAtMidpoint</td>
+            <td data-title="Height at Top">@row.HeightAtTop</td>
+        </tr>
+        }
+        <tr>
+            <td colspan="6" class="btfooter">
+                *To properly QC, all stringers are stood up at full scale pitch.<br />
+                @if (Model.ShowFooter)
+                {<br />
+                <b>Notes:</b>
+                <ol>
+                    <li style="line-height: 3;">Plumb to Radius line tolerance is Not Applicable. Instead, Albina will apply our standard shop cord and rise tolerances (available upon request).</li>
+                    <li style="line-height: 3;">
+                        The level to vertical face is a cumulative tolerance. You cannot be more than half the allowed tolerance out at any one point.
+                        <br />
+                        For example: If your tolerance is 1<sup>1</sup>/<sub>2</sub>&deg; for the vertical face, you can be <sup>3</sup>/<sub>4</sub>&deg; out at the bottom, 0&deg; out at midpoint, and <sup>3</sup>/<sub>4</sub>&deg; out at the top. This would be 1<sup>1</sup>/<sub>2</sub>&deg; out total.
+                        You would not be allowed to be more than <sup>3</sup>/<sub>4</sub>&deg; out at any given point since that would be more than half your tolerance in one spot.
+                    </li>
+                </ol>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+

@@ -2,35 +2,36 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Security.Principal;
+using Craftsman.Mail;
+using Microsoft.AspNetCore.Http;
 using MimeKit;
-using MimeKit.Text;
+using Nop.Core.Configuration;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Infrastructure;
-using Nop.Services.Media;
 
 namespace Nop.Services.Messages
 {
     /// <summary>
     /// Email sender
     /// </summary>
-    public partial class EmailSender : IEmailSender
+    public class EmailSender : IEmailSender
     {
         #region Fields
 
-        private readonly IDownloadService _downloadService;
         private readonly INopFileProvider _fileProvider;
-        private readonly ISmtpBuilder _smtpBuilder;
+        private readonly AlbinaConfig _albinaConfig;
 
         #endregion
 
         #region Ctor
 
-        public EmailSender(IDownloadService downloadService, INopFileProvider fileProvider, ISmtpBuilder smtpBuilder)
+        public EmailSender(INopFileProvider fileProvider, AlbinaConfig albinaConfig)
         {
-            _downloadService = downloadService;
             _fileProvider = fileProvider;
-            _smtpBuilder = smtpBuilder;
+            _albinaConfig = albinaConfig;
         }
 
         #endregion
@@ -91,7 +92,7 @@ namespace Nop.Services.Messages
             return new MimePart(mimeContentType)
             {
                 FileName = attachmentFileName,
-                Content = new MimeContent(new MemoryStream(binaryContent), ContentEncoding.Default),
+                Content = new MimeContent(new MemoryStream(binaryContent)),
                 ContentDisposition = new ContentDisposition
                 {
                     CreationDate = cDate,
@@ -130,14 +131,17 @@ namespace Nop.Services.Messages
             string attachmentFilePath = null, string attachmentFileName = null,
             int attachedDownloadId = 0, IDictionary<string, string> headers = null)
         {
-            var message = new MimeMessage();
+            var mm = new CraftsmanMailMessage(_albinaConfig.EmailTest)
+            {
+                From = new MailAddress(fromAddress, fromName)
+            };
 
-            message.From.Add(new MailboxAddress(fromName, fromAddress));
-            message.To.Add(new MailboxAddress(toName, toAddress));
+            mm.To.Add(new MailAddress(toAddress, toName));
 
+            //CC
             if (!string.IsNullOrEmpty(replyTo))
             {
-                message.ReplyTo.Add(new MailboxAddress(replyToName, replyTo));
+                mm.ReplyToList.Add(new MailAddress(replyTo, replyToName));
             }
 
             //BCC
@@ -145,7 +149,7 @@ namespace Nop.Services.Messages
             {
                 foreach (var address in bcc.Where(bccValue => !string.IsNullOrWhiteSpace(bccValue)))
                 {
-                    message.Bcc.Add(new MailboxAddress(address.Trim()));
+                    mm.Bcc.Add(new MailAddress(address.Trim()));
                 }
             }
 
@@ -154,48 +158,78 @@ namespace Nop.Services.Messages
             {
                 foreach (var address in cc.Where(ccValue => !string.IsNullOrWhiteSpace(ccValue)))
                 {
-                    message.Cc.Add(new MailboxAddress(address.Trim()));
+                    mm.CC.Add(new MailAddress(address.Trim()));
                 }
             }
 
             //content
-            message.Subject = subject;
+            mm.Subject = subject;
 
             //headers
             if (headers != null)
                 foreach (var header in headers)
                 {
-                    message.Headers.Add(header.Key, header.Value);
+                    mm.Headers.Add(header.Key, header.Value);
                 }
 
-            var multipart = new Multipart("mixed")
-            {
-                new TextPart(TextFormat.Html) { Text = body }
-            };
+            mm.Body = body;
+            mm.IsBodyHtml = true; //data stored in the db looks like it's all stored as html
 
-            //create the file attachment for this e-mail message
-            if (!string.IsNullOrEmpty(attachmentFilePath) && _fileProvider.FileExists(attachmentFilePath))
+            var fileStreams = new List<FileStream>();
+            var attachmentFilePaths = new List<string>();
+            if (!string.IsNullOrEmpty(attachmentFilePath))
             {
-                multipart.Add(CreateMimeAttachment(attachmentFilePath, attachmentFileName));
-            }
-
-            //another attachment?
-            if (attachedDownloadId > 0)
-            {
-                var download = _downloadService.GetDownloadById(attachedDownloadId);
-                //we do not support URLs as attachments
-                if (!download?.UseDownloadUrl ?? false)
+                attachmentFilePaths = attachmentFilePath.Split(',').ToList();
+                foreach (var filePath in attachmentFilePaths)
                 {
-                    multipart.Add(CreateMimeAttachment(download));
+                    if (File.Exists(filePath))
+                    {
+                        var rdr = new FileStream(filePath, FileMode.Open);
+                        fileStreams.Add(rdr);
+
+                        mm.Attachments.Add(new Attachment(rdr, Path.GetFileName(filePath)));
+                    }
                 }
             }
-
-            message.Body = multipart;
-
             //send email
-            using var smtpClient = _smtpBuilder.Build(emailAccount);
-            smtpClient.Send(message);
-            smtpClient.Disconnect(true);
+            
+            mm.Send(emailAccount.Host);
+            
+            DisposeStuff(fileStreams, mm, attachmentFilePaths);
+        }
+
+        public virtual void SendErrorEmail(Exception exception, EmailAccount emailAccount, HttpRequest contextRequest, IIdentity userIdentity)
+        {
+            var username = userIdentity?.IsAuthenticated ?? false ? userIdentity.Name : "anonymous";
+            var body = $"Albina Public Website\n\nFull Error (including inner exception & stack trace):\n{exception}\r\n\r\nURL Path: {contextRequest?.Path}\r\nURL Parameters: {contextRequest?.QueryString}\r\nUser: {username}";
+            var mm = new CraftsmanMailMessage(_albinaConfig.EmailTest)
+            {
+                From = new MailAddress(_albinaConfig.ErrorFromAddress)
+            };
+            mm.To.Add(_albinaConfig.ErrorToAddress);
+            mm.Subject = _albinaConfig.ErrorSubject;
+            mm.Body = body;
+
+            mm.Send(emailAccount.Host);
+        }
+
+        
+        private static void DisposeStuff(List<FileStream> fileStreams, MailMessage mm, List<string> filesToDelete)
+        {
+            foreach (var stream in fileStreams)
+            {
+                stream.Close();
+                stream.Dispose();
+            }
+            foreach (var attachment in mm.Attachments)
+            {
+                attachment.Dispose();
+            }
+            foreach (var file in filesToDelete)
+            {
+                File.Delete(file);
+            }
+            mm.Dispose();
         }
 
         #endregion

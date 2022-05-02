@@ -464,6 +464,19 @@ namespace Nop.Services.Messages
         int SendTestEmail(int messageTemplateId, string sendToEmail, List<Token> tokens, int languageId);
 
         /// <summary>
+        /// Sends an email for the rfq page
+        /// </summary>
+        /// <param name="languageId">Message language identifier</param>
+        /// <param name="senderEmail">Sender email</param>
+        /// <param name="senderName">Sender name</param>
+        /// <param name="subject">Email subject. Pass null if you want a message template subject to be used.</param>
+        /// <param name="body">Email body</param>
+        /// <param name="attachmentFilePath"></param>
+        /// <param name="attachmentFileName"></param>
+        /// <returns>Queued email identifier</returns>
+        IList<int> SendQuoteEmail(int languageId, string senderEmail, string senderName, string subject, string body, List<string> attachmentFiles = null);
+
+        /// <summary>
         /// Send notification
         /// </summary>
         /// <param name="messageTemplate">Message template</param>

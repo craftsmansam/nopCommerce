@@ -33,7 +33,7 @@ namespace Nop.Web.Infrastructure
                     pattern = "{language:lang=" + languages.FirstOrDefault().UniqueSeoCode + "}/{SeName}";
                 }
             }
-            endpointRouteBuilder.MapDynamicControllerRoute<SlugRouteTransformer>(pattern);
+            endpointRouteBuilder.MapDynamicControllerRoute<SlugRouteTransformer>("{**SeName}");
 
             //and default one
             endpointRouteBuilder.MapControllerRoute(
@@ -50,7 +50,13 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("Product", pattern, 
                 new { controller = "Product", action = "ProductDetails" });
 
+            endpointRouteBuilder.MapControllerRoute("ProductWithPath", "{Path}/" + pattern, 
+                new { controller = "Product", action = "ProductDetails" });
+
             endpointRouteBuilder.MapControllerRoute("Category", pattern, 
+                new { controller = "Catalog", action = "Category" });
+
+            endpointRouteBuilder.MapControllerRoute("CategoryWithPath", "{Path}/" + pattern, 
                 new { controller = "Catalog", action = "Category" });
 
             endpointRouteBuilder.MapControllerRoute("Manufacturer", pattern, 
@@ -65,7 +71,13 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("BlogPost", pattern, 
                 new { controller = "Blog", action = "BlogPost" });
 
+            endpointRouteBuilder.MapControllerRoute("BlogPostWithPath", "{Path}/" + pattern, 
+                new { controller = "Blog", action = "BlogPost" });
+
             endpointRouteBuilder.MapControllerRoute("Topic", pattern, 
+                new { controller = "Topic", action = "TopicDetails" });
+
+            endpointRouteBuilder.MapControllerRoute("TopicWithPath", "{Path}/" + pattern, 
                 new { controller = "Topic", action = "TopicDetails" });
 
             //product tags

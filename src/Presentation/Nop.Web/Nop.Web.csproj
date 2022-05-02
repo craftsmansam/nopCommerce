@@ -19,6 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Albina\Source\Albina.StandardBase\Albina.StandardBase.csproj" />
+    <ProjectReference Include="..\..\Albina.CoreBase\Albina.CoreBase.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Core\Nop.Core.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
@@ -29,21 +31,78 @@
     <!-- We copy the entire \App_Data directory. But we ignore JSON files and data protection keys  -->
     <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Remove="App_Data\*.json" />
+    <Content Remove="Plugins\bin\**" />
+    <Content Remove="wwwroot\bundles\**" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
 
     <Compile Remove="Plugins\**;Themes\**" />
+
+    <Compile Remove="Plugins\bin\**" />
+
+    <Compile Remove="wwwroot\bundles\**" />
     <Content Remove="Plugins\**;Themes\**" />
     <EmbeddedResource Remove="Plugins\**;Themes\**" />
+    <EmbeddedResource Remove="Plugins\bin\**" />
+    <EmbeddedResource Remove="wwwroot\bundles\**" />
     <None Remove="Plugins\**;Themes\**" />
-
-    <Content Include="Plugins\bin\placeholder.txt" CopyToPublishDirectory="PreserveNewest"/>
-    <None Include="Plugins\**"  CopyToPublishDirectory="PreserveNewest" />
+    <None Remove="Plugins\bin\**" />
+    <None Remove="wwwroot\bundles\**" />
+    <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" />
 
     <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" Exclude="Themes\**\*.config;Themes\**\*.cshtml;Themes\**\*.json" />
-    <None Include="Themes\**"  CopyToPublishDirectory="PreserveNewest" />
+    <None Include="Themes\**" CopyToPublishDirectory="PreserveNewest" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
+    <Content Remove="Themes\Albina\Content\css\albina.css" />
+    <Content Remove="Themes\Albina\Content\css\calculators.css" />
+    <Content Remove="Themes\Albina\Content\images\calculatorpic_a.png" />
+    <Content Remove="Themes\Albina\Content\images\calculatorpic_b.png" />
+    <Content Remove="Themes\Albina\Content\scripts\albina.js" />
+    <Content Remove="Themes\Albina\Content\scripts\lazysizes.js" />
+    <Content Remove="wwwroot\css\albina\bendingtolerances.css" />
+    <None Remove="Plugins\bin\dotless.Core.dll" />
+    <None Remove="Plugins\bin\J2N.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.Analysis.Common.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.Highlighter.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.Memory.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.Queries.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.QueryParser.dll" />
+    <None Remove="Plugins\bin\Lucene.Net.Sandbox.dll" />
+    <None Remove="Plugins\bin\Nop.Plugin.DiscountRules.CustomerRoles.dll" />
+    <None Remove="Plugins\bin\Nop.Plugin.Payments.Manual.dll" />
+    <None Remove="Plugins\bin\Nop.Plugin.Pickup.PickupInStore.dll" />
+    <None Remove="Plugins\bin\Nop.Plugin.Widgets.GoogleAnalytics.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Conditions.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Core.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.EntitySettings.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Framework.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Mappings.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxCart.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxFilters.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxFilters.Pro.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AnywhereSliders.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.CloudZoom.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.Core.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.FacebookShop.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.InstantSearch.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.JCarousel.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.MegaMenu.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.NopQuickTabs.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.ProductRibbons.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.QuickView.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.RichBlog.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.SaleOfTheDay.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.SmartProductCollections.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Scheduling.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Nop.Services.dll" />
+    <None Remove="Plugins\bin\SevenSpikes.Theme.Venture.dll" />
+    <None Remove="Themes\Venture\Views\Quote\QuoteDetails.cshtml" />
+    <Content Include="Themes\Venture\Views\Quote\QuoteDetails.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -61,6 +120,23 @@
 
   <ItemGroup>
     <Folder Include="Plugins\" />
+    <Folder Include="Themes\Albina\Content\images\" />
+    <Folder Include="wwwroot\app\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\albina\bendingtolerances.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Include="wwwroot\images\calculatorbg.png" />
+    <None Include="wwwroot\images\calculatorpic_a.png" />
+    <None Include="wwwroot\images\calculatorpic_b.png" />
+    <None Include="wwwroot\images\toolboxbg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.
@@ -117,6 +193,7 @@
       
       More details here: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#concurrent-garbage-collection-->
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <UserSecretsId>75483039-8a29-4989-ac9e-df3ca3d5c0f5</UserSecretsId>
   </PropertyGroup>
 
 </Project>

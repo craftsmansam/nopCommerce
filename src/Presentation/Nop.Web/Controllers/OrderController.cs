@@ -8,6 +8,7 @@ using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Common;
+using Nop.Services.Configuration;
 using Nop.Services.Customers;
 using Nop.Services.Orders;
 using Nop.Services.Payments;
@@ -18,20 +19,23 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Controllers
 {
-    public partial class OrderController : BasePublicController
+    public partial class OrderController : BaseWebAttachmentPublicController
     {
         #region Fields
 
         private readonly ICustomerService _customerService;
         private readonly IOrderModelFactory _orderModelFactory;
+        private readonly IShopOrderModelFactory _shopOrderModelFactory;
         private readonly IOrderProcessingService _orderProcessingService;
         private readonly IOrderService _orderService;
+        private readonly IShopOrderService _shopOrderService;
         private readonly IPaymentService _paymentService;
         private readonly IPdfService _pdfService;
         private readonly IShipmentService _shipmentService;
         private readonly IWebHelper _webHelper;
         private readonly IWorkContext _workContext;
         private readonly RewardPointsSettings _rewardPointsSettings;
+        private readonly ISettingService _settingService;
 
         #endregion
 
@@ -39,25 +43,31 @@ namespace Nop.Web.Controllers
 
         public OrderController(ICustomerService customerService,
             IOrderModelFactory orderModelFactory,
+            IShopOrderModelFactory shopOrderModelFactory,
             IOrderProcessingService orderProcessingService, 
             IOrderService orderService, 
+            IShopOrderService shopOrderService, 
             IPaymentService paymentService, 
             IPdfService pdfService,
             IShipmentService shipmentService, 
             IWebHelper webHelper,
             IWorkContext workContext,
-            RewardPointsSettings rewardPointsSettings)
+            RewardPointsSettings rewardPointsSettings,
+            ISettingService settingService)
         {
             _customerService = customerService;
             _orderModelFactory = orderModelFactory;
+            _shopOrderModelFactory = shopOrderModelFactory;
             _orderProcessingService = orderProcessingService;
             _orderService = orderService;
+            _shopOrderService = shopOrderService;
             _paymentService = paymentService;
             _pdfService = pdfService;
             _shipmentService = shipmentService;
             _webHelper = webHelper;
             _workContext = workContext;
             _rewardPointsSettings = rewardPointsSettings;
+            _settingService = settingService;
         }
 
         #endregion
@@ -162,8 +172,44 @@ namespace Nop.Web.Controllers
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
                 return Challenge();
 
-            var model = _orderModelFactory.PrepareOrderDetailsModel(order);
+            ShopOrder shopOrder = null;
+            if (int.TryParse(order.CustomOrderNumber, out var shopOrderNumber) && shopOrderNumber > 10000)
+            {
+                shopOrder = _shopOrderService.GetShopOrderByShopOrderNumber(shopOrderNumber);
+            }
+
+            var model = _orderModelFactory.PrepareOrderDetailsModel(order, shopOrder);
             return View(model);
+        }
+
+        //My account / Shop Order details page
+        [HttpsRequirement]
+        public virtual IActionResult ShopOrderDetails(int shopOrderNumber)
+        {
+            var shopOrder = _shopOrderService.GetShopOrderByShopOrderNumber(shopOrderNumber);
+            if (shopOrder == null || _workContext.CurrentCustomer.JCCustomerID != shopOrder.CustomerID)
+                return Challenge();
+
+            var model = _shopOrderModelFactory.PrepareShopOrderDetailsModel(shopOrder);
+            return View(model);
+        }
+
+        [HttpsRequirement]
+        public virtual IActionResult ShopOrderConfirmation(int shopOrderId)
+        {
+            if (!_shopOrderService.TestShopOrderPermissions(shopOrderId, _workContext.CurrentCustomer.JCCustomerID, out var shopOrder))
+                return AccessDeniedView();
+
+            return ServeWebAttachment(_settingService, shopOrder.ShopOrderConfirmationFilename);
+        }
+
+        [HttpsRequirement]
+        public virtual IActionResult ShopOrderMtrDocument(int shopOrderMtrId)
+        {
+            if (!_shopOrderService.TestMTRPermissions(shopOrderMtrId, _workContext.CurrentCustomer.JCCustomerID, out var mtr, out var shopOrder))
+                return AccessDeniedView();
+
+            return ServeWebAttachment(_settingService, mtr.FilenameOnDisk);
         }
 
         //My account / Order details page / Print

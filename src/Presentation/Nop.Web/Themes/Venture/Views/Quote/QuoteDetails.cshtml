@@ -1,0 +1,90 @@
+@model QuoteDetailsModel
+@{
+    Layout = !Model.PrintMode ? "_ColumnsOne" : "_Print";
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderDetails").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-order-details-page");
+}
+@if (Model.PrintMode)
+{
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            window.print();
+        });
+    </script>
+}
+<div class="page order-details-page">
+    <div class="page-body">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageTop, additionalData = Model })
+        <div class="order-overview">
+            <div class="order-number">
+                <strong>Quote#: @Model.QuoteNumber</strong>
+            </div>
+            <ul class="order-overview-content">
+                <li class="order-date">
+                    Quote Date: @Model.QuoteDate.ToString("D")
+                </li>
+                <li class="order-status">
+                    Project Name: @Model.ProjectName
+                </li>
+                <li class="order-total">
+                    Customer Contact: @Model.CustomerContact
+                </li>
+            </ul>
+            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageOverview, additionalData = Model })
+        </div>
+        <div class="order-details-area">
+            <div class="section shipments">
+                <div class="title">
+                    <strong>Documents</strong>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <colgroup>
+                            <col />
+                            <col />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="name">
+                                    Document Name
+                                </th>
+                                <th class="price">
+                                    Document Link
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!string.IsNullOrWhiteSpace(Model.QuoteReportFilename))
+                            {
+                                <tr>
+                                    <td class="product">Quote Report</td>
+                                    <td class="unit-price"><a target="_blank" href="@Url.RouteUrl("QuoteReport", new { quoteId = Model.Id})">Open Document</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="section billing">
+                <div class="title">
+                    <strong></strong>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <colgroup>
+                            <col />
+                            <col />
+                        </colgroup>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageBottom, additionalData = Model })
+    </div>
+</div>

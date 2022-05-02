@@ -21,7 +21,7 @@ namespace Nop.Core
     /// <summary>
     /// Represents a web helper
     /// </summary>
-    public partial class WebHelper : IWebHelper
+    public class WebHelper : IWebHelper
     {
         #region Fields 
 
@@ -277,7 +277,7 @@ namespace Nop.Core
             //a little workaround. FileExtensionContentTypeProvider contains most of static file extensions. So we can use it
             //source: https://github.com/aspnet/StaticFiles/blob/dev/src/Microsoft.AspNetCore.StaticFiles/FileExtensionContentTypeProvider.cs
             //if it can return content type, then it's a static file
-            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            var contentTypeProvider = new AlbinaFileExtensionContentTypeProvider();
             return contentTypeProvider.TryGetContentType(path, out var _);
         }
 
@@ -491,5 +491,16 @@ namespace Nop.Core
         }
 
         #endregion
+    }
+
+    public class AlbinaFileExtensionContentTypeProvider : FileExtensionContentTypeProvider
+    {
+        public AlbinaFileExtensionContentTypeProvider()
+        {
+            Mappings.Add(".plist", "text/plain");
+            Mappings.Add(".organization", "text/plain");
+            Mappings.Add(".mobileconfig", "application/octet-stream");
+            Mappings.Add(".ipa", "application/octet-stream");
+        }
     }
 }

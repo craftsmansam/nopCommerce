@@ -194,9 +194,16 @@ namespace Nop.Web.Factories
             }
             else
             {
-                blogPosts = _blogService.GetAllBlogPostsByTag(_storeContext.CurrentStore.Id,
-                    _workContext.WorkingLanguage.Id,
-                    command.Tag, command.PageNumber - 1, command.PageSize);
+                blogPosts = _blogService.GetAllBlogPostsByTag(_storeContext.CurrentStore.Id,  _workContext.WorkingLanguage.Id, command.Tag, command.PageNumber - 1, command.PageSize);
+                if (command.Tag.Contains("-"))
+                {
+                    var tag = command.Tag.Replace("-", " ");
+                    var dashPosts = _blogService.GetAllBlogPostsByTag(_storeContext.CurrentStore.Id, _workContext.WorkingLanguage.Id, tag, command.PageNumber - 1, command.PageSize);
+                    foreach (var item in dashPosts.Where(x => !blogPosts.Contains(x)))
+                    {
+                        blogPosts.Add(item);
+                    }
+                }
             }
             model.PagingFilteringContext.LoadPagedList(blogPosts);
 

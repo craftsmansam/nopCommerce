@@ -76,8 +76,11 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("CustomerOrders", $"{pattern}order/history",
                 new { controller = "Order", action = "CustomerOrders" });
 
+            endpointRouteBuilder.MapControllerRoute("CustomerQuotes", $"{pattern}quote/history",
+                new { controller = "Quote", action = "CustomerQuotes" });
+
             //contact us
-            endpointRouteBuilder.MapControllerRoute("ContactUs", $"{pattern}contactus",
+            endpointRouteBuilder.MapControllerRoute("ContactUs", $"{pattern}about/contact",
                 new { controller = "Common", action = "ContactUs" });
 
             //sitemap
@@ -328,10 +331,30 @@ namespace Nop.Web.Infrastructure
                 pattern + "profile/{id:min(0)}/page/{pageNumber:min(0)}",
                 new { controller = "Profile", action = "Index" });
 
+            endpointRouteBuilder.MapControllerRoute("QuoteDetails",
+                pattern + "quotedetails/{quoteId:min(0)}",
+                new { controller = "Quote", action = "QuoteDetails" });
+
+            endpointRouteBuilder.MapControllerRoute("QuoteReport",
+                pattern + "quotereport/{quoteId:min(0)}",
+                new { controller = "Quote", action = "QuoteReport" });
+
             //orders
             endpointRouteBuilder.MapControllerRoute("OrderDetails",
                 pattern + "orderdetails/{orderId:min(0)}",
                 new { controller = "Order", action = "Details" });
+
+            endpointRouteBuilder.MapControllerRoute("OrderConf",
+                pattern + "shoporderconfirmation/{shopOrderId:min(0)}",
+                new { controller = "Order", action = "ShopOrderConfirmation" });
+
+            endpointRouteBuilder.MapControllerRoute("OrderMtrDoc",
+                pattern + "ordermtrdoc/{shopOrderMtrId:min(0)}",
+                new { controller = "Order", action = "ShopOrderMtrDocument" });
+
+            endpointRouteBuilder.MapControllerRoute("ShopOrderDetails",
+                pattern + "shoporderdetails/{shopOrderNumber:min(0)}",
+                new { controller = "Order", action = "ShopOrderDetails" });
 
             endpointRouteBuilder.MapControllerRoute("ShipmentDetails",
                 pattern + "orderdetails/shipment/{shipmentId}",
@@ -581,6 +604,54 @@ namespace Nop.Web.Infrastructure
             //page not found
             endpointRouteBuilder.MapControllerRoute("PageNotFound", $"{pattern}page-not-found",
                 new { controller = "Common", action = "PageNotFound" });
+
+            //Albina Bending calculators
+            endpointRouteBuilder.MapControllerRoute("BendingCalculators", $"{pattern}/calculators/bending-calculators",
+                new { controller = "Calculators", action = "BendingCalculators"});
+
+            //Albina spiral math calculator
+            endpointRouteBuilder.MapControllerRoute("SpiralCalculator", $"{pattern}/calculators/spiral-calculator",
+                new { controller = "Calculators", action = "SpiralCalculator"});
+
+            //Albina tangent materials
+            endpointRouteBuilder.MapControllerRoute("TangentMaterials", $"{pattern}/calculators/tangent-materials",
+                new { controller = "Calculators", action = "TangentMaterials"});
+
+            //Albina bending tolerences
+            endpointRouteBuilder.MapControllerRoute("BendingTolerances", $"{pattern}/calculators/bending-tolerances",
+                new { controller = "Calculators", action = "BendingTolerances"});
+
+            //Albina Browse Picture Vault
+            endpointRouteBuilder.MapControllerRoute("BrowsePictureVault", $"{pattern}/secure/browse-picture-vault",
+                new {controller = "PictureVault", action = "BrowsePictureVault"});
+
+            //Albina Picture Vault
+            endpointRouteBuilder.MapControllerRoute("PictureVault", $"{pattern}/secure/picture-vault",
+                new {controller = "PictureVault", action = "PictureVault"});
+
+            //Albina Picture Vault
+            endpointRouteBuilder.MapControllerRoute("ShowPicture", $"{pattern}/secure/show-picture",
+                new {controller = "PictureVault", action = "ShowPicture"});
+
+            //Albina Bending and Fabrication
+            endpointRouteBuilder.MapControllerRoute("BendingAndFabrication", $"{pattern}/quote-request/bending-and-fabrication",
+                new {controller = "QuoteRequest", action = "BendingAndFabrication"});
+
+            //Albina request account
+            endpointRouteBuilder.MapControllerRoute("RequestAccount", "request-account",
+                new {controller = "Common", action = "RequestAccount"});
+
+            //Albina Bending and Fabrication success
+            endpointRouteBuilder.MapControllerRoute("BendingAndFabrication", $"{pattern}/quote-request/bending-and-fabrication-success",
+                new {controller = "QuoteRequest", action = "BendingAndFabricationSuccess"});
+
+            //Albina Bending and Fabrication Google
+            endpointRouteBuilder.MapControllerRoute("BendingAndFabrication", $"{pattern}/quote-request/bending-and-fabrication-google",
+                new {controller = "QuoteRequest", action = "BendingAndFabricationGoogle"});
+
+            //Albina Download Spiral Math Report
+            endpointRouteBuilder.MapControllerRoute("DownloadSpiralReport", $"{pattern}/download-spiral-math",
+                new {controller = "Calculators", action = "DownloadSpiralReport"});
         }
 
         #endregion

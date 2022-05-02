@@ -37,6 +37,7 @@ using Nop.Services.Security;
 using Nop.Services.Seo;
 using Nop.Services.Themes;
 using Nop.Services.Topics;
+using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
 using Nop.Web.Infrastructure.Cache;
@@ -617,11 +618,15 @@ namespace Nop.Web.Factories
                     var topics = _topicService.GetAllTopics(storeId: _storeContext.CurrentStore.Id)
                         .Where(topic => topic.IncludeInSitemap);
 
-                    model.Items.AddRange(topics.Select(topic => new SitemapModel.SitemapItemModel
+                    model.Items.AddRange(topics.Select(topic =>
                     {
-                        GroupTitle = commonGroupTitle,
-                        Name = _localizationService.GetLocalized(topic, x => x.Title),
-                        Url = urlHelper.RouteUrl("Topic", new { SeName = _urlRecordService.GetSeName(topic) })
+                        var seName = _urlRecordService.GetSeName(topic);
+                        return new SitemapModel.SitemapItemModel
+                        {
+                            GroupTitle = commonGroupTitle,
+                            Name = _localizationService.GetLocalized(topic, x => x.Title),
+                            Url = urlHelper.RouteUrl("TopicWithPath", new {Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath()})
+                        };
                     }));
                 }
 
@@ -632,11 +637,15 @@ namespace Nop.Web.Factories
                     var blogPosts = _blogService.GetAllBlogPosts(storeId: _storeContext.CurrentStore.Id)
                         .Where(p => p.IncludeInSitemap);
 
-                    model.Items.AddRange(blogPosts.Select(post => new SitemapModel.SitemapItemModel
+                    model.Items.AddRange(blogPosts.Select(post => 
                     {
-                        GroupTitle = blogPostsGroupTitle,
-                        Name = post.Title,
-                        Url = urlHelper.RouteUrl("BlogPost", new { SeName = _urlRecordService.GetSeName(post) })
+                        var seName = _urlRecordService.GetSeName(post);
+                        return new SitemapModel.SitemapItemModel
+                        {
+                            GroupTitle = blogPostsGroupTitle,
+                            Name = post.Title,
+                            Url = urlHelper.RouteUrl("BlogPostWithPath", new {Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
+                        };
                     }));
                 }
 

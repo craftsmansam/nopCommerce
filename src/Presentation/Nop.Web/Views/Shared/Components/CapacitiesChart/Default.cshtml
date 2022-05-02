@@ -1,0 +1,61 @@
+﻿@using Nop.Web.Components
+@model Nop.Web.Components.CapacitiesChartModel
+
+@{
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/capchart.css");
+}
+
+<div class="outer-capchart">
+    <a class="printer-friendly" href="/pdfs/capacities-chart-web.pdf">
+        <img src="/images/743-printer-toolbar-orange.png" width="20" />Printer Friendly Version
+    </a>
+
+    <div id="capacitieschartheader" class="capsprite-capacitieschartheader">
+        @Html.Raw(Model.CapChartHeaderHtml)
+    </div>
+
+    <table class="striped">
+        <thead>
+            <tr>
+                <th class="sectioncolumn columnheader" style="border: none;">Section</th>
+                <th class="threedcolumn columnheader" style="border: none;">3D Image</th>
+                <th class="twodcolumn columnheader" style="border: none;">2D Image</th>
+                <th class="photocolumn columnheader" style="border: none;">Photo</th>
+                <th class="capacitiescolumn columnheader" style="border: none;">Capacities</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="capacitieschart">
+        <table class="striped">
+            @{
+                var outputSections = new List<string>();
+                foreach (var chartType in Model.ListOfChartTypes)
+                {
+                    foreach (var row in CapacitiesChartViewComponent.CapacitiesChartDictionary[chartType])
+                    {
+                        if (!outputSections.Contains(row.Section))
+                        {
+                            outputSections.Add(row.Section);
+                            <tr>
+                                <td data-title="Section" class="sectioncolumn">@Html.Raw(row.Section)</td>
+                                <td data-title="3D Image" class="threedcolumn"><img class="lazyload" data-src="@row.ThreeDImg" alt="@row.TwoDAltTitle" title="@row.TwoDAltTitle" /></td>
+                                <td data-title="2D Image" class="twodcolumn"><img class="lazyload" data-src="@row.TwoDImg" alt="@row.TwoDAltTitle" title="<@row.TwoDAltTitle" /></td>
+                                <td data-title="Photo" class="photocolumn"><img class="lazyload" data-src="@row.PhotoImg" alt="@row.PhotoAltTitle" title="<@row.PhotoAltTitle" /></td>
+                                <td data-title="Capacities" class="capacitiescolumn">@Html.Raw(row.Capacities)</td>
+                            </tr>
+                        }
+                    }
+                }
+                if (!Model.ChartType.HasValue || Model.ChartType.Value == CapacitiesChartType.AngleChartType)
+                {
+                    <tr>
+                        <td colspan="5">
+                            <p>*BULB FLAT - <b>We can also bend bulb flat either bulb stem-in or bulb stem-out. All mill sized produced up to 430 mm x 20 mm (16.93" wide x .787" thick).</b></p>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>

@@ -28,6 +28,7 @@ namespace Nop.Web.Models.Customer
         Info = 0,
         Addresses = 10,
         Orders = 20,
+        Quotes = 25,
         BackInStockSubscriptions = 30,
         ReturnRequests = 40,
         DownloadableProducts = 50,
@@ -38,6 +39,7 @@ namespace Nop.Web.Models.Customer
         ProductReviews = 100,
         VendorInfo = 110,
         GdprTools = 120,
-        CheckGiftCardBalance = 130
+        CheckGiftCardBalance = 130,
+        PictureVault = 140
     }
 }

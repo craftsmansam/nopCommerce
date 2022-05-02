@@ -8,7 +8,7 @@
         /// <summary>
         /// Default path to root directory of uploaded files (if appropriate settings are not specified)
         /// </summary>
-        public static string DefaultRootDirectory { get; } = "/images/uploaded";
+        public static string DefaultRootDirectory { get; } = "";
 
         /// <summary>
         /// Path to configuration file

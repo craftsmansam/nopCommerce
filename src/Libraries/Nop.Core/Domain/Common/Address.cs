@@ -81,5 +81,9 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the date and time of instance creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
+
+        public int? CustomerAddressID { get; set; }
+
+        public int? SalesContactID { get; set; }
     }
 }

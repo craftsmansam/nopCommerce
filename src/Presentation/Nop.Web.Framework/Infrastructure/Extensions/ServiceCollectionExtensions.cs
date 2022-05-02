@@ -63,6 +63,9 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             //add hosting configuration parameters
             services.ConfigureStartupConfig<HostingConfig>(configuration.GetSection("Hosting"));
 
+            //add Albina configuration parameters
+            services.ConfigureStartupConfig<AlbinaConfig>(configuration.GetSection("Albina"));
+
             //add accessor to HttpContext
             services.AddHttpContextAccessor();
 

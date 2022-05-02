@@ -41,7 +41,20 @@ namespace Nop.Data.Mapping
                 var tableExpr = Expressions.GetOrAdd(type, entityType => _migrationManager.GetCreateTableExpression(entityType));
 
                 if (typeof(T) == typeof(TableAttribute))
-                    return new TableAttribute(tableExpr.TableName) { Schema = tableExpr.SchemaName };
+                {
+                    var schema = tableExpr.SchemaName;
+
+                    var tableAttr = type.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(T));
+                    if (tableAttr != null)
+                    {
+                        var namedArgument = tableAttr.NamedArguments?.FirstOrDefault(x => x.MemberName == nameof(TableAttribute.Schema));
+                        if (namedArgument != null)
+                        {
+                            schema = namedArgument.Value.TypedValue.Value?.ToString();
+                        }
+                    }
+                    return new TableAttribute(tableExpr.TableName) { Schema = schema };
+                }
 
                 if (typeof(T) != typeof(ColumnAttribute))
                     return null;

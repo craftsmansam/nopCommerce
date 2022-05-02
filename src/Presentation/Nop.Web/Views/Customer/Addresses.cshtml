@@ -67,9 +67,9 @@
                                     </li>
                                 }
                                 @if (address.CityEnabled && !string.IsNullOrEmpty(address.City)||
-                             address.CountyEnabled && !string.IsNullOrEmpty(address.County) ||
-                             address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName) ||
-                             address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
+                                     address.CountyEnabled && !string.IsNullOrEmpty(address.County) ||
+                                     address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName) ||
+                                     address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
                                 {
                                     var addressLine = string.Empty;
                                     if (address.CityEnabled && !string.IsNullOrEmpty(address.City))
@@ -121,10 +121,13 @@
                                     </li>
                                 }
                             </ul>
-                            <div class="buttons">
-                                <input type="button" class="button-2 edit-address-button" onclick="location.href = '@(Url.RouteUrl("CustomerAddressEdit", new {addressId = address.Id}))'" value="@T("Common.Edit")"/>
-                                <input type="button" class="button-2 delete-address-button" onclick="deletecustomeraddress(@(address.Id))" value="@T("Common.Delete")"/>
-                            </div>
+                            @if (address.CustomerAddressID == null)
+                            {
+                                <div class="buttons">
+                                    <input type="button" class="button-2 edit-address-button" onclick="location.href = '@(Url.RouteUrl("CustomerAddressEdit", new { addressId = address.Id }))'" value="@T("Common.Edit")"/>
+                                    <input type="button" class="button-2 delete-address-button" onclick="deletecustomeraddress(@(address.Id))" value="@T("Common.Delete")"/>
+                                </div>
+                            }
                         </div>
                     }
                 </div>

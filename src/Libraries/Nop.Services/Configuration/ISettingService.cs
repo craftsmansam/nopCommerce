@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Craftsman.IO;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Configuration;
 
@@ -17,6 +18,18 @@ namespace Nop.Services.Configuration
         /// <param name="settingId">Setting identifier</param>
         /// <returns>Setting</returns>
         Setting GetSettingById(int settingId);
+
+        /// <summary>
+        /// Gets a UncDriveMapping for the picture vault root files folder
+        /// </summary>
+        /// <returns>UncDriveMapping</returns>
+        UncDriveMapping PictureVaultRootFolder();
+
+        /// <summary>
+        /// Gets a UncDriveMapping for the web attachments (for order confirmation, quote reports and MTR's) root files folder
+        /// </summary>
+        /// <returns>UncDriveMapping</returns>
+        UncDriveMapping WebAttachmentsRootFolder();
 
         /// <summary>
         /// Deletes a setting

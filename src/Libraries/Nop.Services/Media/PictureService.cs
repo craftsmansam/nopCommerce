@@ -471,7 +471,12 @@ namespace Nop.Services.Media
         /// <returns>Result</returns>
         public virtual string GetPictureSeName(string name)
         {
-            return _urlRecordService.GetSeName(name, true, false);
+            var seName = _urlRecordService.GetSeName(name, true, false);
+            if (seName.Contains("/"))
+            {
+                seName = seName.Replace("/", "").Replace("--", "-");
+            }
+            return seName;
         }
 
         /// <summary>

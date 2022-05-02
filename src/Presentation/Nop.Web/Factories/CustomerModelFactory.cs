@@ -683,6 +683,22 @@ namespace Nop.Web.Factories
                 ItemClass = "customer-orders"
             });
 
+            model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            {
+                RouteName = "CustomerQuotes",
+                Title = "Quotes",
+                Tab = CustomerNavigationEnum.Quotes,
+                ItemClass = "customer-quotes"
+            });
+
+            model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            {
+                RouteName = "BrowsePictureVault",
+                Title = "Picture Vault",
+                Tab = CustomerNavigationEnum.PictureVault,
+                ItemClass = "browse-picture-vault"
+            });
+
             if (_orderSettings.ReturnRequestsEnabled &&
                 _returnRequestService.SearchReturnRequests(_storeContext.CurrentStore.Id,
                     _workContext.CurrentCustomer.Id, pageIndex: 0, pageSize: 1).Any())

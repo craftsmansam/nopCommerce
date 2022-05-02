@@ -101,6 +101,12 @@ namespace Nop.Web.Controllers
             return View();
         }
 
+        //error
+        public virtual IActionResult Error()
+        {
+            return View();
+        }
+
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
@@ -200,7 +206,8 @@ namespace Nop.Web.Controllers
             if (ModelState.IsValid)
             {
                 var subject = _commonSettings.SubjectFieldOnContactUsForm ? model.Subject : null;
-                var body = Core.Html.HtmlHelper.FormatText(model.Enquiry, false, true, false, false, false, false);
+                var additionalBody = "Name and Email: " + model.FullName + " <" + model.Email + ">\nPhone: " + model.Phone + "\nComments:\n" + model.Enquiry;
+                var body = Core.Html.HtmlHelper.FormatText(additionalBody, false, true, false, false, false, false);
 
                 _workflowMessageService.SendContactUsMessage(_workContext.WorkingLanguage.Id,
                     model.Email.Trim(), model.FullName, subject, body);
@@ -346,6 +353,16 @@ namespace Nop.Web.Controllers
         public virtual IActionResult StoreClosed()
         {
             return View();
+        }
+
+        public virtual IActionResult RequestAccount()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Info", "Customer");
+            }
+
+            return RedirectToAction("Register", "Customer");
         }
 
         //helper method to redirect users. Workaround for GenericPathRoute class where we're not allowed to do it

@@ -1393,7 +1393,11 @@ namespace Nop.Services.Orders
             //process payment
             ProcessPaymentResult processPaymentResult;
             //skip payment workflow if order total equals zero
-            var skipPaymentWorkflow = details.OrderTotal == decimal.Zero;
+            //uncomment the below if we are trying to implement payment
+            //var skipPaymentWorkflow = details.OrderTotal == decimal.Zero;
+
+            //Albina default will be no payment required, so we are forcing it to skip
+            var skipPaymentWorkflow = true;
             if (!skipPaymentWorkflow)
             {
                 var customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId);
@@ -3116,13 +3120,13 @@ namespace Nop.Services.Orders
             if (cart == null)
                 throw new ArgumentNullException(nameof(cart));
 
-            var result = true;
+            //originally the result value is defaulted to true, we are just automatically returning false for it for Albina initially
 
             //check whether order total equals zero
-            var shoppingCartTotalBase = _orderTotalCalculationService.GetShoppingCartTotal(cart, useRewardPoints: useRewardPoints);
+            /*var shoppingCartTotalBase = _orderTotalCalculationService.GetShoppingCartTotal(cart, useRewardPoints: useRewardPoints);
             if (shoppingCartTotalBase.HasValue && shoppingCartTotalBase.Value == decimal.Zero)
-                result = false;
-            return result;
+                result = false;*/
+            return false;
         }
 
         /// <summary>

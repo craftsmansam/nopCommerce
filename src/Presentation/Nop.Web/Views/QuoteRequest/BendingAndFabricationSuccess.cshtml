@@ -1,0 +1,18 @@
+﻿@model Nop.Web.Models.QuoteRequest.BendingAndFabricationSuccessModel
+@{
+    Layout = "_ColumnsOne";
+}
+
+
+<h2>Information Request Form</h2>
+
+<div id="ContactSent">
+    <div class="leftBox" style="margin-top:30px;">
+        <h3>THANK YOU!</h3>
+        <p>Thank you for contacting us.  Your request has been received. We will contact you within 1 business day.</p>
+        @if (Model.IncludeSpiral)
+        {
+            <p id="pSpiralReportLink">You can <a href="/download-spiral-math" target="_blank">download your spiral math report here.</a></p>
+        }
+    </div>
+</div>

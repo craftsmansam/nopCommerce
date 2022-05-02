@@ -1475,6 +1475,7 @@ namespace Nop.Services.Seo
             if (languageId > 0)
             {
                 //ensure that we have at least two published languages
+                
                 var loadLocalizedValue = true;
                 if (ensureTwoPublishedLanguages)
                 {
@@ -1506,7 +1507,7 @@ namespace Nop.Services.Seo
             if (string.IsNullOrEmpty(name))
                 return name;
 
-            var okChars = "abcdefghijklmnopqrstuvwxyz1234567890 _-";
+            const string okChars = "abcdefghijklmnopqrstuvwxyz1234567890 _-/";
             name = name.Trim().ToLowerInvariant();
 
             if (convertNonWesternChars && _seoCharacterTable == null)

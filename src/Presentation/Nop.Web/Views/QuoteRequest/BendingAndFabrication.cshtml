@@ -1,0 +1,185 @@
+﻿@model Nop.Web.Models.QuoteRequest.BendingAndFabricationModel
+@{
+    Layout = "_ColumnsOne";
+}
+
+<h1>Bending and Fabrication</h1>
+<br />
+<h2 id="formHeading">Information Request Form For Bending and Fabrication</h2>
+
+@if (!Model.SuccessfullySent)
+{
+    <p>Albina makes your vision a reality and we can meet all of your steel rolling, forming and bending needs. Select the items that apply, and then let us know how to contact you.</p>
+    <p>*(asterisk) fields are required</p>
+    <br />
+    if (Model.IncludeSpiral)
+    {
+        <div class="alert alert-info" id="pSpiralRequest">
+            <i class="fa fa-exclamation-triangle"></i> 
+            Thanks for submitting your spiral calculator results.  We need a few more pieces of information before we can help you with your spiral project.
+        </div>
+    }
+
+    <h3 style="color: #004b88; margin-bottom: 1em;">Other information that is required for a quote to be issued:</h3>
+    <form asp-route="BendingAndFabrication" method="post" enctype="multipart/form-data">
+        @Html.HiddenFor(m => m.UploadDocumentMaxSize)
+        @Html.HiddenFor(m => m.IncludeSpiral)
+
+        <div asp-validation-summary="ModelOnly" class="message-error"></div>
+        <div class="fieldset">
+            <div class="form-fields" id="bendingAndFabricationFields">
+                <div class="inputs" style="display: none">
+                    <input asp-for="IncludeSpiral" />
+                </div>
+                <div class="inputs">
+                    <label asp-for="CompanyName" asp-postfix=":"></label>
+                    <input asp-for="CompanyName" placeholder="Company Name (required)" />
+                    <nop-required />
+                    <span asp-validation-for="CompanyName"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Contact" asp-postfix=":"></label>
+                    <input asp-for="Contact" placeholder="Primary Contact (required)" />
+                    <nop-required />
+                    <span asp-validation-for="Contact"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Phone" asp-postfix=":"></label>
+                    <input asp-for="Phone" placeholder="Phone (required)" />
+                    <nop-required />
+                    <span asp-validation-for="Phone"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Email" asp-postfix=":"></label>
+                    <input asp-for="Email" placeholder="Email (required)" />
+                    <nop-required />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Fax" asp-postfix=":"></label>
+                    <input asp-for="Fax" placeholder="Fax" />
+                    <span asp-validation-for="Fax"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Address" asp-postfix=":"></label>
+                    <input asp-for="Address" placeholder="Address" />
+                    <span asp-validation-for="Address"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="City" asp-postfix=":"></label>
+                    <input asp-for="City" placeholder="City" />
+                    <span asp-validation-for="City"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="State" asp-postfix=":"></label>
+                    <input asp-for="State" placeholder="State" />
+                    <span asp-validation-for="State"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="ZipCode" asp-postfix=":"></label>
+                    <input asp-for="ZipCode" placeholder="Zip Code" />
+                    <span asp-validation-for="ZipCode"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="WhereHeard"></label>
+                    <select asp-for="WhereHeard" asp-items="Model.WhereHeardList"></select>
+                    <span asp-validation-for="WhereHeard"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="ProjectDescription" asp-postfix=":"></label>
+                    <textarea asp-for="ProjectDescription" placeholder="Description of Project"></textarea>
+                    <span asp-validation-for="ProjectDescription"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="ProjectName" asp-postfix=":"></label>
+                    <input asp-for="ProjectName" placeholder="Project Name" />
+                    <span asp-validation-for="ProjectName"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="BidDeadline"></label>
+                    <input asp-for="BidDeadline" placeholder="Bid Deadline" />
+                    <span asp-validation-for="BidDeadline"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="MaterialType" asp-postfix=":"></label>
+                    <input asp-for="MaterialType" placeholder="Material Type / Size" />
+                    <span asp-validation-for="ProjectDescription"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Quantity" asp-postfix=":"></label>
+                    <input asp-for="Quantity" placeholder="Quantity" />
+                    <span asp-validation-for="Quantity"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-for="Notes" asp-postfix=":"></label>
+                    <textarea asp-for="Notes" placeholder="Notes"></textarea>
+                    <span asp-validation-for="Notes"></span>
+                </div>
+                <div class="inputs">
+                    <label asp-postfix=":">Upload Attachment/Drawing</label>
+                    <input onchange="ValidateFile(this)" name="files" type="file"/>
+                </div>
+                <div class="inputs" id="addAnotherInputBtn">
+                    <input id="btnAddAnother" type="button" value="Add Another" onclick="AddMoreAttachments(); " class="btn btn-warning" style="padding: 5px;" />
+                </div>
+
+                @if (Model.DisplayCaptcha)
+                {
+                    <nop-captcha />
+                }
+
+            </div>
+            
+        </div>
+        <div class="buttons">
+            <input type="submit" class="submit btn btn-warning" id="submit" value="Submit Request" onclick="CheckFileSizes"/>
+        </div>
+    </form>
+}
+
+<script asp-location="Footer">
+    function AddMoreAttachments() {
+
+        var inputFieldParent = document.getElementById("bendingAndFabricationFields");
+        var inputButtonDiv = document.getElementById("addAnotherInputBtn");
+        var newElementDiv = document.createElement("div");
+        newElementDiv.setAttribute("class", "inputs");
+        var newInputElement = document.createElement("input");
+        newInputElement.setAttribute("name", "files");
+        newInputElement.setAttribute("type", "file");
+        newInputElement.setAttribute("onchange", "ValidateFile(this)");
+        newElementDiv.appendChild(newInputElement);
+        inputFieldParent.insertBefore(newElementDiv, inputButtonDiv);
+
+    }
+
+    function ValidateFile(uploadedFile) {
+        ValidateFileSize(uploadedFile);
+        ValidateFileName(uploadedFile);
+        ValidateFileExtension(uploadedFile);
+    }
+
+    function ValidateFileSize(uploadedFile) {
+        if (uploadedFile.files[0].size > @Model.UploadDocumentMaxSize) //between 14.4 and 14.6 MB is the largest file size the email will send
+        {
+            alert('File size cannot be larger than 14 MB. Please upload a smaller file.');
+            $(uploadedFile).val(''); //clear out uploaded file
+        }
+    }
+
+    function ValidateFileName(uploadedFile) {
+        var filename = uploadedFile.files[0].name;
+        if (filename.indexOf(",") !== -1) {
+            alert('File name cannot contain a comma ",". Please rename the file to a name with no commas.');
+            $(uploadedFile).val('');
+        }
+    }
+
+    function ValidateFileExtension(uploadedFile) {
+        var filename = uploadedFile.files[0].name;
+        if ((filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename) === "exe") {
+            alert('File cannot be a .exe file. Please upload a different file.');
+            $(uploadedFile).val('');
+        }
+    }
+</script>

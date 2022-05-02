@@ -196,6 +196,9 @@ namespace Nop.Web.Factories
                 model.ZipPostalCode = address.ZipPostalCode;
                 model.PhoneNumber = address.PhoneNumber;
                 model.FaxNumber = address.FaxNumber;
+                model.CustomAttributes = address.CustomAttributes;
+                model.CustomerAddressID = address.CustomerAddressID;
+                model.SalesContactID = address.SalesContactID;
             }
 
             if (address == null && prePopulateWithCustomerFields)

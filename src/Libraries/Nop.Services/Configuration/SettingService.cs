@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Craftsman.IO;
+using Newtonsoft.Json;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Configuration;
@@ -24,6 +26,7 @@ namespace Nop.Services.Configuration
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<Setting> _settingRepository;
         private readonly IStaticCacheManager _staticCacheManager;
+        private readonly INopDataProvider _dataProvider;
 
         #endregion
 
@@ -31,16 +34,43 @@ namespace Nop.Services.Configuration
 
         public SettingService(IEventPublisher eventPublisher,
             IRepository<Setting> settingRepository,
-            IStaticCacheManager staticCacheManager)
+            IStaticCacheManager staticCacheManager,
+            INopDataProvider dataProvider)
         {
             _eventPublisher = eventPublisher;
             _settingRepository = settingRepository;
             _staticCacheManager = staticCacheManager;
+            _dataProvider = dataProvider;
         }
 
         #endregion
 
         #region Utilities
+
+        public UncDriveMapping PictureVaultRootFolder()
+        {
+            var pictureVaultRootFolder = GetDatabaseConfig(_dataProvider, "PictureVaultRootFolder");
+            return JsonConvert.DeserializeObject<UncDriveMapping>(pictureVaultRootFolder);
+        }
+
+        public UncDriveMapping WebAttachmentsRootFolder()
+        {
+            var rootFolder = GetDatabaseConfig(_dataProvider, "WebAttachmentRootFolder");
+            return JsonConvert.DeserializeObject<UncDriveMapping>(rootFolder);
+        }
+
+        public static string GetDatabaseConfig(INopDataProvider dataProvider, string key)
+        {
+            try
+            {
+                var keyParameter = SqlParameterHelper.GetStringParameter("key", key);
+                return dataProvider.Query<string>("select Value from albina.Configuration WHERE Search = @key", keyParameter).SingleOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets all settings

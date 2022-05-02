@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_ColumnsOneBendingTolerances";
+
+    //title
+    Html.AddTitleParts("Bending Tolerances");
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/calculators.css");
+    Html.AppendMetaDescriptionParts(" Interested in learning more about bending tolerances for various steel bending procedures? Visit our website or call directly to learn more.");
+}
+
+<h1>Bending Tolerences </h1>
+<br />
+<h2>Rotary Draw, Roll and Increment Bending Tolerances</h2>
+<h3><i>Standard shop tolerances for rotary draw, roll and increment bending procedures are <a href="/about/contact">available upon request</a>.</i></h3>
+<br />
+<br />
+<h2>Spiral Bending Tolerances</h2>
+<br />
+<br />
+@await Component.InvokeAsync("BendingTolerancesTable", new { id = 1, showFooter = false, hotOrCold = "Cold" })
+<br />
+<br />
+@await Component.InvokeAsync("BendingTolerancesTable", new { id = 2, showFooter = true, hotOrCold = "Cold" })
+<br />
+<br />
+@await Component.InvokeAsync("BendingTolerancesTable", new { id = 3, showFooter = false, hotOrCold = "Hot" })
+<br />
+<br />
+@await Component.InvokeAsync("BendingTolerancesTable", new { id = 4, showFooter = true, hotOrCold = "Hot" })
+<br />
+<br />

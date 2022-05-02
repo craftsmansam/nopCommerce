@@ -14,6 +14,7 @@ using Nop.Services.Stores;
 using Nop.Services.Vendors;
 using Nop.Web.Factories;
 using Nop.Web.Framework;
+using Nop.Web.Framework.Extensions;
 using Nop.Web.Models.Catalog;
 
 namespace Nop.Web.Controllers
@@ -299,7 +300,7 @@ namespace Nop.Web.Controllers
                     select new
                     {
                         label = p.Name,
-                        producturl = Url.RouteUrl("Product", new {SeName = p.SeName}),
+                        producturl = Url.RouteUrl("ProductWithPath", new {Path = p.SeName.GetPathFromSeName(), SeName = p.SeName.GetSeNameWithoutPath() }),
                         productpictureurl = p.DefaultPictureModel.ImageUrl,
                         showlinktoresultsearch = showLinkToResultSearch
                     })

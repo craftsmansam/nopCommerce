@@ -1,0 +1,9 @@
+﻿@model SearchBoxModel
+<form asp-route="ProductSearch" method="get" id="small-search-box-form">
+    @if (Model.ShowSearchBox)
+    {
+        <ci-search></ci-search>
+
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.SearchBox })
+    }
+</form>

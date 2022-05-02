@@ -1,0 +1,81 @@
+﻿@model Nop.Web.Components.IOrderDetailsModel
+@if (!string.IsNullOrWhiteSpace(Model.ShippingTrackingUrl) || !string.IsNullOrWhiteSpace(Model.ShopOrderConfirmationFilename) || (Model.MtrDocumentIDs?.Count ?? 0) > 0)
+{
+    <div class="order-details-area">
+        <div class="section shipments">
+            <div class="title">
+                <strong>Order Confirmation</strong>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <colgroup>
+                        <col />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="name">
+                                Document Name
+                            </th>
+                            <th class="price">
+                                Document Link
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!string.IsNullOrWhiteSpace(Model.ShopOrderConfirmationFilename))
+                        {
+                            <tr>
+                                <td class="product">Order Confirmation</td>
+                                <td class="unit-price"><a target="_blank" href="@Url.RouteUrl("OrderConf", new { shopOrderId = Model.ShopOrderId })">Open Document</a></td>
+                            </tr>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.ShippingTrackingUrl))
+                        {
+                            <tr>
+                                <td class="product">Shipping Tracking</td>
+                                <td class="unit-price"><a target="_blank" href="@Model.ShippingTrackingUrl">Open Shipper Website</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="section billing">
+            <div class="title">
+                <strong>MTR's</strong>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <colgroup>
+                        <col />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="name">
+                                Document Name
+                            </th>
+                            <th class="price">
+                                Document Link
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.MtrDocumentIDs)
+                        {
+                            <tr>
+                                <td class="product">
+                                    MTR
+                                </td>
+                                <td class="unit-price">
+                                    <a target="_blank" href="@Url.RouteUrl("OrderMtrDoc", new { shopOrderMtrId = item })">Open Document</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -23,6 +23,24 @@ namespace Nop.Core.Domain.Orders
         /// <summary>
         /// Cancelled
         /// </summary>
-        Cancelled = 40
+        Cancelled = 40,
+
+        /// <summary>
+        /// On Hold
+        /// </summary>
+        OnHold = 50, 
+
+        /// <summary>
+        /// Ordered
+        /// </summary>
+        Ordered = 60,
+        
+        /// <summary>
+        /// Work In Progress
+        /// Use this for At Subcontractor, Ready for Subcontractor and Work in progress
+        /// </summary>
+        WorkInProgress = 70
+
+
     }
 }

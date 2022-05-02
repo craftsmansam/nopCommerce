@@ -55,5 +55,11 @@
         /// A customer is added to this customer role once a specified product is purchased.
         /// </summary>
         public int PurchasedWithProductId { get; set; }
+
+        public int? ComponentPartGroupID { get; set; }
+
+        public int? PartID { get; set; }
+
+        public decimal? Markup { get; set; }
     }
 }

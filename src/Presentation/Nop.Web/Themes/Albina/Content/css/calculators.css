@@ -1,0 +1,274 @@
+﻿.rads
+{
+	padding-left:10px;
+	margin-bottom: -30px;
+}
+
+.rads span {
+	display: inline;
+}
+
+div.rads
+{
+	margin-top:15px;
+}
+.calculator 
+{
+	background-image:url(/images/calculatorbg.png);
+	background-repeat:repeat;
+	width:auto;
+	height:100%;
+	min-height: 340px;
+	margin-left:12px;
+	padding-right: 12px;
+	margin-top:12px;
+	padding-left: 10px;
+	min-width: 100%;
+}
+
+.calculator-long {
+	height: 380px;
+}
+		
+.calc-button {
+	margin: 5px 0;
+}
+
+.calculator h3 
+{
+	padding-top:0;
+	padding-left:2px;
+	font-size: 13px;
+	font-weight: bold;
+	margin-bottom: 0;
+	text-align: left;
+}
+
+#bendingcalculators 
+{
+	background-image:url(/images/toolboxbg.png);
+	background-repeat:repeat;
+	width:100%;
+	height:100%;
+	padding-top:12px;
+}
+
+#bendingcalculators img {
+	width: 100%;
+	max-width: 100%;
+}
+		
+input[type="button"] 
+{
+	padding-left:10px;
+	padding-right:10px;
+}
+		
+@media screen and (max-width: 800px) {
+	.calculator {
+		min-height: 360px;
+	}
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#spiralTable td {
+    padding: 0 5px 2px 0;
+}
+
+.calcinstructions {
+    font-size: 1em;
+    padding-left: 20px;
+}
+
+input[type=submit] {
+    padding: 5px;
+}
+
+.spiral-calculator {
+    background: #dddddd;
+    margin-left: 0px;
+    padding-right: 20px !Important;
+    padding: 5px;
+    width: 100%;
+}
+
+#tangentcalculator {
+	padding: 14px;
+	background-color: #999999;
+	width: 350px;
+	margin: 0 auto 1.5em auto;
+}
+
+#tangentcalculator p {
+	line-height: 1.5em;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#tangentcalculator tr {
+	height: 25px;
+}
+
+#tangentcalculator td {
+	font-weight: bold;
+}
+
+#innertangent {
+	width: 99%;
+	padding: 14px;
+	background-color: #edeaea;
+}
+
+.tangent-calculator {
+	margin: 0 auto;
+	width: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+    #rollbenttable {
+		font-size: 1em;
+		border-right-width: 1px;
+		border-left-width: 1px;
+	}
+
+	table td:first-child {
+		color: #ffffff;
+		background-color: #ffcc80;
+		font-size: 20px !important;
+		font-weight: bold;
+		margin-bottom: 6px;
+	}
+
+	.materialcolumn[data-title]:before {
+		color: #fff;
+	}
+
+	table td:first-child:before {
+		content: '';
+	}
+
+	.namecol {
+		text-align: center;
+	}
+}
+
+#rollbenttable .materialcolumn, #rollbentheader .materialcolumn {
+	width: 8%;
+	text-align: left !important;
+}
+
+.rollcolumn_one {
+	width: 8%;
+}
+
+.rollcolumn_two {
+	width: 8%;
+}
+
+.rollcolumn_three {
+	width: 8%;
+}
+
+.rollcolumn_four {
+	width: 8%;
+}
+
+.rollcolumn_five {
+	width: 8%;
+}
+
+.rollcolumn_six {
+	width: 8%;
+}
+
+.rollcolumn_seven {
+	width: 8%;
+}
+
+.rollcolumn_eight {
+	width: 8%;
+}
+
+.rollcolumn_nine {
+	width: 8%;
+}
+
+.rollcolumn_ten {
+	width: 8%;
+}
+
+.rollcolumn_eleven {
+	width: 8%;
+}
+
+
+#rollbentheader td {
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+}
+
+#rollbenttable {
+	border: 2px solid black;
+	/*font-size:10px;*/
+	border-collapse: collapse;
+}
+
+#rollbenttable td, #rollbentheader td {
+	border: 2px solid black;
+	/*padding-left:5px;
+	padding-right:5px;*/
+	text-align: center;
+	line-height: 1em;
+}
+
+.columnheader {
+	/*font-size:10px;*/
+	font-weight: bold;
+	line-height: 1em;
+	text-align: center;
+	background-color: #ffcc80;
+}
+
+#rotaryheader .materialcolumn, #rotarytable .materialcolumn {
+	width: 20%;
+}
+
+.rotarycolumn_one {
+	width: 20%;
+}
+
+.rotarycolumn_two {
+	width: 20%;
+}
+
+.rotarycolumn_three {
+	width: 20%;
+}
+
+.rotarycolumn_four {
+	width: 20%;
+}
+
+#rotarytable {
+	border: 2px solid black;
+}
+
+#rotarytable td, #rotaryheader td {
+	border: 2px solid black;
+	/*padding-left:8px;
+	padding-right:8px;*/
+	text-align: center;
+	line-height: 1em;
+}
+
+#rotaryheader td {
+	padding-left: 8px;
+	padding-right: 8px;
+	text-align: center;
+	/*font-size:12px;*/
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Nop.Web.Controllers
 {
@@ -7,6 +8,11 @@ namespace Nop.Web.Controllers
         public virtual IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Throw()
+        {
+            throw new ApplicationException("We've thrown from a URL request!");
         }
     }
 }

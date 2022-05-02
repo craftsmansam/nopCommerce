@@ -1,0 +1,53 @@
+﻿@model CustomerQuoteListModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-account-page");
+    Html.AppendPageCssClassParts("html-order-list-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Quotes })
+}
+
+<div class="page account-page order-list-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - Quotes</h1>
+    </div>
+    <div class="page-body">
+        @if (Model.Quotes.Count > 0)
+        {
+            <div class="order-list">
+                @foreach (var quote in Model.Quotes.OrderByDescending(x => x.QuoteDate).ThenByDescending(x => x.QuoteNumber))
+                {
+                    <div class="section order-item">
+                        <div class="title">
+                            <strong>Quote#: @quote.QuoteNumber</strong>
+                        </div>
+                        <ul class="info">
+                            <li>Quote Date: <span class="order-status">@quote.QuoteDate.ToShortDateString()</span></li>
+                            <li>Project Name: <span class="order-date">@quote.ProjectName</span></li>
+                            <li>Customer Contact: <span class="order-total">@quote.CustomerContact</span></li>
+                        </ul>
+                        <div class="buttons">
+                            @{
+                                var url = Url.RouteUrl("QuoteDetails", new { quoteId = quote.Id });
+                            }
+                            <input type="button" value="@T("Account.CustomerOrders.OrderDetails")" class="button-2 order-details-button" onclick="setLocation('@url')"/>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                No Quotes
+            </div>
+        }
+    </div>
+</div>

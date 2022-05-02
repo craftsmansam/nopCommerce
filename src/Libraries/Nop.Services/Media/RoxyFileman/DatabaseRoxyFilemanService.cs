@@ -76,8 +76,8 @@ namespace Nop.Services.Media.RoxyFileman
             var sourceVirtualPath = _fileProvider.GetVirtualPath(_fileProvider.GetDirectoryName(filePath));
             var fileName = _fileProvider.GetFileNameWithoutExtension(filePath);
 
-            var picture = _pictureService.GetPictures(sourceVirtualPath.TrimEnd('/'))
-                       .FirstOrDefault(p => fileName.Contains(p.SeoFilename));
+            var pagedList = _pictureService.GetPictures(sourceVirtualPath.TrimEnd('/')).ToList();
+            var picture = pagedList.FirstOrDefault(p => fileName.Contains(p.SeoFilename));
 
             return picture;
         }
@@ -448,10 +448,10 @@ namespace Nop.Services.Media.RoxyFileman
             var filePath = _fileProvider.GetAbsolutePath(sourcePath.Split('/'));
             var picture = GetPictureByFile(filePath);
 
-            if (picture == null)
-                throw new Exception(GetLanguageResource("E_DeletеFile"));
-
-            _pictureService.DeletePicture(picture);
+            if (picture != null)
+            {
+                _pictureService.DeletePicture(picture);
+            }
 
             await base.DeleteFileAsync(sourcePath);
         }

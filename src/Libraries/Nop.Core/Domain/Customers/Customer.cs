@@ -131,5 +131,9 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the shipping address identifier
         /// </summary>
         public int? ShippingAddressId { get; set; }
+
+        public int? JCCustomerID { get; set; }
+
+        public int? SalesContactID { get; set; }
     }
 }

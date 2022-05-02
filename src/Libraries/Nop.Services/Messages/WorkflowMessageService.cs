@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Nop.Core;
@@ -27,7 +28,7 @@ namespace Nop.Services.Messages
     /// <summary>
     /// Workflow message service
     /// </summary>
-    public partial class WorkflowMessageService : IWorkflowMessageService
+    public class WorkflowMessageService : IWorkflowMessageService
     {
         #region Fields
 
@@ -452,10 +453,15 @@ namespace Nop.Services.Messages
                 //event notification
                 _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
 
+                var emailToken = tokens.SingleOrDefault(x => x.Key.Contains("CustomerEmail"));
+                var nameToken = tokens.SingleOrDefault(x => x.Key.Contains("CustomerFullName"));
+
                 var toEmail = emailAccount.Email;
                 var toName = emailAccount.DisplayName;
 
-                return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
+                return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName, 
+                                        replyToEmailAddress: emailToken?.Value.ToString(), 
+                                        replyToName: nameToken?.Value.ToString());
             }).ToList();
         }
 
@@ -2306,6 +2312,92 @@ namespace Nop.Services.Messages
             _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
 
             return SendNotification(messageTemplate, emailAccount, languageId, tokens, sendToEmail, null);
+        }
+        /// <summary>
+        /// Sends an email for the rfq page
+        /// </summary>
+        /// <param name="languageId">Message language identifier</param>
+        /// <param name="senderEmail">Sender email</param>
+        /// <param name="senderName">Sender name</param>
+        /// <param name="subject">Email subject. Pass null if you want a message template subject to be used.</param>
+        /// <param name="body">Email body</param>
+        /// <param name="attachmentFilePath"></param>
+        /// <param name="attachmentFileName"></param>
+        /// <returns>Queued email identifier</returns>
+        public virtual IList<int> SendQuoteEmail(int languageId, string senderEmail,
+            string senderName, string subject, string body, List<string> attachmentFiles = null)
+        {
+            var store = _storeContext.CurrentStore;
+            languageId = EnsureLanguageIsActive(languageId, store.Id);
+
+            var messageTemplates = GetActiveMessageTemplates(MessageTemplateSystemNames.ContactUsMessage, store.Id);
+            if (!messageTemplates.Any())
+                return new List<int>();
+
+            //tokens
+            var commonTokens = new List<Token>
+            {
+                new Token("ContactUs.SenderEmail", senderEmail),
+                new Token("ContactUs.SenderName", senderName),
+                new Token("ContactUs.Body", body, true)
+            };
+
+            return messageTemplates.Select(messageTemplate =>
+            {
+                //email account
+                var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
+
+                var tokens = new List<Token>(commonTokens);
+                _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
+
+                string fromEmail;
+                string fromName;
+                //required for some SMTP servers
+                if (_commonSettings.UseSystemEmailForContactUsForm)
+                {
+                    fromEmail = emailAccount.Email;
+                    fromName = emailAccount.DisplayName;
+                    body = $"<strong>From</strong>: {WebUtility.HtmlEncode(senderName)} - {WebUtility.HtmlEncode(senderEmail)}<br /><br />{body}";
+                }
+                else
+                {
+                    fromEmail = senderEmail;
+                    fromName = senderName;
+                }
+
+                //event notification
+                _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
+
+                var toEmail = emailAccount.Email;
+                var toName = emailAccount.DisplayName;
+                string attachmentFilePath = null;
+                string attachmentFileName = null;
+                if (attachmentFiles != null)
+                {
+                    attachmentFilePath = "";
+                    attachmentFileName = "";
+                    foreach (var attachmentFile in attachmentFiles.Where(File.Exists))
+                    {
+                        var fileName = Path.GetFileName(attachmentFile);
+                        if (!string.IsNullOrEmpty(attachmentFilePath))
+                        {
+                            attachmentFilePath += ",";
+                            attachmentFileName += ",";
+                        }
+
+                        attachmentFilePath += attachmentFile;
+                        attachmentFileName += fileName;
+                    }
+                }
+                return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName,
+                    attachmentFilePath,
+                    attachmentFileName,
+                    fromEmail: fromEmail,
+                    fromName: fromName,
+                    subject: subject,
+                    replyToEmailAddress: senderEmail,
+                    replyToName: senderName);
+            }).ToList();
         }
 
         /// <summary>

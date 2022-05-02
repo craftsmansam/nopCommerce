@@ -1,0 +1,18 @@
+﻿@media all and (min-width: 481px) {
+    .customer-pages-body .block .list .browse-picture-vault a:before {
+        content: "p";
+    }
+    
+    .master-wrapper-page hr {
+        border-top-color: #000;
+    }
+}
+@media (min-width: 1080px) {
+    .vertical-center {
+        vertical-align: middle;
+    }
+}
+
+.excel-btn:before {
+    content: "Excel Export";
+}

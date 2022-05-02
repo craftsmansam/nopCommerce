@@ -1,0 +1,43 @@
+﻿@using System.Net
+@model Nop.Web.Models.PictureVault.BrowsePictureVaultModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts("Browse Picture Vault Items");
+
+    Html.AppendPageCssClassParts("html-account-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.PictureVault })
+}
+<div class="account-page browse-picture-vault-page">
+    <div class="page-title">
+        <h2>@T("Account.MyAccount") - Welcome To Your Picture Vault</h2>
+    </div>
+    <div class="page-body">
+        <div class="category-description">
+            @{
+                foreach (var po in Model.PurchaseOrderList)
+                {
+                    var pictureText = $"{po.Item3}PO#{po.Item1}";
+
+                    <h3>
+                        <a href="@string.Format(Model.PictureVaultUrlTemplate, WebUtility.UrlEncode(po.Item1))">
+                            <img src="/images/foldericon.png" alt="@pictureText" />
+                        </a>
+                        <a href="@string.Format(Model.PictureVaultUrlTemplate, WebUtility.UrlEncode(po.Item1))">
+                            @pictureText
+                        </a>
+                    </h3>
+                    <p style="margin-left: 40px;">
+                        (last updated @po.Item2)
+                    </p>
+                    <hr style="clear: both;" />
+                }
+            }
+        </div>
+    </div>
+</div>

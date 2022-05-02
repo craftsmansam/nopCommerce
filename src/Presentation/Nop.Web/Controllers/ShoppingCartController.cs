@@ -32,6 +32,7 @@ using Nop.Services.Shipping;
 using Nop.Services.Tax;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Infrastructure.Cache;
@@ -514,11 +515,12 @@ namespace Nop.Web.Controllers
                 });
 
             //we can add only simple products
+            var seName = _urlRecordService.GetSeName(product);
             if (product.ProductType != ProductType.SimpleProduct)
             {
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -529,7 +531,7 @@ namespace Nop.Web.Controllers
                 //it can confuse customers. That's why we redirect customers to the product details page
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -538,7 +540,7 @@ namespace Nop.Web.Controllers
                 //cannot be added to the cart (requires a customer to enter price)
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -547,7 +549,7 @@ namespace Nop.Web.Controllers
                 //rental products require start/end dates to be entered
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -557,7 +559,7 @@ namespace Nop.Web.Controllers
                 //cannot be added to the cart (requires a customer to select a quantity from dropdownlist)
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -568,7 +570,7 @@ namespace Nop.Web.Controllers
                 //product has some attributes. let a customer see them
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 
@@ -622,7 +624,7 @@ namespace Nop.Web.Controllers
                 //but we do not display attribute and gift card warnings here. let's do it on the product details page
                 return Json(new
                 {
-                    redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    redirect = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() })
                 });
             }
 

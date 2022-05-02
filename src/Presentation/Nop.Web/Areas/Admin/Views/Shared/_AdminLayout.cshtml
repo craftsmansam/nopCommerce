@@ -48,6 +48,11 @@
 
     var supportRtl = workContext.WorkingLanguage.Rtl && !localizationSettings.IgnoreRtlPropertyForAdminArea;
 
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/albina.css");
+
+
+    Html.AppendCssFileParts("https://cdn.datatables.net/v/dt/jszip-2.5.0/b-2.0.1/b-html5-2.0.1/datatables.min.css");
+
     //CSS resources
     if (supportRtl)
     {
@@ -77,6 +82,8 @@
     Html.AppendCssFileParts("~/lib/adminLTE/css/skins/_all-skins.min.css");
 
     //scripts
+    Html.AppendScriptParts("https://cdn.datatables.net/v/dt/jszip-2.5.0/b-2.0.1/b-html5-2.0.1/datatables.min.js");
+
     Html.AppendScriptParts($"~/lib/datatables/buttons.bootstrap.min.js");
     Html.AppendScriptParts($"~/lib/datatables/dataTables.buttons.min.js");
     Html.AppendScriptParts($"~/lib/datatables/moment-with-locales-2.22.2.min.js");

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Messages;
 
 namespace Nop.Services.Messages
@@ -32,5 +35,7 @@ namespace Nop.Services.Messages
             IEnumerable<string> bcc = null, IEnumerable<string> cc = null,
             string attachmentFilePath = null, string attachmentFileName = null,
             int attachedDownloadId = 0, IDictionary<string, string> headers = null);
+
+        void SendErrorEmail(Exception exception, EmailAccount emailAccount, HttpRequest contextRequest, IIdentity userIdentity);
     }
 }

@@ -497,7 +497,7 @@ namespace Nop.Web.Controllers
                 _genericAttributeService.SaveAttribute<PickupPoint>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPickupPointAttribute, null, _storeContext.CurrentStore.Id);
             }
 
-            return RedirectToRoute("CheckoutShippingMethod");
+            return RedirectToRoute("CheckoutConfirm");
         }
 
         [HttpPost, ActionName("ShippingAddress")]
@@ -590,7 +590,15 @@ namespace Nop.Web.Controllers
 
         public virtual IActionResult ShippingMethod()
         {
+            //@@@@@
+            if (_shippingSettings.ShipToSameAddress)
+            {
+                return RedirectToRoute("CheckoutPaymentMethod");
+            }
+            return RedirectToRoute("CheckoutShippingAddress");
+
             //validation
+            // ReSharper disable once HeuristicUnreachableCode
             if (_orderSettings.CheckoutDisabled)
                 return RedirectToRoute("ShoppingCart");
 
@@ -1685,6 +1693,8 @@ namespace Nop.Web.Controllers
                 var placeOrderResult = _orderProcessingService.PlaceOrder(processPaymentRequest);
                 if (placeOrderResult.Success)
                 {
+                    //send email
+                    //add order to job costing
                     HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", null);
                     var postProcessPaymentRequest = new PostProcessPaymentRequest
                     {

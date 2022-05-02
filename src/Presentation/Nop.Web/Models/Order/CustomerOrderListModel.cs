@@ -30,6 +30,9 @@ namespace Nop.Web.Models.Order
             public string PaymentStatus { get; set; }
             public string ShippingStatus { get; set; }
             public DateTime CreatedOn { get; set; }
+            public string PurchaseOrder { get; set; }
+            public string ProjectName { get; set; }
+            public bool IsShopOrder { get; set; } = false;
         }
 
         public partial class RecurringOrderModel : BaseNopEntityModel

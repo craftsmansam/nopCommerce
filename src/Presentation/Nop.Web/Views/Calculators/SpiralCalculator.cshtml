@@ -1,0 +1,224 @@
+﻿@model Nop.Web.Models.Calculators.SpiralCalculatorModel
+@{
+    ViewData["Title"] = "SpiralCalculator";
+    Layout = "_ColumnsOne";
+
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/calculators.css");
+    Html.AppendMetaDescriptionParts("Need a spiral math calculator? Visit our website today to get all the tools you need to calculate plan view radius and plan view diameter for a spiral bend.");
+}
+
+<div class="page account-page address-list-page">
+    <div class="page-title">
+        <h2>Spiral Math Calculator</h2>
+    </div>
+
+    <div class="page-body">
+        <nop-antiforgery-token />
+        <div class="spiral-calculator">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new {id = "spiralCalculatorForm" } ))
+            {
+                <div id="validationSummary">
+                    @Html.ValidationSummary(false)
+                </div>
+                <div class="calculator" style="width: auto; height: auto; padding: 10px;">
+                    <div class="form-group" id="spiralTable">
+                        @Html.LabelFor(m => m.PlanViewRadius, "Plan View Radius: *")
+                        @Html.TextBoxFor(m => m.PlanViewRadius, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Plan View Radius (inches) - required", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.PlanViewRadius)
+                        @Html.LabelFor(m => m.PlanViewDiameter, "Plan View Diameter:")
+                        @Html.TextBoxFor(m => m.PlanViewDiameter, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Plan View Diameter (inches)" })
+                        @Html.ValidationMessageFor(m => m.PlanViewDiameter)
+                        @Html.LabelFor(m => m.OverallHeight, "Overall Height of Bent Section: *")
+                        @Html.TextBoxFor(m => m.OverallHeight, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Overall Height of Bent Section (inches) - required" })
+                        @Html.ValidationMessageFor(m => m.OverallHeight)
+                        @Html.LabelFor(m => m.RiseHeight, "Rise Height:")
+                        @Html.TextBoxFor(m => m.RiseHeight, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Rise Height (inches)" })
+                        @Html.ValidationMessageFor(m => m.RiseHeight)
+                        @Html.LabelFor(m => m.NumRises, "No. of Rises:")
+                        @Html.TextBoxFor(m => m.NumRises, new { @type = "number", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "No. of Rises" })
+                        @Html.ValidationMessageFor(m => m.NumRises)
+                        @Html.LabelFor(m => m.OverallRun, "Arc in Plan/Overall Run: *")
+                        @Html.TextBoxFor(m => m.OverallRun, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Arc in Plan/Overall Run - required" })
+                        @Html.ValidationMessageFor(m => m.OverallRun)
+                        @Html.LabelFor(m => m.DegreeTurnInPlan, "Degree Turn in Plan:")
+                        @Html.TextBoxFor(m => m.DegreeTurnInPlan, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Degree Turn in Plan" })
+                        @Html.ValidationMessageFor(m => m.DegreeTurnInPlan)
+                        @Html.LabelFor(m => m.TreadWidth, "Tread Width & Stringer:")
+                        @Html.TextBoxFor(m => m.TreadWidth, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Tread Width & Stringer" })
+                        @Html.ValidationMessageFor(m => m.TreadWidth)
+                        @Html.LabelFor(m => m.NumTreads, "Number Treads:")
+                        @Html.TextBoxFor(m => m.NumTreads, new { @type = "number", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Number Treads" })
+                        @Html.ValidationMessageFor(m => m.NumTreads)
+                        @Html.LabelFor(m => m.RisePerFoot, "Rise Per Foot:")
+                        @Html.TextBoxFor(m => m.RisePerFoot, new { @type = "number", @step = "0.001", @min = "0", @maxlength = "10", @class = "form-control", @placeholder = "Rise Per Foot" })
+                        @Html.ValidationMessageFor(m => m.RisePerFoot)
+                        @Html.LabelFor(m => m.DirectionOfSpiral, "Direction of Spiral *")
+                        @Html.DropDownListFor(m => m.DirectionOfSpiral, Model.DirectionOfSpiralList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DirectionOfSpiral)
+                        @Html.LabelFor(m => m.Pitch, "Degree of Pitch (calculated):")
+                        @Html.TextBoxFor(m => m.Pitch, new { @maxlength = "10", @readonly = "true", @class = "form-control", @placeholder = "Degree of Pitch - Calculated" })
+                        @Html.LabelFor(m => m.ArcLength, "Arc Length (calculated):")
+                        @Html.TextBoxFor(m => m.ArcLength, new { @maxlength = "10", @readonly = "true", @class = "form-control", @placeholder = "Arc Length - Calculated" })
+                        @Html.LabelFor(m => m.Notes, "Notes:")
+                        @Html.TextAreaFor(m => m.Notes, new { @textmode = "MultiLine", @rows = "14", @rolumns = "40", @class = "form-control", @placeholder = "Any Notes for Albina" })
+
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3 calc-button">
+                                <input type="button" value="Calculate" CssClass="btn btn-warning" OnClick="btnCalculate_Click()" />
+                            </div>
+                            <div class="col-md-3 col-xs-12 calc-button">
+                                <input type="button" value="Clear All" CssClass="btn btn-danger clear" onclick="btnSpiralClearAll_Click()" />
+                            </div>
+                            <div class="col-md-3 col-xs-12 calc-button">
+                                <input type="button" value="View Results as PDF" CssClass="btn btn-info" OnClick="btnPrintReport_Click()" />
+                            </div>
+                            <div class="col-md-3 col-xs-12 calc-button">
+                                <input type="button" value="Email Report to Albina" CssClass="btn btn-warning" OnClick="btnEmailReport_Click()" />
+                            </div>
+                            <asp:HiddenField ID="PrintHidden" Value="false" />
+                        </div>
+                        <br />
+                        <p style="font-weight: bold;">* Albina must have <em>Plan View Radius, Overall Height of Bent Section Arc in Plan/Overal Run, Direction of Spiral</em> to produce a spiral</p><br />
+                        <ul class="parameters">
+                            <li class="calcinstructions">All dimensions are entered in inches and all outputs will be in inches.</li>
+                            <li class="calcinstructions">All dimensions are to be rounded to .xxx</li>
+                            <li class="calcinstructions">Enter consistent dimensions(i.e. if you enter an inside dimension for one input, enter an inside dimension for your other inputs. Do not mix inside, outside, and centerline dimensions).</li>
+                        </ul>
+                        <p>**Albina takes no responsibility for the calculated results.</p>
+                    </div>
+
+                    <img style="width: 75%; margin: 0 12%;" class="lazyload" data-src="/images/calculatorpic_b.png" alt="Spiral calculator diagram" title="Spiral calculator diagram" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script asp-location="Footer">
+    function btnPrintReport_Click() {
+        EmailPrintReport(false);
+    }
+
+    function btnEmailReport_Click() {
+        EmailPrintReport(true);
+    }
+
+    function EmailPrintReport(isEmail) {
+        if ($("#spiralCalculatorForm").valid()) {
+            clearValidationSummary();
+
+            var postData = createPostData();
+            var url = "@Url.Action("PrintSpiralReport", "Calculators")";
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: url,
+                data: postData,
+                datatype: "json",
+                success: function(data) {
+                    if (isEmail) {
+                        window.location = "/quote-request/bending-and-fabrication?include_spiral=true";
+                    } else {
+                        window.location = "@Url.Action("DownloadSpiralReport", "Calculators")";
+                    }
+                },
+                error: function() {
+                    alert("There was an error while downloading your report.");
+                }
+            });
+        }
+    }
+
+    function btnSpiralClearAll_Click() {
+        $("#PlanViewRadius").val("");
+        $("#PlanViewDiameter").val("");
+        $("#OverallHeight").val("");
+        $("#RiseHeight").val("");
+        $("#NumRises").val("");
+        $("#NumTreads").val("");
+        $("#OverallRun").val("");
+        $("#DegreeTurnInPlan").val("");
+        $("#TreadWidth").val("");
+        $("#Pitch").val("");
+        $("#ArcLength").val("");
+        $("#RisePerFoot").val("");
+        $("#DirectionOfSpiral").val(0);
+        $("#Notes").val("");
+        //SpecifyNoPrint stuff here as well
+    }
+
+    function createPostData() {
+        var postData = {
+            spiralCalculatorModel:
+            {
+                PlanViewRadius: $("#PlanViewRadius").val(),
+                PlanViewDiameter: $("#PlanViewDiameter").val(),
+                OverallHeight: $("#OverallHeight").val(),
+                RiseHeight: $("#RiseHeight").val(),
+                NumRises: $("#NumRises").val(),
+                NumTreads: $("#NumTreads").val(),
+                OverallRun: $("#OverallRun").val(),
+                DegreeTurnInPlan: $("#DegreeTurnInPlan").val(),
+                TreadWidth: $("#TreadWidth").val(),
+                RisePerFoot: $("#RisePerFoot").val(),
+                DirectionOfSpiral: $("#DirectionOfSpiral").val(),
+                Notes: $("#Notes").val()
+            }
+        };
+        addAntiForgeryToken(postData);
+
+        return postData;
+    }
+
+    function btnCalculate_Click() {
+        if ($("#spiralCalculatorForm").valid()) {
+            clearValidationSummary();
+
+            var postData = createPostData();
+
+            var urlCalculate = "@Url.Action("SpiralCalculator", "Calculators")";
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: urlCalculate,
+                data: postData,
+                datatype: "json",
+                success: function(data) {
+                    if (data.Result != "Error") {
+                        $('#@Html.IdFor(model => model.PlanViewRadius)').val(data.PlanViewRadius);
+                        $('#@Html.IdFor(model => model.PlanViewDiameter)').val(data.PlanViewDiameter);
+                        $('#@Html.IdFor(model => model.OverallHeight)').val(data.OverallHeight);
+                        $('#@Html.IdFor(model => model.RiseHeight)').val(data.RiseHeight);
+                        $('#@Html.IdFor(model => model.NumRises)').val(data.NumRises);
+                        $('#@Html.IdFor(model => model.OverallRun)').val(data.OverallRun);
+                        $('#@Html.IdFor(model => model.DegreeTurnInPlan)').val(data.DegreeTurnInPlan);
+                        $('#@Html.IdFor(model => model.TreadWidth)').val(data.TreadWidth);
+                        $('#@Html.IdFor(model => model.NumTreads)').val(data.NumTreads);
+                        $('#@Html.IdFor(model => model.RisePerFoot)').val(data.RisePerFoot);
+                        $('#@Html.IdFor(model => model.DirectionOfSpiral)').val(data.DirectionOfSpiral);
+                        $('#@Html.IdFor(model => model.Pitch)').val(data.Pitch);
+                        $('#@Html.IdFor(model => model.ArcLength)').val(data.ArcLength);
+                        $('#@Html.IdFor(model => model.Notes)').val(data.Notes);
+                        //SpecifyNoPrint stuff here as well
+                    }
+                    else{
+                        console.log("Error in model state");
+                    }
+               },
+                error: function () {
+                    alert("There was an error trying to calculate the spiral math.");
+                }
+            });
+        }
+    }
+
+    function clearValidationSummary() {
+        var container = $("#spiralCalculatorForm").find("[data-valmsg-summary='true']");
+        var list = container.find("ul");
+
+        if (list && list.length) {
+            list.empty();
+            container.addClass("validation-summary-valid").removeClass("validation-summary-errors");
+        }
+    }
+</script>
+

@@ -1,5 +1,6 @@
 ﻿@model TopicModel
 @using Nop.Core.Domain.Seo
+@using Nop.Web.Components
 @inject Nop.Core.IWebHelper webHelper
 @inject SeoSettings seoSettings
 @{
@@ -20,12 +21,13 @@
 
     if (seoSettings.CanonicalUrlsEnabled)
     {
-        var topicUrl = Url.RouteUrl("Topic", new { SeName = Model.SeName }, webHelper.CurrentRequestProtocol).ToLowerInvariant();
+        var topicUrl = Url.RouteUrl("TopicWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }, webHelper.CurrentRequestProtocol).ToLowerInvariant();
         Html.AddCanonicalUrlParts(topicUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
     }
 
     //page class
     Html.AppendPageCssClassParts("html-topic-page");
+    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.css");
 }
 @if (Model.IsPasswordProtected)
 {
@@ -90,6 +92,6 @@
         <h1>@Model.Title</h1>
     </div>
     <div class="page-body">
-        @Html.Raw(Model.Body)
+        @Html.Raw(await Component.ParseWidgetAndComponentsFromText(Model.Body))
     </div>
 </div>

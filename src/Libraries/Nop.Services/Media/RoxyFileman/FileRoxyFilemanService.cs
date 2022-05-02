@@ -624,14 +624,19 @@ namespace Nop.Services.Media.RoxyFileman
                     var fileName = formFile.FileName;
                     if (CanHandleFile(fileName))
                     {
-                        var uniqueFileName = GetUniqueFileName(directoryPath, _fileProvider.GetFileName(fileName));
+                        var uniqueFileName = _fileProvider.GetFileName(fileName); //GetUniqueFileName(directoryPath, _fileProvider.GetFileName(fileName));
                         var destinationFile = _fileProvider.Combine(directoryPath, uniqueFileName);
+
+                        if (_fileProvider.FileExists(destinationFile))
+                        {
+                            _fileProvider.DeleteFile(destinationFile);
+                        }
 
                         //A warning (SCS0018 - Path Traversal) from the "Security Code Scan" analyzer may appear at this point. 
                         //In this case, it is not relevant. The input is not supplied by user.
-                        using (var stream = new FileStream(destinationFile, FileMode.OpenOrCreate))
+                        await using (var stream = new FileStream(destinationFile, FileMode.OpenOrCreate))
                         {
-                            formFile.CopyTo(stream);
+                            await formFile.CopyToAsync(stream);
                         }
 
                         if (GetFileType(new FileInfo(uniqueFileName).Extension) != "image")

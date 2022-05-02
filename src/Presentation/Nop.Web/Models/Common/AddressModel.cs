@@ -76,11 +76,15 @@ namespace Nop.Web.Models.Common
         public bool FaxRequired { get; set; }
         [NopResourceDisplayName("Address.Fields.FaxNumber")]
         public string FaxNumber { get; set; }
+
+        public string CustomAttributes { get; set; }
         
         public IList<SelectListItem> AvailableCountries { get; set; }
         public IList<SelectListItem> AvailableStates { get; set; }
 
         public string FormattedCustomAddressAttributes { get; set; }
         public IList<AddressAttributeModel> CustomAddressAttributes { get; set; }
+        public int? CustomerAddressID { get; set; }
+        public int? SalesContactID { get; set; }
     }
 }

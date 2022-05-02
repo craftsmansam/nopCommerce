@@ -1,0 +1,85 @@
+﻿@model Nop.Web.Models.Calculators.TangentMaterialsModel
+@{
+    Layout = "_ColumnsOne";
+
+    Html.AppendCssFileParts("~/Themes/Albina/Content/css/calculators.css");
+    Html.AppendMetaDescriptionParts("Find a tangent material calculator here! Actual tangents required are based on many different requirements. Visit our website or call directly to learn more.");
+}
+<h2>Tangent Materials</h2>
+<br />
+<h3><b>Tangent Material required for bending</b> (reference only)</h3>
+<p>*tangents listed are per each end (i.e. the total loss required is two (2) times what is listed)</p>
+<br />
+<div id="tangentcalculator">
+    <div id="innertangent">
+        <label>Select Material:</label>
+        @Html.DropDownListFor(m => m.MaterialSelector, Model.MaterialSelectorList, "- select a material -", new { @class = "form-control" })
+        <label style="margin-top: 10px;">Select Material Size:</label>
+        @Html.DropDownListFor(m => m.MaterialSizeSelector, Model.MaterialSizeSelectorList, "- select a size -", new { @class = "form-control" })
+
+        <div style="margin: 10px 0 10px 20px;">
+            <input type="button" id="CalculateButton" value="Calculate" disabled="disabled" class="btn btn-warning" style="padding: 5px;" />
+            <input type="button" id="ClearButton" value="Clear" style="margin-left: 10px; padding: 5px;" class="btn btn-danger" />
+        </div>
+        <label>Total Larger Radii/Roll Bend:</label>
+        <input type="text" id="RollBendResult" class="form-control" readonly="readonly" />
+        <label>Total Tighter Radii/Draw Bend:</label>
+        <input class="form-control" type="text" id="DrawBendResult" readonly="readonly" />
+    </div>
+</div>
+<div class="tangent-calculator">
+    <h3>Material Sizes - Assuming roll bent material (typically larger radii)</h3>
+    @await Component.InvokeAsync("TangentTable", new { bendType = "Roll Bend", headerTableID = "rollbentheader", mainTableID = "rollbenttable", classPrefix = "rollcolumn" })
+    <br />
+
+    <h3>Material Sizes - Assuming Rotary draw bent material (typically tighter radii)</h3>
+    @await Component.InvokeAsync("TangentTable", new { bendType = "Rotary Draw", headerTableID = "rotaryheader", mainTableID = "rotarytable", classPrefix = "rotarycolumn" })
+    <br />
+
+    <p><b>All information represented is approximate- actual tangents required are based on many different requirements, such as:</b></p>
+    <ul style="padding-left: 20px;">
+        <li>Bend configuration</li>
+        <li>Actual radii required</li>
+        <li>Material thickness</li>
+        <li>Actual machine we are bending on (many machines can bend the same materials)</li>
+        <li>Complexity of bending (i.e. Spiral bent)</li>
+        <li>Distortion requirements (i.e. AESS)</li>
+    </ul>
+</div>
+
+<script asp-location="Footer">
+    function MaterialOrSizeSelected() {
+        var material = $("#MaterialSelector option:selected").text();
+        var materialSize = $("#MaterialSizeSelector option:selected").text();
+        if (material != "- select a material -" && materialSize != "- select a size -") {
+            $("#CalculateButton").removeAttr("disabled");
+        }
+        else {
+            $("#CalculateButton").attr("disabled", "disabled");
+        }
+    }
+
+    $("#CalculateButton").click(function () {
+        // do ajax call to get the lookup value
+        $.ajax({
+            url: "@Url.Action("TangentMaterialsCalculate", "Calculators")",
+            data: { size: $("#MaterialSizeSelector").val(), material: $("#MaterialSelector").val() },
+            success: function (data) {
+                var result = eval(data);
+                $("#RollBendResult").val(result.RollBendResult);
+                $("#DrawBendResult").val(result.DrawBendResult);
+            }
+        });
+    });
+
+    $("#MaterialSelector").change(MaterialOrSizeSelected);
+    $("#MaterialSizeSelector").change(MaterialOrSizeSelected);
+
+    $("#ClearButton").click(function () {
+        $("#MaterialSizeSelector option:selected").removeAttr("selected");
+        $("#MaterialSelector option:selected").removeAttr("selected");
+
+        $("#DrawBendResult").val("");
+        $("#RollBendResult").val("");
+	});
+</script>

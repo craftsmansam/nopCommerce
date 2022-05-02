@@ -16,6 +16,11 @@ namespace Nop.Core.Domain.Shipping
         NotYetShipped = 20,
 
         /// <summary>
+        /// Ready to ship
+        /// </summary>
+        ReadyToShip = 22,
+
+        /// <summary>
         /// Partially shipped
         /// </summary>
         PartiallyShipped = 25,

@@ -1,0 +1,59 @@
+﻿@model TangentTableModel
+@{
+}
+
+<table class="table header-table" id=@Model.HeaderTableID>
+    <thead>
+        <tr>
+            <td class="materialcolumn columnheader">Material</td>
+            @{
+                var rowNumber = 0;
+                var columnNumber = 0;
+                var firstRowMaterial = string.Empty;
+            }
+            @foreach (Nop.Core.Domain.Calculators.VwTangentMaterial tangentMaterial in Model.TangentMaterials)
+            {
+            @if (++rowNumber == 1)
+            {
+             firstRowMaterial = tangentMaterial.MaterialName;
+            } 
+            @if (tangentMaterial.MaterialName == firstRowMaterial)
+            {
+                var classValue = Model.ClassPrefix + "_" + Craftsman.Utility.NumberToEnglish.ChangeNumericToWords(++columnNumber).ToLower() + " columnheader";
+            <td class="@classValue">@tangentMaterial.MaterialSize</td>
+            }
+            } 
+        </tr>
+    </thead>
+</table>
+
+<table class="table" id=@Model.MainTableID>
+    
+        @{
+            var currentRowMaterial = string.Empty;
+            columnNumber = 0;
+        }
+        @foreach (Nop.Core.Domain.Calculators.VwTangentMaterial tangentMaterial in Model.TangentMaterials)
+        {
+            @if (tangentMaterial.MaterialName != currentRowMaterial)
+            {
+                columnNumber = 0;
+                @if (currentRowMaterial != string.Empty)
+                {
+                    @:</tr>
+                }
+                currentRowMaterial = tangentMaterial.MaterialName;
+                @:<tr>
+                <td data-title="Material" class="materialcolumn">@currentRowMaterial</td>
+            }
+
+            var rowClass = "colrow " + Model.ClassPrefix + "_" + Craftsman.Utility.NumberToEnglish.ChangeNumericToWords(++columnNumber).ToLower();
+            var text = string.IsNullOrEmpty(tangentMaterial.Tangent) ? "N/A" : tangentMaterial.Tangent + " tangents";
+
+            <td data-title="@tangentMaterial.MaterialName" class="@rowClass"> @text</td>
+            
+        }
+    </tr>
+</table>
+
+

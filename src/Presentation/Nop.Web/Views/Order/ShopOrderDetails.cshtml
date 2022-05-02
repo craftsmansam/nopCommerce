@@ -1,0 +1,29 @@
+@model ShopOrderDetailsModel
+@{
+    Layout = !Model.PrintMode ? "_ColumnsOne" : "_Print";
+    //title
+    Html.AddTitleParts(T("PageTitle.OrderDetails").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-order-details-page");
+}
+@if (Model.PrintMode)
+{
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            window.print();
+        });
+    </script>
+}
+<div class="page order-details-page">
+    <div class="page-body">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageTop, additionalData = Model })
+        <div class="order-overview">
+            <div class="order-number">
+                <strong>@T("Order.Order#")@Model.ShopOrderNumber</strong>
+            </div>
+            @await Component.InvokeAsync("OrderDetailsShared", Model)
+        </div>
+        @await Component.InvokeAsync("OrderDetailsFilesShared", Model)
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageBottom, additionalData = Model })
+    </div>
+</div>

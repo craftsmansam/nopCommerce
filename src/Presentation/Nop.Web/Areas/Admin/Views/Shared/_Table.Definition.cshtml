@@ -180,26 +180,60 @@ else
 ordering: @Model.Ordering.ToString().ToLower(),
 @if (Model.RefreshButton)
 {
-    <text>
-        buttons: [{
+    if(Model.UrlRead != null)
+    {
+        <text>
+            buttons: [{
             name: 'refresh',
             text: '<i class="fa fa-refresh" style="padding-left: 5px"></i>',
             action: function () {
-                @if (Model.ServerSide)
-                {
-                    <text>
+            @if (Model.ServerSide)
+            {
+                <text>
                     updateTable('#@Model.Name');
-                    </text>
-                }
-                else
-                {
-                    <text>
-                    updateTableSrc('#@Model.Name');
-                    </text>
-                }
+                </text>
             }
-        }],
-    </text>
+            else
+            {
+                <text>
+                    updateTableSrc('#@Model.Name');
+                </text>
+            }
+            }
+            },
+            {
+            extend: 'excel',
+            action: newExportAction,
+            text: '<i class="excel-btn"></i>',
+            titleAttr: "Excel"
+            }
+            ],
+        </text>
+    }
+    else
+    {
+        <text>
+            buttons: [{
+            name: 'refresh',
+            text: '<i class="fa fa-refresh" style="padding-left: 5px"></i>',
+            action: function () {
+            @if (Model.ServerSide)
+            {
+                <text>
+                    updateTable('#@Model.Name');
+                </text>
+            }
+            else
+            {
+                <text>
+                    updateTableSrc('#@Model.Name');
+                </text>
+            }
+            }
+            }
+            ],
+        </text>
+    }
 }
 dom: '@JavaScriptEncoder.Default.Encode(dom)',
 columns: [    

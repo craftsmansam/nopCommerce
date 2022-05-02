@@ -1,0 +1,37 @@
+﻿@model Nop.Web.Components.IOrderDetailsModel
+<ul class="order-overview-content">
+    <li class="order-date">
+        @T("Order.OrderDate"): @Model.OrderDate.ToString("D")
+    </li>
+    @if (!string.IsNullOrWhiteSpace(Model.PurchaseOrder))
+    {
+        <li class="order-status">
+            Purchase Order: @Model.PurchaseOrder
+        </li>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ProjectName))
+    {
+        <li class="order-status">
+            Project Name: @Model.ProjectName
+        </li>
+    }
+    <li class="order-status">
+        @T("Order.OrderStatus"): @Model.Status
+    </li>
+    @if (Model.DateRTS.HasValue)
+    {
+        <li class="order-total">
+            Date Ready to Ship: @Model.DateRTS.Value.ToShortDateString()
+        </li>
+    }
+    @if (Model.DateShipped.HasValue)
+    {
+        <li class="order-total">
+            Date Shipped: @Model.DateShipped.Value.ToShortDateString()
+        </li>
+    }
+    <li class="order-total">
+        @T("Order.OrderTotal"): <strong>@Model.OrderTotal</strong>
+    </li>
+</ul>
+@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderDetailsPageOverview, additionalData = Model })

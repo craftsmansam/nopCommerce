@@ -97,6 +97,8 @@ namespace Nop.Web.Infrastructure
             builder.RegisterType<Factories.NewsModelFactory>().As<Factories.INewsModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.NewsletterModelFactory>().As<Factories.INewsletterModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.OrderModelFactory>().As<Factories.IOrderModelFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<Factories.QuoteModelFactory>().As<Factories.IQuoteModelFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<Factories.ShopOrderModelFactory>().As<Factories.IShopOrderModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.PollModelFactory>().As<Factories.IPollModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.PrivateMessagesModelFactory>().As<Factories.IPrivateMessagesModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.ProductModelFactory>().As<Factories.IProductModelFactory>().InstancePerLifetimeScope();

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Nop.Web.Components;
 using Nop.Web.Framework.Models;
 using Nop.Web.Models.Common;
 
 namespace Nop.Web.Models.Order
 {
-    public partial class OrderDetailsModel : BaseNopEntityModel
+    public partial class OrderDetailsModel : BaseNopEntityModel, IOrderDetailsModel
     {
         public OrderDetailsModel()
         {
@@ -26,6 +27,13 @@ namespace Nop.Web.Models.Order
         public bool PdfInvoiceDisabled { get; set; }
 
         public string CustomOrderNumber { get; set; }
+
+        public string ShopOrderConfirmationFilename { get; set; }
+        public string ShippingTrackingUrl { get; set; }
+        public int ShopOrderId { get; set; }
+
+        public List<int> MtrDocumentIDs { get; set; }
+
 
         public DateTime CreatedOn { get; set; }
 
@@ -78,7 +86,25 @@ namespace Nop.Web.Models.Order
         public IList<OrderNote> OrderNotes { get; set; }
 
         public bool ShowVendorName { get; set; }
-        
+
+        public DateTime OrderDate {
+            get => CreatedOn;
+            set => CreatedOn = value;
+        }
+
+        public string PurchaseOrder => null;
+
+        public string ProjectName => null;
+
+        public string Status
+        {
+            get => OrderStatus;
+            set => OrderStatus = value;
+        }
+
+        public DateTime? DateRTS => null;
+
+        public DateTime? DateShipped => null;
 
         #region Nested Classes
 

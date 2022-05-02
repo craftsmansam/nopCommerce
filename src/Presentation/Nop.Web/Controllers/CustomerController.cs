@@ -436,6 +436,8 @@ namespace Nop.Web.Controllers
 
                             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
                                 return RedirectToRoute("Homepage");
+                            if (returnUrl == "/")
+                                return RedirectToRoute("CustomerInfo");
 
                             return Redirect(returnUrl);
                         }
@@ -1468,8 +1470,8 @@ namespace Nop.Web.Controllers
             var customer = _workContext.CurrentCustomer;
             //find address (ensure that it belongs to the current customer)
             var address = _customerService.GetCustomerAddress(customer.Id, addressId);
-            if (address == null)
-                //address is not found
+            if (address == null || address.CustomerAddressID != null)
+                //address is not found or address is from job costing
                 return RedirectToRoute("CustomerAddresses");
 
             var model = new CustomerAddressEditModel();

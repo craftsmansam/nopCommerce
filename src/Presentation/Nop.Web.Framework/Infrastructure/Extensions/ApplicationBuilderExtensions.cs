@@ -1,6 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -14,6 +14,7 @@ using Microsoft.Net.Http.Headers;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Security;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -23,6 +24,7 @@ using Nop.Services.Installation;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Media.RoxyFileman;
+using Nop.Services.Messages;
 using Nop.Services.Plugins;
 using Nop.Web.Framework.Globalization;
 using Nop.Web.Framework.Mvc.Routing;
@@ -107,17 +109,38 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
                             //log error
                             EngineContext.Current.Resolve<ILogger>().Error(exception.Message, exception, currentCustomer);
+
+                            //send error email
+                            var defaultEmailAccountId = EngineContext.Current.Resolve<EmailAccountSettings>().DefaultEmailAccountId;
+                            var defaultEmailAccount = EngineContext.Current.Resolve<IEmailAccountService>().GetEmailAccountById(defaultEmailAccountId);
+
+                            if (ShouldEmailError(exception))
+                            {
+                                EngineContext.Current.Resolve<IEmailSender>().SendErrorEmail(exception, defaultEmailAccount, context.Request, context.User?.Identity);
+                            }
                         }
                     }
                     finally
                     {
-                        //rethrow the exception to show the error page
-                        ExceptionDispatchInfo.Throw(exception);
+                        //get new path
+                        var errorPath = "/error";
+                        //re-execute request with new path
+                        context.Response.Redirect(context.Request.PathBase + errorPath);
                     }
 
                     return Task.CompletedTask;
                 });
             });
+        }
+
+        private static bool ShouldEmailError(Exception exception)
+        {
+            if (exception is FormatException && exception.ToString().Contains("not a valid value for Boolean"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -274,7 +297,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 RequestPath = new PathString("/db_backups"),
                 ContentTypeProvider = provider
             });
-
+            
             //add support for webmanifest files
             provider.Mappings[".webmanifest"] = MimeTypes.ApplicationManifestJson;
 
@@ -282,6 +305,14 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             {
                 FileProvider = new PhysicalFileProvider(fileProvider.GetAbsolutePath("icons")),
                 RequestPath = "/icons",
+                ContentTypeProvider = provider
+            });
+
+            provider = new AlbinaFileExtensionContentTypeProvider();
+            application.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(fileProvider.GetAbsolutePath("App")),
+                RequestPath = "/App",
                 ContentTypeProvider = provider
             });
 

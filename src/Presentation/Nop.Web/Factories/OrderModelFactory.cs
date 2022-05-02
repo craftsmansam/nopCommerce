@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Craftsman.Data;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
@@ -8,6 +10,7 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Data;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
@@ -43,6 +46,7 @@ namespace Nop.Web.Factories
         private readonly ILocalizationService _localizationService;
         private readonly IOrderProcessingService _orderProcessingService;
         private readonly IOrderService _orderService;
+        private readonly IShopOrderService _shopOrderService;
         private readonly IOrderTotalCalculationService _orderTotalCalculationService;
         private readonly IPaymentPluginManager _paymentPluginManager;
         private readonly IPaymentService _paymentService;
@@ -60,6 +64,7 @@ namespace Nop.Web.Factories
         private readonly ShippingSettings _shippingSettings;
         private readonly TaxSettings _taxSettings;
         private readonly VendorSettings _vendorSettings;
+        private readonly IRepository<ShopOrderMTR> _shopOrderMtrRepository;
 
         #endregion
 
@@ -77,6 +82,7 @@ namespace Nop.Web.Factories
             ILocalizationService localizationService,
             IOrderProcessingService orderProcessingService,
             IOrderService orderService,
+            IShopOrderService shopOrderService,
             IOrderTotalCalculationService orderTotalCalculationService,
             IPaymentPluginManager paymentPluginManager,
             IPaymentService paymentService,
@@ -93,7 +99,8 @@ namespace Nop.Web.Factories
             RewardPointsSettings rewardPointsSettings,
             ShippingSettings shippingSettings,
             TaxSettings taxSettings,
-            VendorSettings vendorSettings)
+            VendorSettings vendorSettings,
+            IRepository<ShopOrderMTR> shopOrderMtrRepository)
         {
             _addressSettings = addressSettings;
             _catalogSettings = catalogSettings;
@@ -107,6 +114,7 @@ namespace Nop.Web.Factories
             _localizationService = localizationService;
             _orderProcessingService = orderProcessingService;
             _orderService = orderService;
+            _shopOrderService = shopOrderService;
             _orderTotalCalculationService = orderTotalCalculationService;
             _paymentPluginManager = paymentPluginManager;
             _paymentService = paymentService;
@@ -124,6 +132,7 @@ namespace Nop.Web.Factories
             _shippingSettings = shippingSettings;
             _taxSettings = taxSettings;
             _vendorSettings = vendorSettings;
+            _shopOrderMtrRepository = shopOrderMtrRepository;
         }
 
         #endregion
@@ -139,6 +148,15 @@ namespace Nop.Web.Factories
             var model = new CustomerOrderListModel();
             var orders = _orderService.SearchOrders(storeId: _storeContext.CurrentStore.Id,
                 customerId: _workContext.CurrentCustomer.Id);
+            
+            var shopOrders = new List<ShopOrder>();
+            if (_workContext.CurrentCustomer.JCCustomerID.HasValue)
+            {
+                shopOrders = _shopOrderService.ListShopOrdersForCustomer(_workContext.CurrentCustomer.JCCustomerID.Value);
+                var duplicated = shopOrders.Where(so => orders.Any(o => o.CustomOrderNumber == so.ShopOrderNumber.ToString())).ToList();
+                duplicated.ForEach(x => shopOrders.Remove(x));
+            }
+
             foreach (var order in orders)
             {
                 var orderModel = new CustomerOrderListModel.OrderDetailsModel
@@ -154,6 +172,25 @@ namespace Nop.Web.Factories
                 };
                 var orderTotalInCustomerCurrency = _currencyService.ConvertCurrency(order.OrderTotal, order.CurrencyRate);
                 orderModel.OrderTotal = _priceFormatter.FormatPrice(orderTotalInCustomerCurrency, true, order.CustomerCurrencyCode, false, _workContext.WorkingLanguage.Id);
+
+                model.Orders.Add(orderModel);
+            }
+
+            foreach (var shopOrder in shopOrders)
+            {
+                var orderModel = new CustomerOrderListModel.OrderDetailsModel
+                {
+                    Id = shopOrder.ShopOrderNumber,
+                    CreatedOn = shopOrder.OrderDate,
+                    OrderStatusEnum = shopOrder.NopOrderStatus,
+                    OrderStatus = _localizationService.GetLocalizedEnum(shopOrder.NopOrderStatus),
+                    IsReturnRequestAllowed = false,
+                    CustomOrderNumber = shopOrder.ShopOrderNumber.ToString(),
+                    IsShopOrder = true,
+                    OrderTotal = shopOrder.QuotedPrice.ToString(FormatStrings.CurrencyFormat),
+                    PurchaseOrder = shopOrder.PurchaseOrder,
+                    ProjectName = shopOrder.ProjectName
+                };
 
                 model.Orders.Add(orderModel);
             }
@@ -189,10 +226,11 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="order">Order</param>
         /// <returns>Order details model</returns>
-        public virtual OrderDetailsModel PrepareOrderDetailsModel(Order order)
+        public virtual OrderDetailsModel PrepareOrderDetailsModel(Order order, ShopOrder shopOrder = null)
         {
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
+
             var model = new OrderDetailsModel
             {
                 Id = order.Id,
@@ -206,6 +244,18 @@ namespace Nop.Web.Factories
                 //shipping info
                 ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus)
             };
+
+            if (shopOrder != null)
+            {
+                model.ShopOrderConfirmationFilename = shopOrder.ShopOrderConfirmationFilename;
+                model.ShippingTrackingUrl = shopOrder.ShippingTrackingUrl;
+                model.ShopOrderId = shopOrder.Id;
+                
+                var query = _shopOrderMtrRepository.Table.Where(x => x.ShopOrderNumber == shopOrder.ShopOrderNumber);
+
+                model.MtrDocumentIDs = query.Select(x => x.Id).ToList();
+            }
+
             if (order.ShippingStatus != ShippingStatus.ShippingNotRequired)
             {
                 model.IsShippable = true;

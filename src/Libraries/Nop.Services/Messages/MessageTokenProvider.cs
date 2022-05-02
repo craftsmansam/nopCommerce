@@ -205,6 +205,8 @@ namespace Nop.Services.Messages
                     "%Customer.Email%",
                     "%Customer.Username%",
                     "%Customer.FullName%",
+                    "%Customer.Company%",
+                    "%Customer.Phone%",
                     "%Customer.FirstName%",
                     "%Customer.LastName%",
                     "%Customer.VatNumber%",
@@ -1180,6 +1182,8 @@ namespace Nop.Services.Messages
             tokens.Add(new Token("Customer.LastName", _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute)));
             tokens.Add(new Token("Customer.VatNumber", _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.VatNumberAttribute)));
             tokens.Add(new Token("Customer.VatNumberStatus", ((VatNumberStatus)_genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute)).ToString()));
+            tokens.Add(new Token("Customer.Company", _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute)));
+            tokens.Add(new Token("Customer.Phone", _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.PhoneAttribute)));
 
             var customAttributesXml = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CustomCustomerAttributes);
             tokens.Add(new Token("Customer.CustomAttributes", _customerAttributeFormatter.FormatAttributes(customAttributesXml), true));

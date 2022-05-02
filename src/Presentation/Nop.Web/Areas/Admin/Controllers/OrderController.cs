@@ -51,6 +51,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IOrderModelFactory _orderModelFactory;
         private readonly IOrderProcessingService _orderProcessingService;
         private readonly IOrderService _orderService;
+        private readonly IShopOrderService _shopOrderService;
         private readonly IPaymentService _paymentService;
         private readonly IPdfService _pdfService;
         private readonly IPermissionService _permissionService;
@@ -84,6 +85,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IOrderModelFactory orderModelFactory,
             IOrderProcessingService orderProcessingService,
             IOrderService orderService,
+            IShopOrderService shopOrderService,
             IPaymentService paymentService,
             IPdfService pdfService,
             IPermissionService permissionService,
@@ -113,6 +115,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _orderModelFactory = orderModelFactory;
             _orderProcessingService = orderProcessingService;
             _orderService = orderService;
+            _shopOrderService = shopOrderService;
             _paymentService = paymentService;
             _pdfService = pdfService;
             _permissionService = permissionService;
