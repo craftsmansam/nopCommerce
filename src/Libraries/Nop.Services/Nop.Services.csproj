@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\CraftsmanStandardBase\CraftsmanStandardBase.csproj" />
+    <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Common\CraftsmanStandardBase\CraftsmanStandardBase.csproj" />
+    <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Projects\Albina\Source\Albina.StandardBase\Albina.StandardBase.csproj" />
     <ProjectReference Include="..\Nop.Core\Nop.Core.csproj" />
     <ProjectReference Include="..\Nop.Data\Nop.Data.csproj" />
   </ItemGroup>
