@@ -19,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Albina\Source\Albina.StandardBase\Albina.StandardBase.csproj" />
-    <ProjectReference Include="..\..\Albina.CoreBase\Albina.CoreBase.csproj" />
+    <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Projects\Albina\Source\Albina.StandardBase\Albina.StandardBase.csproj" />
+    <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Projects\Albina_NopCommerce\Source\Albina.CoreBase\Albina.CoreBase.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Core\Nop.Core.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
