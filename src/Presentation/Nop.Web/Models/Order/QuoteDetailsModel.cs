@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Order
 {
-    public partial class QuoteDetailsModel : BaseNopEntityModel
+    public partial record QuoteDetailsModel : BaseNopEntityModel
     {
         public bool PrintMode { get; set; }
 

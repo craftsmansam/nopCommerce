@@ -1,8 +1,7 @@
 ﻿@model TopMenuModel
 
 <ul class="top-menu">
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuBefore })
-
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuBefore, additionalData = Model })
     @if (Model.DisplayHomepageMenuItem)
     {
         <li><a href="@Url.RouteUrl("Homepage")">@T("Homepage")</a></li>
@@ -22,7 +21,6 @@
     {
         <li><a href="@Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() })">@topic.Name</a></li>
     }
-    
     @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
     {
         <li><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
@@ -47,6 +45,5 @@
     {
         <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
     }
-
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuAfter })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuAfter, additionalData = Model })
 </ul>

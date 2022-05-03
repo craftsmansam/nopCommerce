@@ -4,7 +4,7 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Common
 {
-    public partial class TangentTableModel : BaseNopModel
+    public partial record TangentTableModel : BaseNopModel
     {
         public TangentTableModel()
         {

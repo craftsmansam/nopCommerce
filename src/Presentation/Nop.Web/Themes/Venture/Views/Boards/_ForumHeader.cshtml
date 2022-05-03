@@ -4,7 +4,7 @@
 <div class="forums-header">
     @await Component.InvokeAsync("TopicBlock", new { systemName = "ForumWelcomeMessage" })
     <div class="current-time">
-        @dateTimeHelper.ConvertToUserTime(DateTime.UtcNow).ToString("F")
+        @((await dateTimeHelper.ConvertToUserTimeAsync(DateTime.UtcNow)).ToString("F"))
     </div>
-    @Html.Partial("_SearchBox")
+    @await Html.PartialAsync("_SearchBox")
 </div>

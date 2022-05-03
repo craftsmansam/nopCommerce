@@ -59,7 +59,7 @@
 .responsive-nav-wrapper > div > span,
 .responsive-nav-wrapper > div > a {
 	display: block;
-	height: 75px;
+	height: 50px;
 	width: 50px;
 	font-size: 0;
 }
@@ -72,9 +72,9 @@
     font-family: "venture-font";
     text-transform: none;
     content: "b";
-    font-size: 25px;
+    font-size: 16px;
     width: 18px;
-    height: 25px;
+    height: 16px;
     position: absolute;
     top: 0;
     left: 0;
@@ -85,13 +85,13 @@
 .responsive-nav-wrapper .mobile-logo {
     float: left;
     width: 160px;
-    height: 75px;
+    height: 50px;
     padding: 7px 0;
 }
 .responsive-nav-wrapper .mobile-logo a {
     display: block;
     width: 100%;
-    height: 50px;
+    height: 35px;
     position: relative;
 }
 .responsive-nav-wrapper .mobile-logo a img {
@@ -112,9 +112,9 @@
     font-family: "venture-font";
     text-transform: none;
     content: "e";
-    font-size: 25px;
+    font-size: 16px;
     width: 18px;
-    height: 35px;
+    height: 16px;
     position: absolute;
     top: 0;
     left: 0;
@@ -135,9 +135,9 @@
     font-family: "venture-font";
     text-transform: none;
     content: "a";
-    font-size: 25px;
+    font-size: 17px;
     width: 18px;
-    height: 35px;
+    height: 16px;
     position: absolute;
     top: 0;
     left: 0;
@@ -252,7 +252,7 @@
 .close-menu .mobile-logo a {
     display: block;
     width: 100%;
-    height: 50px;
+    height: 35px;
     position: relative;
 }
 .close-menu .mobile-logo a img {
@@ -505,6 +505,9 @@
     position: absolute;
     top: 10px;
     right: -36px;
+    font-family: "venture-font";
+    text-transform: none;
+    content: "e";
     font-size: 16px;
     line-height: 36px;
     text-align: center;
@@ -554,6 +557,16 @@
 }
 .header-links-wrapper.open {
 	display: block;
+}
+
+/* DEFAULT FILTERS */
+
+.block .product-filter {
+    padding: 0 22px;
+}
+.block .product-filter:first-child {
+    margin: 0;
+    padding-top: 18px;
 }
 
 /* RESPONSIVE TABLES */

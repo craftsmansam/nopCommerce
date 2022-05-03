@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.PictureVault;
 
 namespace Nop.Services.PictureVault
@@ -9,11 +10,11 @@ namespace Nop.Services.PictureVault
     /// </summary>
     public interface IPictureVaultService
     {
-        List<Tuple<string, DateTime, string>> CustomerListPurchaseOrders(int? salesContactId);
+        Task<List<Tuple<string, DateTime, string>>> CustomerListPurchaseOrdersAsync(int? salesContactId);
 
-        IList<PictureVaultItem> CustomerListPictureVaultItems(int? salesContactId, string po);
-        bool IsPictureForMyCompany(int customerSalesContactId, int imageId);
-        string PictureVaultFileNameByShopOrderPictureId(int imageId);
-        int PictureVaultSONumberBySOPictureId(int imageId);
+        Task<IList<PictureVaultItem>> CustomerListPictureVaultItemsAsync(int? salesContactId, string po);
+        Task<bool> IsPictureForMyCompanyAsync(int customerSalesContactId, int imageId);
+        Task<string> PictureVaultFileNameByShopOrderPictureIdAsync(int imageId);
+        Task<int> PictureVaultSONumberBySOPictureIdAsync(int imageId);
     }
 }

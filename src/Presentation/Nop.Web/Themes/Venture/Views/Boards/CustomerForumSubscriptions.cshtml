@@ -3,14 +3,14 @@
     Layout = "_ColumnsTwo";
 
     //title
-    Html.AddTitleParts(T("PageTitle.ForumSubscriptions").Text);
+    NopHtml.AddTitleParts(T("PageTitle.ForumSubscriptions").Text);
     //page class
-    Html.AppendPageCssClassParts("html-account-page");
-    Html.AppendPageCssClassParts("html-forum-subscriptions-page");
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-forum-subscriptions-page");
 }
 @section left
 {
-    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.ForumSubscriptions })
+    @await Component.InvokeAsync("CustomerNavigation",new { selectedTabId = CustomerNavigationEnum.ForumSubscriptions })
 }
 <div class="page account-page forum-subscriptions-page">
     <div class="page-title">
@@ -36,14 +36,14 @@
                 });
             </script>
             <form asp-route="CustomerForumSubscriptions" method="post">
-            <div class="subscription-list">
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <colgroup>
-                            <col width="1" />
-                            <col />
-                        </colgroup>
-                        <thead>
+                <div class="subscription-list">
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col width="1" />
+                                <col />
+                            </colgroup>
+                            <thead>
                             <tr>
                                 <th class="select-boxes">
                                     <input type="checkbox" id="selectall" />
@@ -53,8 +53,8 @@
                                     @T("Account.ForumSubscriptions.InfoColumn")
                                 </th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @for (var i = 0; i < Model.ForumSubscriptions.Count; i++)
                             {
                                 var item = Model.ForumSubscriptions[i];
@@ -75,22 +75,22 @@
                                     </td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
-                </div>
-                @{
-                    var pager = Html.Pager(Model.PagerModel);
-                }
-                @if (!string.IsNullOrEmpty(pager.ToHtmlString()))
-                {
-                    <div class="pager">
-                        @pager
+                            </tbody>
+                        </table>
                     </div>
-                }
-                <div class="buttons">
-                    <input type="submit" value="@T("Account.ForumSubscriptions.DeleteSelected")" class="button-1 delete-selected-fs-button" />
+                    @{
+                        var pager = await Html.PagerAsync(Model.PagerModel);
+                    }
+                    @if (!string.IsNullOrEmpty(await pager.RenderHtmlContentAsync()))
+                    {
+                        <div class="pager">
+                            @pager
+                        </div>
+                    }
+                    <div class="buttons">
+                        <button type="submit" class="button-1 delete-selected-fs-button">@T("Account.ForumSubscriptions.DeleteSelected")</button>
+                    </div>
                 </div>
-            </div>
             </form>
         }
         else

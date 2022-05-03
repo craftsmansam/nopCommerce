@@ -89,7 +89,9 @@
         actionName.Equals("checkgiftcardbalance", StringComparison.InvariantCultureIgnoreCase) ||        
         actionName.Equals("downloadableproducts", StringComparison.InvariantCultureIgnoreCase) ||
         actionName.Equals("changepassword", StringComparison.InvariantCultureIgnoreCase) ||
-        actionName.Equals("avatar", StringComparison.InvariantCultureIgnoreCase))) ||
+        actionName.Equals("avatar", StringComparison.InvariantCultureIgnoreCase) ||
+        actionName.Equals("multifactorauthentication", StringComparison.InvariantCultureIgnoreCase) ||
+        actionName.Equals("configuremultifactorauthenticationprovider", StringComparison.InvariantCultureIgnoreCase))) ||
         actionName.Equals("customerproductreviews", StringComparison.InvariantCultureIgnoreCase) ||
         controllerName.Equals("pricematch", StringComparison.InvariantCultureIgnoreCase) ||
         controllerName.Equals("helpdesk", StringComparison.InvariantCultureIgnoreCase) ||
@@ -99,15 +101,12 @@
                         actionName.Equals("customersubscriptions", StringComparison.InvariantCultureIgnoreCase)) ||
         (controllerName.Equals("order", StringComparison.InvariantCultureIgnoreCase) &&
                         actionName.Equals("customerorders", StringComparison.InvariantCultureIgnoreCase)) ||
-        (controllerName.Equals("quote", StringComparison.InvariantCultureIgnoreCase) &&
-                        actionName.Equals("customerquotes", StringComparison.InvariantCultureIgnoreCase)) ||
         (controllerName.Equals("order", StringComparison.InvariantCultureIgnoreCase) &&
                         actionName.Equals("customerrewardpoints", StringComparison.InvariantCultureIgnoreCase)) ||
         (controllerName.Equals("boards", StringComparison.InvariantCultureIgnoreCase) &&
                         actionName.Equals("customerforumsubscriptions", StringComparison.InvariantCultureIgnoreCase)) ||
         (controllerName.Equals("returnrequest", StringComparison.InvariantCultureIgnoreCase) &&
-                        actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase)) ||
-        (controllerName.Equals("picturevault", StringComparison.InvariantCultureIgnoreCase));
+                        actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase));
 
     if (isAccountPage)
     {

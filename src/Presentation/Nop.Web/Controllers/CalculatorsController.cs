@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Services.Calculators;
 using Nop.Web.Models.Calculators;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
@@ -16,13 +17,13 @@ namespace Nop.Web.Controllers
     {
         private readonly ITangentMaterialService _tangentMaterialService;
 
-        protected readonly AlbinaConfig AlbinaWebConfig;
-        protected readonly IWorkContext WorkContext;
+        protected readonly AlbinaConfig _albinaWebConfig;
+        protected readonly IWorkContext _workContext;
 
         public CalculatorsController(IWorkContext context, ITangentMaterialService tangentMaterialService)
         {
-            AlbinaWebConfig = EngineContext.Current.Resolve<AlbinaConfig>();
-            WorkContext = context;
+            _albinaWebConfig = EngineContext.Current.Resolve<AlbinaConfig>();
+            _workContext = context;
             _tangentMaterialService = tangentMaterialService;
         }
 
@@ -50,13 +51,15 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult PrintSpiralReport(SpiralCalculatorModel spiralCalculatorModel)
+        public async Task<IActionResult> PrintSpiralReport(SpiralCalculatorModel spiralCalculatorModel)
         {
             if (ModelState.IsValid)
             {
                 var ds  = CalculateAndBind(ref spiralCalculatorModel);
 
-                var filename = SpiralMathReportHelper.SpiralMathReportCacheFileName(AlbinaWebConfig.SpiralMathReportCache, WorkContext.CurrentCustomer.CustomerGuid.ToString());
+                var customer = await _workContext.GetCurrentCustomerAsync();
+
+                var filename = SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaWebConfig.SpiralMathReportCache, customer.CustomerGuid.ToString());
                 var radiusInInches = ds.SpiralMath[0].IsActualRadiusNull() ? 0 : ds.SpiralMath[0].ActualRadius;
                 SpiralMathReportHelper.InitializeSpiralMathData(ds, radiusInInches, false, Path.GetFileName(filename));
 
@@ -68,9 +71,11 @@ namespace Nop.Web.Controllers
             return Json(new {Result = "Error" });
         }
 
-        public IActionResult DownloadSpiralReport()
+        public async Task<IActionResult> DownloadSpiralReport()
         {
-            var filename = SpiralMathReportHelper.SpiralMathReportCacheFileName(AlbinaWebConfig.SpiralMathReportCache, WorkContext.CurrentCustomer.CustomerGuid.ToString());
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
+            var filename = SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaWebConfig.SpiralMathReportCache, customer.CustomerGuid.ToString());
             var fs = System.IO.File.OpenRead(filename);
             return File(fs, System.Net.Mime.MediaTypeNames.Application.Pdf, "SpiralReport.pdf");
         }
@@ -182,16 +187,16 @@ namespace Nop.Web.Controllers
             row.Notes = spiralCalculatorModel.Notes;
         }
 
-        public IActionResult TangentMaterials()
+        public async Task<IActionResult> TangentMaterials()
         {
             var viewModel = new TangentMaterialsModel();
-            var materials = _tangentMaterialService.GetAllUniqueMaterialNames();
+            var materials = await _tangentMaterialService.GetAllUniqueMaterialNamesAsync();
             foreach(var material in materials)
             {
                 viewModel.MaterialSelectorList.Add(new SelectListItem(material, material));
             }
 
-            var materialSizes = _tangentMaterialService.GetAllMaterialSizes();
+            var materialSizes = await _tangentMaterialService.GetAllMaterialSizesAsync();
             foreach(var materialSize in materialSizes)
             {
                 viewModel.MaterialSizeSelectorList.Add(new SelectListItem(materialSize, materialSize));
@@ -201,12 +206,12 @@ namespace Nop.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult TangentMaterialsCalculate(string size, string material)
+        public async Task<IActionResult> TangentMaterialsCalculate(string size, string material)
         {
             if (ModelState.IsValid)
             {
-                var drawBendResult = _tangentMaterialService.GetTangentMaterialResult("Rotary Draw", material, size);
-                var rollBendResult = _tangentMaterialService.GetTangentMaterialResult("Roll Bend", material, size);
+                var drawBendResult = await _tangentMaterialService.GetTangentMaterialResultAsync("Rotary Draw", material, size);
+                var rollBendResult = await _tangentMaterialService.GetTangentMaterialResultAsync("Roll Bend", material, size);
                 return Json(new {DrawBendResult = drawBendResult, RollBendResult = rollBendResult});
             }
 

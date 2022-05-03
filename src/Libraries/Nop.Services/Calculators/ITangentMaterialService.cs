@@ -1,5 +1,6 @@
 ﻿using Nop.Core.Domain.Calculators;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Nop.Services.Calculators
 {
@@ -12,14 +13,14 @@ namespace Nop.Services.Calculators
         /// Gets all Tangent Materials material Names
         /// </summary>
         /// <returns>Categories</returns>
-        List<string> GetAllUniqueMaterialNames();
+        Task<List<string>> GetAllUniqueMaterialNamesAsync();
          /// <summary>
         /// Gets all Tangent Materials material sizes
         /// </summary>
         /// <returns>Categories</returns>
-        List<string> GetAllMaterialSizes();
-        IList<VwTangentMaterial> GetTangentTable();
+        Task<List<string>> GetAllMaterialSizesAsync();
+        Task<IList<VwTangentMaterial>> GetTangentTableAsync();
 
-        string GetTangentMaterialResult(string bendType, string materialName, string materialSize);
+        Task<string> GetTangentMaterialResultAsync(string bendType, string materialName, string materialSize);
     }
 }

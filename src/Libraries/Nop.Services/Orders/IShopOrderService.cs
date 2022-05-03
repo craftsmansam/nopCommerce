@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Orders;
 
 namespace Nop.Services.Orders
@@ -13,9 +14,9 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="customerID">The Job Costing customerID</param>
         /// <returns>List of ShopOrder</returns>
-        List<ShopOrder> ListShopOrdersForCustomer(int customerID);
+        Task<List<ShopOrder>> ListShopOrdersForCustomerAsync(int customerID);
 
-        ShopOrder GetShopOrderByShopOrderNumber(int shopOrderNumber);
+        Task<ShopOrder> GetShopOrderByShopOrderNumberAsync(int shopOrderNumber);
         bool TestMTRPermissions(int mtrId, int? jcCustomerID, out ShopOrderMTR mtr, out ShopOrder shopOrder);
         bool TestShopOrderPermissions(int shopOrderId, int? jcCustomerID, out ShopOrder shopOrder);
     }

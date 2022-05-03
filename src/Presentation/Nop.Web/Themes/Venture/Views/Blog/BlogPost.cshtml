@@ -4,30 +4,31 @@
 
 @inject IStoreContext storeContext
 @inject ISettingService settingService
+@inject Nop.Services.Html.IHtmlFormatter htmlFormatter
 
 @model BlogPostModel
 @{
     Layout = "_ColumnsOne";
 
     //title
-    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
     //meta
-    Html.AddMetaDescriptionParts(Model.MetaDescription);
-    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
     //page class
-    Html.AppendPageCssClassParts("html-blogpost-page");
+    NopHtml.AppendPageCssClassParts("html-blogpost-page");
 
-    var storeId = storeContext.CurrentStore.Id;
-    var richBlogEnabled = settingService.GetSettingByKey("richblogsettings.enabled", false, storeId, true);
+    var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
+    var richBlogEnabled = await settingService.GetSettingByKeyAsync("richblogsettings.enabled", false, storeId, true);
 
     if (richBlogEnabled)
     {
-        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.css");
+        <link rel="stylesheet" href="~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.css" />
 
-        var supportRtl = this.ShouldUseRtlTheme();
+        var supportRtl = await Html.ShouldUseRtlThemeAsync();
         if (supportRtl)
         {
-            Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.rtl.css");
+            <link rel="stylesheet" href="~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.rtl.css" />
         }
     }
 
@@ -81,7 +82,7 @@
                         @{
                             var result = TempData["nop.blog.addcomment.result"] as string;
                         }
-                        @if (!String.IsNullOrEmpty(result))
+                        @if (!string.IsNullOrEmpty(result))
                         {
                             <div class="result">@result</div>
                         }
@@ -91,7 +92,7 @@
                         <div class="form-fields">
                             <div class="inputs">
                                 <label asp-for="AddNewComment.CommentText" asp-postfix=":"></label>
-                                <textarea asp-for="AddNewComment.CommentText" class="enter-comment-text"></textarea>
+                                <textarea asp-for="AddNewComment.CommentText" class="enter-comment-text" asp-disabled="@Model.PreventNotRegisteredUsersToLeaveComments"></textarea>
                                 <span asp-validation-for="AddNewComment.CommentText"></span>
                             </div>
                             @if (Model.AddNewComment.DisplayCaptcha)
@@ -99,9 +100,16 @@
                                 <nop-captcha />
                             }
                         </div>
-                        <div class="buttons">
-                            <input type="submit" name="add-comment" class="button-1 blog-post-add-comment-button" value="@T("Blog.Comments.SubmitButton")" />
-                        </div>
+	                    @if (!Model.PreventNotRegisteredUsersToLeaveComments)
+	                    {
+	                        <div class="buttons">
+	                            <button type="submit" name="add-comment" class="button-1 blog-post-add-comment-button">@T("Blog.Comments.SubmitButton")</button>
+	                        </div>
+	                    }
+	                    else
+	                    {
+	                        <div class="message-error">@T("Blog.Comments.OnlyRegisteredUsersLeaveComments")</div>
+	                    }
                     </form>
                 </div>
                 @if (Model.Comments.Count > 0)
@@ -109,46 +117,46 @@
                     <div class="comments">
                         @foreach (var comment in Model.Comments)
                         {
-                        <div class="comment blog-comment">
-                            <div class="comment-info">
-                                <div class="user-info">
-                                    @if (comment.AllowViewingProfiles)
+                            <div class="comment blog-comment">
+                                <div class="comment-info">
+                                    <div class="user-info">
+                                        @if (comment.AllowViewingProfiles)
                                         {
-                                        <a href="@Url.RouteUrl("CustomerProfile", new {id = comment.CustomerId})" class="username">@(comment.CustomerName)</a>
+                                            <a href="@Url.RouteUrl("CustomerProfile", new {id = comment.CustomerId})" class="username">@(comment.CustomerName)</a>
                                         }
                                         else
                                         {
-                                        <span class="username">@(comment.CustomerName)</span>
+                                            <span class="username">@(comment.CustomerName)</span>
                                         }
 
-                                    @if (!String.IsNullOrEmpty(comment.CustomerAvatarUrl))
+                                        @if (!string.IsNullOrEmpty(comment.CustomerAvatarUrl))
                                         {
-                                        <div class="avatar">
-                                            @if (comment.AllowViewingProfiles)
+                                            <div class="avatar">
+                                                @if (comment.AllowViewingProfiles)
                                                 {
-                                                <a href="@Url.RouteUrl("CustomerProfile", new {id = comment.CustomerId})" class="avatar-img-link">
-                                                    <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
-                                                </a>
+                                                    <a href="@Url.RouteUrl("CustomerProfile", new {id = comment.CustomerId})" class="avatar-img-link">
+                                                        <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
+                                                    </a>
                                                 }
                                                 else
                                                 {
-                                                <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
+                                                    <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
                                                 }
-                                        </div>
+                                            </div>
                                         }
+                                    </div>
                                 </div>
+                                <div class="comment-content">
+                                    <div class="comment-time">
+                                        <label>@T("Blog.Comments.CreatedOn"):</label>
+                                        <span class="stat-value">@comment.CreatedOn.ToString("g")</span>
+                                    </div>
+                                    <div class="comment-body">
+                                        @Html.Raw(htmlFormatter.FormatText(comment.CommentText, false, true, false, false, false, false))
+                                    </div>
+                                </div>
+                                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogPostPageInsideComment, additionalData = comment })
                             </div>
-                            <div class="comment-content">
-                                <div class="comment-time">
-                                    <label>@T("Blog.Comments.CreatedOn"):</label>
-                                    <span class="stat-value">@comment.CreatedOn.ToString("g")</span>
-                                </div>
-                                <div class="comment-body">
-                                    @Html.Raw(Nop.Core.Html.HtmlHelper.FormatText(comment.CommentText, false, true, false, false, false, false))
-                                </div>
-                            </div>
-                            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogPostPageInsideComment, additionalData = comment })
-                        </div>
                         }
                     </div>
                 }

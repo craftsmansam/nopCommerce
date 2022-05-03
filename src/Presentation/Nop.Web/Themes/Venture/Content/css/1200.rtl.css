@@ -590,7 +590,7 @@
     text-align: center;
     overflow: hidden;
 }
-.mini-shopping-cart input[type="button"] {
+.mini-shopping-cart button {
 	float: left;
     width: 49%;
 	padding: 15px 10px;
@@ -601,19 +601,19 @@
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.mini-shopping-cart input[type="button"]:only-child {
+.mini-shopping-cart button:only-child {
     float: none;
 }
-.mini-shopping-cart input[type="button"].cart-button {
+.mini-shopping-cart button.cart-button {
     background: #f3cc2e;
 }
-.light-theme .mini-shopping-cart input[type="button"].cart-button {
+.light-theme .mini-shopping-cart button.cart-button {
     color: #fff;
 }
-.mini-shopping-cart input[type="button"].cart-button:hover {
+.mini-shopping-cart button.cart-button:hover {
     background: #ebbf0d;
 }
-.mini-shopping-cart input[type="button"] + input[type="button"] {
+.mini-shopping-cart button + button {
     margin: 0 0 0 2%;
 }
 
@@ -987,7 +987,7 @@
 .block .poll-total-votes {
     padding: 8px 3px;
 }
-.block .poll .buttons input {
+.block .poll .buttons button {
     padding: 8px 3px;
     background: none;
     color: #909090;
@@ -996,7 +996,7 @@
 .block .poll-results {
     margin: 0;
 }
-.block .poll .buttons input:hover {
+.block .poll .buttons button:hover {
     background: none !important;
     color: #909090;
 }
@@ -1117,34 +1117,34 @@
     left: -5px;
     bottom: -5px;
 }
-.item-box input[type="button"]:hover {
+.item-box button:hover {
     background-color: #f3cc2e;
 }
-.dark-theme .item-box input[type="button"].product-box-add-to-cart-button:hover {
+.dark-theme .item-box button.product-box-add-to-cart-button:hover {
     background-image: url('../img/product-shopping-cart-dark.svg');
 }
-.dark-theme .item-box input.add-to-compare-list-button:hover {
+.dark-theme .item-box button.add-to-compare-list-button:hover {
 	background-image: url('../img/product-compare-dark.svg');
 }
-.dark-theme .item-box input.add-to-wishlist-button:hover {
+.dark-theme .item-box button.add-to-wishlist-button:hover {
 	background-image: url('../img/product-wishlist-dark.svg');
 }
-.light-theme .item-box input[type="button"].product-box-add-to-cart-button:hover {
+.light-theme .item-box button.product-box-add-to-cart-button:hover {
     background-image: url('../img/product-shopping-cart-light.svg');
 }
-.light-theme .item-box input.add-to-compare-list-button:hover {
+.light-theme .item-box button.add-to-compare-list-button:hover {
 	background-image: url('../img/product-compare-light.svg');
 }
-.light-theme .item-box input.add-to-wishlist-button:hover {
+.light-theme .item-box button.add-to-wishlist-button:hover {
 	background-image: url('../img/product-wishlist-light.svg');
 }
-.dark-theme .product-box-layout-2 .venture-product-grid .item-box input[type="button"].product-box-add-to-cart-button:hover,
-.dark-theme .product-box-layout-2 .venture-product-grid .item-box .items-2 input[type="button"]:hover {
+.dark-theme .product-box-layout-2 .venture-product-grid .item-box button.product-box-add-to-cart-button:hover,
+.dark-theme .product-box-layout-2 .venture-product-grid .item-box .items-2 button:hover {
     background-image: none;
     color: #2c2c2c;
 }
-.light-theme .product-box-layout-2 .venture-product-grid .item-box input[type="button"].product-box-add-to-cart-button:hover,
-.light-theme .product-box-layout-2 .venture-product-grid .item-box .items-2 input[type="button"]:hover {
+.light-theme .product-box-layout-2 .venture-product-grid .item-box button.product-box-add-to-cart-button:hover,
+.light-theme .product-box-layout-2 .venture-product-grid .item-box .items-2 button:hover {
     background-image: none;
     color: #fff;
 }
@@ -1170,7 +1170,7 @@
 .item-box .product-item:hover .buttons.items-5 {
     height: 262px;
 }
-.item-box .product-item:hover input[type="button"] {
+.item-box .product-item:hover button {
     height: 50px;
 }
 .item-box .additional-price-info {
@@ -1199,11 +1199,11 @@
     clear: both;
 }
 
-.dark-theme .product-list .item-box input[type="button"].product-box-add-to-cart-button:hover {
+.dark-theme .product-list .item-box button.product-box-add-to-cart-button:hover {
     background-image :none;
     color: #2c2c2c;
 }
-.light-theme .product-list .item-box input[type="button"].product-box-add-to-cart-button:hover {
+.light-theme .product-list .item-box button.product-box-add-to-cart-button:hover {
     background-image :none;
     color: #f2f2f2;
 }

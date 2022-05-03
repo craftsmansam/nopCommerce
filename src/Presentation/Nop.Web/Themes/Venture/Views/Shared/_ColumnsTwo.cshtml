@@ -34,10 +34,10 @@
         currentProductId = Convert.ToInt32(Url.ActionContext.RouteData.Values["productId"].ToString());
     }
 
-    int storeId = storeContext.CurrentStore.Id;
+    int storeId = (await storeContext.GetCurrentStoreAsync()).Id;
 
-    bool enableGridNumberSwitch = settingService.GetSettingByKey("venturethemesettings.allowcustomerstoswitchcategorygriditemsnumber", true, storeId, true);
-    string gridNuberOfItemsViewMode = settingService.GetSettingByKey("venturethemesettings.categorygriditemsnumber", "items-3", storeId, true);
+    bool enableGridNumberSwitch = await settingService.GetSettingByKeyAsync("venturethemesettings.allowcustomerstoswitchcategorygriditemsnumber", true, storeId, true);
+    string gridNuberOfItemsViewMode = await settingService.GetSettingByKeyAsync("venturethemesettings.categorygriditemsnumber", "items-3", storeId, true);
 
     if (enableGridNumberSwitch)
     {
@@ -53,7 +53,6 @@
             }
         }
     }
-
 
     var isAccountPage = (controllerName.Equals("customer", StringComparison.InvariantCultureIgnoreCase) && (
             actionName.Equals("info", StringComparison.InvariantCultureIgnoreCase) ||
@@ -78,9 +77,7 @@
             (controllerName.Equals("boards", StringComparison.InvariantCultureIgnoreCase) &&
                             actionName.Equals("customerforumsubscriptions", StringComparison.InvariantCultureIgnoreCase)) ||
             (controllerName.Equals("returnrequest", StringComparison.InvariantCultureIgnoreCase) &&
-                            actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase)) ||
-            (controllerName.Equals("picturevault", StringComparison.InvariantCultureIgnoreCase));
-
+                            actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase));
 }
 
 @if (IsSectionDefined("Breadcrumb"))
@@ -101,13 +98,14 @@
         @if (IsSectionDefined("left"))
         {
 	        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
-	        @RenderSection("left")
+	        @await RenderSectionAsync("left")
 	        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
         }
         else
         {
             @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
             <div class="blocks-wrapper">
+                @await RenderSectionAsync("CatalogFilters", false)
                 @await Component.InvokeAsync("CategoryNavigation", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
                 @*@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfterCategoryNavigation })*@
                 @await Component.InvokeAsync("ManufacturerNavigation", new { currentManufacturerId = currentManufacturerId })

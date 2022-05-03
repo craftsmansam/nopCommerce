@@ -9,20 +9,20 @@
 @inject ILocalizationService localizationService
 
 @{
-    var currentThemeName = themeContext.WorkingThemeName;
+    var currentThemeName = await themeContext.GetWorkingThemeNameAsync();
     var logoPath = "~/Themes/" + currentThemeName + "/Content/img/logo.png";
     var themeLogo = await Component.InvokeAsync("Widget", new { widgetZone = "venture_theme_logo" });
-    var currentStore = storeContext.CurrentStore;
+    var currentStore = await storeContext.GetCurrentStoreAsync();
 }
 
 <a href="@Url.RouteUrl("Homepage")" class="logo">
-    @if (!String.IsNullOrEmpty(themeLogo.ToHtmlString()))
+    @if (!String.IsNullOrEmpty(await themeLogo.RenderHtmlContentAsync()))
     {
         @themeLogo
     }
     else
     {
-        string storeName = localizationService.GetLocalized(storeContext.CurrentStore, x => x.Name);
+        string storeName = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), x => x.Name);
         <img title="" alt="@storeName" src="@Url.Content(logoPath)">
     }
 </a>

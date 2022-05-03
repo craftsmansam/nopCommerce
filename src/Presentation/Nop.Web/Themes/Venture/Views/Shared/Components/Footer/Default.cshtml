@@ -9,10 +9,10 @@
 @inject ISettingService settingService
 
 @{
-    var storeId = storeContext.CurrentStore.Id;
+    var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
     var userAgent = Url.ActionContext.HttpContext.Request.Headers["User-Agent"];
-    var removeCopyright = settingService.GetSettingByKey("venturethemesettings.removecopyright", false, storeId, true);
-    var removeDesignedBy = settingService.GetSettingByKey("venturethemesettings.removedesignedby", false, storeId, true);
+    var removeCopyright = await settingService.GetSettingByKeyAsync("venturethemesettings.removecopyright", false, storeId, true);
+    var removeDesignedBy = await settingService.GetSettingByKeyAsync("venturethemesettings.removedesignedby", false, storeId, true);
 
     var controllerName = Url.ActionContext.RouteData.Values["controller"].ToString();
     var isHomePage = controllerName.Equals("home", StringComparison.InvariantCultureIgnoreCase);
@@ -23,7 +23,7 @@
         isIe9 = true;
     }
 
-    var showFooterMap = settingService.GetSettingByKey("venturethemesettings.enablefootermap", true, storeId, true);
+    var showFooterMap = await settingService.GetSettingByKeyAsync("venturethemesettings.enablefootermap", true, storeId, true);
 }
 
 @if (isHomePage)
@@ -53,21 +53,16 @@
             </div>
             <ul class="list footer-collapse">
                 <li class="address">
-                    <a href="https://www.google.com/maps/place/12080+SW+Myslony+St,+Tualatin,+OR+97062">
-                        <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
-                    </a>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
                 </li>
-                @{
-                    var emailHrefString = "mailto:" + @T("SevenSpikes.Themes.Venture.Common.EMail");
-                }
                 <li class="e-mail">
-                    <a href=@emailHrefString><span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span></a>
-</li>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span>
+                </li>
+                <li class="mobile-phone">
+                    <span>@T("SevenSpikes.Themes.Venture.Common.MobilePhone")</span>
+                </li>
                 <li class="phone">
-                    @{
-                        var telHrefString = "tel:" + @T("SevenSpikes.Themes.Venture.Common.Phone");
-                    }
-                    <a href=@telHrefString><span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span></a>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span>
                 </li>
             </ul>
         </div>
@@ -82,7 +77,7 @@
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
                 {
-                    <li><a href="@Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() })">@topic.Name</a></li>
+                    <li><a href="@Url.RouteUrl("Topic", new {SeName = topic.SeName})">@topic.Name</a></li>
                 }
             </ul>
         </div>
@@ -124,9 +119,9 @@
         @if(!removeCopyright)
         { 
             <div class="footer-powered-by">
-                Powered by <a href="https://www.nopcommerce.com/">nopCommerce</a>
                 @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
                     Please find more info at https://www.nopcommerce.com/nopcommerce-copyright-removal-key*@
+                Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
             </div>
         }
         @if (!removeDesignedBy)
@@ -137,13 +132,12 @@
         }
         @if (Model.DisplayTaxShippingInfoFooter)
         {
-            var inclTax = workContext.TaxDisplayType == TaxDisplayType.IncludingTax;
+            var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
             <div class="footer-tax-shipping">
-                @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteUrl("Topic", new { SeName = Html.GetTopicSeName("shippinginfo") }))
+                @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteUrl("Topic", new { SeName = await Html.GetTopicSeNameAsync("shippinginfo") }))
             </div>
         }
-
         @await Component.InvokeAsync("StoreThemeSelector")
     </div>
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.Footer })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
 </div>

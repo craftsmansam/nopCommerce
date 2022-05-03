@@ -1,13 +1,24 @@
-﻿@model CheckoutBillingAddressModel
+﻿@using Nop.Core
+@using Nop.Services.Customers
+@model CheckoutBillingAddressModel
+@inject IWebHelper webHelper
+@inject IWorkContext workContext
+@inject ICustomerService _customerService
 @{
     Layout = "_ColumnsOne";
 
+    var storeLocation = webHelper.GetStoreLocation();
+
     //title
-    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Checkout").Text);
     //page class
-    Html.AppendPageCssClassParts("html-checkout-page");
-    Html.AppendPageCssClassParts("html-billing-address-page");
+    NopHtml.AppendPageCssClassParts("html-checkout-page");
+    NopHtml.AppendPageCssClassParts("html-billing-address-page");
 }
+
+@* the nop bundling breaks the js on the page so we need to exclude the script from the bundle in order to prevent it *@
+<script src="~/js/public.billingaddress.js" asp-location="Footer" asp-exclude-from-bundle="true"></script>
+
 <div class="page checkout-page billing-address-page">
     @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
     <div class="page-title">
@@ -16,7 +27,7 @@
     <div class="page-body checkout-data">
         <form asp-route="CheckoutBillingAddress" method="post">
             <div class="billing-addresses">
-                @await Component.InvokeAsync("Widget", new {widgetZone = PublicWidgetZones.CheckoutBillingAddressTop})
+            	@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressTop, additionalData = Model })
                 @if (Model.ShipToSameAddressAllowed)
                 {
                     <div class="section ship-to-same-address">
@@ -32,9 +43,9 @@
                     </div>
                     @if (Model.InvalidExistingAddresses.Count > 0)
                     {
-                        <label class="min-amount-warning">
-                            @string.Format(T("Checkout.Addresses.Invalid").Text, Model.InvalidExistingAddresses.Count)
-                        </label>
+                        <div class="min-amount-warning">
+                            <span>@string.Format(T("Checkout.Addresses.Invalid").Text, Model.InvalidExistingAddresses.Count)</span>
+                        </div>
                     }
                     <div class="address-grid">
                         @foreach (var item in Model.ExistingAddresses)
@@ -62,7 +73,7 @@
                                             <span>@item.FaxNumber</span>
                                         </li>
                                     }
-                                    @if (item.CompanyEnabled && !String.IsNullOrEmpty(item.Company))
+                                    @if (item.CompanyEnabled && !string.IsNullOrEmpty(item.Company))
                                     {
                                         <li class="company">
                                             @item.Company
@@ -74,7 +85,7 @@
                                             @item.Address1
                                         </li>
                                     }
-                                    @if (item.StreetAddress2Enabled && !String.IsNullOrEmpty(item.Address2))
+                                    @if (item.StreetAddress2Enabled && !string.IsNullOrEmpty(item.Address2))
                                     {
                                         <li class="address2">
                                             @item.Address2
@@ -89,7 +100,7 @@
                                             @if (item.CityEnabled && !string.IsNullOrEmpty(item.City))
                                             {
                                                 @item.City
-                                                @if (item.CountyEnabled && !string.IsNullOrEmpty(item.County) || 
+                                                if (item.CountyEnabled && !string.IsNullOrEmpty(item.County) || 
                                                     item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) || 
                                                     item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                                 {
@@ -99,7 +110,7 @@
                                             @if (item.CountyEnabled && !string.IsNullOrEmpty(item.County))
                                             {
                                                 @item.County
-                                                @if (item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) || 
+                                                if (item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) || 
                                                     item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                                 {
                                                     <text>,</text>
@@ -108,7 +119,7 @@
                                             @if (item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName))
                                             {
                                                 @item.StateProvinceName
-                                                @if (item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
+                                                if (item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                                 {
                                                     <text>,</text>
                                                 }
@@ -119,13 +130,13 @@
                                             }
                                         </li>
                                     }
-                                    @if (item.CountryEnabled && !String.IsNullOrEmpty(item.CountryName))
+                                    @if (item.CountryEnabled && !string.IsNullOrEmpty(item.CountryName))
                                     {
                                         <li class="country">
                                             @item.CountryName
                                         </li>
                                     }
-                                    @if (!String.IsNullOrEmpty(item.FormattedCustomAddressAttributes))
+                                    @if (!string.IsNullOrEmpty(item.FormattedCustomAddressAttributes))
                                     {
                                         <li class="custom-attributes-view">
                                             @Html.Raw(item.FormattedCustomAddressAttributes)
@@ -133,7 +144,7 @@
                                     }
                                 </ul>
                                 <div class="select-button">
-                                    <input type="button" value="@T("Checkout.BillToThisAddress")" class="button-1 select-billing-address-button" onclick="selectBillingAddress@(item.Id)()" />
+                                    <button type="button" class="button-1 select-billing-address-button" onclick="selectBillingAddress@(item.Id)()">@T("Checkout.BillToThisAddress")</button>
                                     <script asp-location="Footer">
                                             function selectBillingAddress@(item.Id)() {
                                                 if ($('#@Html.IdFor(model => model.ShipToSameAddress)')
@@ -157,8 +168,7 @@
                         </div>
                     </div>
                 </div>
-
-                @await Component.InvokeAsync("Widget", new {widgetZone = PublicWidgetZones.CheckoutBillingAddressMiddle})
+                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressMiddle, additionalData = Model })
                 <div class="section new-billing-address address-section-collapse">
                     <div class="title">
                         @if (Model.ExistingAddresses.Count > 0)
@@ -179,10 +189,10 @@
                         }
                     </div>
                     <div class="buttons">
-                        <input type="submit" name="nextstep" value="@T("Checkout.NextButton")" class="button-1 new-address-next-step-button" />
+                        <button type="submit" name="nextstep" class="button-1 new-address-next-step-button">@T("Checkout.NextButton")</button>
                     </div>
                 </div>
-                @await Component.InvokeAsync("Widget", new {widgetZone = PublicWidgetZones.CheckoutBillingAddressBottom})
+                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressBottom, additionalData = Model })
             </div>
         </form>
         <div class="section order-summary">

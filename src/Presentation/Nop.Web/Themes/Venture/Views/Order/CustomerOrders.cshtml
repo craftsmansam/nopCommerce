@@ -3,10 +3,10 @@
     Layout = "_ColumnsTwo";
 
     //title
-    Html.AddTitleParts(T("PageTitle.Account").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
     //page class
-    Html.AppendPageCssClassParts("html-account-page");
-    Html.AppendPageCssClassParts("html-order-list-page");
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-order-list-page");
 }
 @section left
 {
@@ -99,14 +99,14 @@
                                             <td class="retry">
                                                 @if (item.CanRetryLastPayment)
                                                 {
-                                                    <input type="submit" name="retryLastPayment_@(item.Id)" value="@T("Account.CustomerOrders.RecurringOrders.RetryLastPayment")" class="button-2 retry-recurring-order-button" />
+                                                    <button type="submit" name="retryLastPayment_@(item.Id)" class="button-2 retry-recurring-order-button">@T("Account.CustomerOrders.RecurringOrders.RetryLastPayment")</button>
                                                 }
                                             </td>
                                         }
                                         <td class="cancel">
                                             @if (item.CanCancel)
                                             {
-                                                <input type="submit" name="cancelRecurringPayment@(item.Id)" value="@T("Account.CustomerOrders.RecurringOrders.Cancel")" class="button-2 cancel-recurring-order-button" />
+                                                <button type="submit" name="cancelRecurringPayment@(item.Id)" class="button-2 cancel-recurring-order-button">@T("Account.CustomerOrders.RecurringOrders.Cancel")</button>
                                             }
                                         </td>
                                     </tr>
@@ -132,37 +132,25 @@
         @if (Model.Orders.Count > 0)
         {
             <div class="order-list">
-                @foreach (var order in Model.Orders.OrderByDescending(x => x.CreatedOn).ThenByDescending(x => x.CustomOrderNumber))
+                @foreach (var order in Model.Orders)
                 {
-                <div class="section order-item">
-                    <div class="title">
-                        <strong>@T("Account.CustomerOrders.OrderNumber"): @order.CustomOrderNumber</strong>
+                    <div class="section order-item">
+                        <div class="title">
+                            <strong>@T("Account.CustomerOrders.OrderNumber"): @order.CustomOrderNumber</strong>
+                        </div>
+                        <ul class="info">
+                            <li>@T("Account.CustomerOrders.OrderStatus"): <span class="order-status @order.OrderStatusEnum.ToString().ToLowerInvariant()">@order.OrderStatus</span></li>
+                            <li>@T("Account.CustomerOrders.OrderDate"): <span class="order-date">@order.CreatedOn.ToString()</span></li>
+                            <li>@T("Account.CustomerOrders.OrderTotal"): <span class="order-total">@order.OrderTotal</span></li>
+                        </ul>
+                        <div class="buttons">
+                            @if (order.IsReturnRequestAllowed)
+                            {
+                                <button type="button" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')">@T("Account.CustomerOrders.ReturnItems")</button>
+                            }
+                            <button type="button" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderId = order.Id })')">@T("Account.CustomerOrders.OrderDetails")</button>
+                        </div>
                     </div>
-                    <ul class="info">
-                        <li>@T("Account.CustomerOrders.OrderStatus"): <span class="order-status @order.OrderStatusEnum.ToString().ToLowerInvariant()">@order.OrderStatus</span></li>
-                        <li>@T("Account.CustomerOrders.OrderDate"): <span class="order-date">@order.CreatedOn.ToShortDateString()</span></li>
-                        @if (!string.IsNullOrWhiteSpace(order.PurchaseOrder))
-                        {
-                            <li>Purchase Order: <span class="order-date">@order.PurchaseOrder</span></li>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(order.ProjectName))
-                        {
-                            <li>Project Name: <span class="order-date">@order.ProjectName</span></li>
-                        }
-                        <li>@T("Account.CustomerOrders.OrderTotal"): <span class="order-total">@order.OrderTotal</span></li>
-                    </ul>
-                    <div class="buttons">
-                        @if (order.IsReturnRequestAllowed)
-                        {
-                            <input type="button" value="@T("Account.CustomerOrders.ReturnItems")" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')" />
-                        }
-
-                        @{
-                            var url = order.IsShopOrder ? Url.RouteUrl("ShopOrderDetails", new { shopOrderNumber = order.CustomOrderNumber }) : Url.RouteUrl("OrderDetails", new { orderId = order.Id });
-                        }
-                        <input type="button" value="@T("Account.CustomerOrders.OrderDetails")" class="button-2 order-details-button" onclick="setLocation('@url')" />
-                    </div>
-                </div>
                 }
             </div>
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Quotes;
@@ -45,12 +46,14 @@ namespace Nop.Web.Factories
             return model;
         }
 
-        public CustomerQuoteListModel PrepareCustomerQuoteListModel()
+        public async Task<CustomerQuoteListModel> PrepareCustomerQuoteListModelAsync()
         {
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
             var model = new CustomerQuoteListModel();
-            if (_workContext.CurrentCustomer.JCCustomerID.HasValue)
+            if (customer.JCCustomerID.HasValue)
             {
-                var quotes = _quoteService.ListQuotesForCustomer(_workContext.CurrentCustomer.JCCustomerID.Value);
+                var quotes = _quoteService.ListQuotesForCustomer(customer.JCCustomerID.Value);
             
                 foreach (var quote in quotes)
                 {

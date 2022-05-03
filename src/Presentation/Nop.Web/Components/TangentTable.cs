@@ -3,6 +3,7 @@ using Nop.Services.Calculators;
 using Nop.Web.Framework.Components;
 using Nop.Web.Models.Common;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Nop.Web.Components
 {
@@ -14,14 +15,14 @@ namespace Nop.Web.Components
           _tangentMaterialService = tangentMaterialService;
         }
 
-        public IViewComponentResult Invoke(string bendType, string headerTableID, string mainTableID, string classPrefix)
+        public async Task<IViewComponentResult> InvokeAsync(string bendType, string headerTableID, string mainTableID, string classPrefix)
         {
             var viewModel = new TangentTableModel();
             viewModel.BendType = bendType;
             viewModel.HeaderTableID = headerTableID;
             viewModel.MainTableID = mainTableID;
             viewModel.ClassPrefix = classPrefix;
-            viewModel.TangentMaterials = _tangentMaterialService.GetTangentTable().Where(x => x.BendType == bendType);
+            viewModel.TangentMaterials = (await _tangentMaterialService.GetTangentTableAsync()).Where(x => x.BendType == bendType);
 
             return View(viewModel);
         }

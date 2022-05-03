@@ -3,10 +3,10 @@
     Layout = "_ColumnsOne";
 
     //title
-    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Checkout").Text);
     //page class
-    Html.AppendPageCssClassParts("html-checkout-page");
-    Html.AppendPageCssClassParts("html-shipping-address-page");
+    NopHtml.AppendPageCssClassParts("html-checkout-page");
+    NopHtml.AppendPageCssClassParts("html-shipping-address-page");
 }
 <div class="page checkout-page shipping-address-page">
     @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
@@ -34,7 +34,7 @@
             @if (Model.PickupPointsModel == null || !Model.PickupPointsModel.PickupInStoreOnly)
             {
                 <div class="shipping-addresses" id="shipping-addresses-form">
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressTop })
+                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressTop, additionalData = Model })
                     @if (Model.ExistingAddresses.Count > 0)
                     {
                         <div class="section select-shipping-address">
@@ -43,9 +43,9 @@
                             </div>
                             @if (Model.InvalidExistingAddresses.Count > 0)
                             {
-                                <label class="min-amount-warning">
-                                    @string.Format(T("Checkout.Addresses.Invalid").Text, Model.InvalidExistingAddresses.Count)
-                                </label>
+                                <div class="min-amount-warning">
+                                    <span>@string.Format(T("Checkout.Addresses.Invalid").Text, Model.InvalidExistingAddresses.Count)</span>
+                                </div>
                             }
                             <div class="address-grid">
                                 @foreach (var item in Model.ExistingAddresses)
@@ -144,7 +144,7 @@
                                             }
                                         </ul>
                                         <div class="select-button">
-                                            <input type="button" value="@T("Checkout.ShipToThisAddress")" class="button-1 select-shipping-address-button" onclick="setLocation('@Url.RouteUrl("CheckoutSelectShippingAddress", new {addressid = item.Id})') " />
+                                            <button type="button" onclick="setLocation('@Url.RouteUrl("CheckoutSelectShippingAddress", new {addressid = item.Id})')" class="button-1 select-shipping-address-button">@T("Checkout.ShipToThisAddress")</button>
                                         </div>
                                     </div>
                                 }
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                     }
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressMiddle })
+                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressMiddle, additionalData = Model })
                     <div class="section new-shipping-address address-section-collapse">
                         <div class="title">
                             @if (Model.ExistingAddresses.Count > 0)
@@ -178,10 +178,10 @@
                             }
                         </div>
                         <div class="buttons">
-                            <input type="submit" name="nextstep" value="@T("Checkout.NextButton")" class="button-1 new-address-next-step-button" />
+                            <button type="submit" name="nextstep" class="button-1 new-address-next-step-button">@T("Checkout.NextButton")</button>
                         </div>
                     </div>
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressBottom })
+                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressBottom, additionalData = Model })
                 </div>
             }
         </form>

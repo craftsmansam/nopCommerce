@@ -5,7 +5,7 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.QuoteRequest
 {
-    public class BendingAndFabricationModel : BaseNopModel
+    public record BendingAndFabricationModel : BaseNopModel
     {
         public BendingAndFabricationModel()
         {

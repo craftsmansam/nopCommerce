@@ -304,7 +304,7 @@
     outline: none !important;
     background: none;
 }
-.product-list .item-box input[type="button"] {
+.product-list .item-box button {
     position: static;
     float: left;
     height: 44px !important;
@@ -312,7 +312,7 @@
     margin: 3px 0 3px 5px;
     vertical-align: middle;
 }
-.product-list .item-box input[type="button"].product-box-add-to-cart-button {
+.product-list .item-box button.product-box-add-to-cart-button {
     min-width: 160px;
     height: 50px !important;
     padding: 0 15px;
@@ -674,11 +674,11 @@
 .cart-collaterals .coupon-code {
     padding: 22.5px 50px 50px;
 }
-.cart-collaterals .coupon-code input[type="text"] {
+.cart-collaterals .coupon-code input {
     float: right;
     width: 60%;
 }
-.cart-collaterals .coupon-code input[type="submit"] {
+.cart-collaterals .coupon-code button {
     float: left;
     width: 38%;
     margin: 0 2% 0 0;
@@ -1039,14 +1039,14 @@
 .private-message-view-page .message-body {
     min-height: 70px;
 }
-.private-message-view-page .buttons input {
+.private-message-view-page .buttons button {
     margin: 0 2.5px;
 }
-.forum-edit-page .buttons input,
-.private-message-send-page .buttons input,
-.private-messages-page .buttons input,
-.move-topic-page .buttons input,
-.private-message-view-page .buttons input {
+.forum-edit-page .buttons button,
+.private-message-send-page .buttons button,
+.private-messages-page .buttons button,
+.move-topic-page .buttons button,
+.private-message-view-page .buttons button {
     margin: 0 2.5px;
 }
 

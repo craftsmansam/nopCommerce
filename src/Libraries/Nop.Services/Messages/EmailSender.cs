@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Security.Principal;
 using Craftsman.Mail;
@@ -11,6 +12,7 @@ using Nop.Core.Configuration;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Infrastructure;
+using Nop.Services.Media;
 
 namespace Nop.Services.Messages
 {
@@ -23,13 +25,17 @@ namespace Nop.Services.Messages
 
         private readonly INopFileProvider _fileProvider;
         private readonly AlbinaConfig _albinaConfig;
+        private readonly IDownloadService _downloadService;
+        private readonly ISmtpBuilder _smtpBuilder;
 
         #endregion
 
         #region Ctor
 
-        public EmailSender(INopFileProvider fileProvider, AlbinaConfig albinaConfig)
+        public EmailSender(IDownloadService downloadService, INopFileProvider fileProvider, ISmtpBuilder smtpBuilder, AlbinaConfig albinaConfig)
         {
+            _downloadService = downloadService;
+            _smtpBuilder = smtpBuilder;
             _fileProvider = fileProvider;
             _albinaConfig = albinaConfig;
         }
@@ -58,8 +64,11 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="filePath">Attachment file path</param>
         /// <param name="attachmentFileName">Attachment file name</param>
-        /// <returns>A leaf-node MIME part that contains an attachment.</returns>
-        protected MimePart CreateMimeAttachment(string filePath, string attachmentFileName = null)
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains a leaf-node MIME part that contains an attachment.
+        /// </returns>
+        protected async Task<MimePart> CreateMimeAttachmentAsync(string filePath, string attachmentFileName = null)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentNullException(nameof(filePath));
@@ -69,7 +78,7 @@ namespace Nop.Services.Messages
 
             return CreateMimeAttachment(
                     attachmentFileName,
-                    _fileProvider.ReadAllBytes(filePath),
+                    await _fileProvider.ReadAllBytesAsync(filePath),
                     _fileProvider.GetCreationTime(filePath),
                     _fileProvider.GetLastWriteTime(filePath),
                     _fileProvider.GetLastAccessTime(filePath));
@@ -98,7 +107,8 @@ namespace Nop.Services.Messages
                     CreationDate = cDate,
                     ModificationDate = mDate,
                     ReadDate = rDate
-                }
+                },
+                ContentTransferEncoding = ContentEncoding.Base64
             };
         }
 
@@ -124,7 +134,8 @@ namespace Nop.Services.Messages
         /// <param name="attachmentFileName">Attachment file name. If specified, then this file name will be sent to a recipient. Otherwise, "AttachmentFilePath" name will be used.</param>
         /// <param name="attachedDownloadId">Attachment download ID (another attachment)</param>
         /// <param name="headers">Headers</param>
-        public virtual void SendEmail(EmailAccount emailAccount, string subject, string body,
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task SendEmailAsync(EmailAccount emailAccount, string subject, string body,
             string fromAddress, string fromName, string toAddress, string toName,
             string replyTo = null, string replyToName = null,
             IEnumerable<string> bcc = null, IEnumerable<string> cc = null,

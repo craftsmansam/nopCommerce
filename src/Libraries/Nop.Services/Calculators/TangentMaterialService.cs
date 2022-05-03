@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using LinqToDB;
+using LinqToDB.Data;
 using Nop.Core.Domain.Calculators;
 using Nop.Data;
 
@@ -28,30 +31,30 @@ namespace Nop.Services.Calculators
         /// Gets all Tangent Materials materialNames
         /// </summary>
         /// <returns>Categories</returns>
-        public virtual List<string> GetAllUniqueMaterialNames()
+        public virtual async Task<List<string>> GetAllUniqueMaterialNamesAsync()
         {
             var table = _tangentMaterialRepository.Table;
-            return table.OrderBy(x => x.MaterialName).Select(x => x.MaterialName).Distinct().ToList();
+            return await table.OrderBy(x => x.MaterialName).Select(x => x.MaterialName).Distinct().ToListAsync();
         }
 
-        public virtual List<string> GetAllMaterialSizes()
+        public virtual async Task<List<string>> GetAllMaterialSizesAsync()
         {
             var table = _tangentMaterialSizeRangeRepository.Table;
-            return table.OrderBy(x => x.SortOrder).Select(x => x.MaterialSize).ToList();
+            return await table.OrderBy(x => x.SortOrder).Select(x => x.MaterialSize).ToListAsync();
         }
 
-        public virtual IList<VwTangentMaterial> GetTangentTable()
+        public virtual async Task<IList<VwTangentMaterial>> GetTangentTableAsync()
         {
-            var tangentMaterials = _dataProvider.Query<VwTangentMaterial>("select * from vwTangentMaterial order by SortOrder");
+            var tangentMaterials = await _dataProvider.QueryAsync<VwTangentMaterial>("select * from vwTangentMaterial order by SortOrder");
             return tangentMaterials;
         }
 
-        public string GetTangentMaterialResult(string bendType, string materialName, string materialSize)
-		{
-            var materialNameParam = SqlParameterHelper.GetStringParameter("materialName", materialName);
-            var materialSizeParam = SqlParameterHelper.GetStringParameter("materialSize", materialSize);
-            var bendTypeParam = SqlParameterHelper.GetStringParameter("bendType", bendType);
-            var results = _dataProvider.QueryProc<string>("TangentMaterial_LookupResult", materialNameParam, materialSizeParam, bendTypeParam);
+        public async Task<string> GetTangentMaterialResultAsync(string bendType, string materialName, string materialSize)
+        {
+            var materialNameParam = new DataParameter("materialName", materialName, DataType.NVarChar);
+            var materialSizeParam = new DataParameter("materialSize", materialSize, DataType.NVarChar);
+            var bendTypeParam = new DataParameter("bendType", bendType, DataType.NVarChar);
+            var results = await _dataProvider.QueryProcAsync<string>("TangentMaterial_LookupResult", materialNameParam, materialSizeParam, bendTypeParam);
             var result = results.Count > 0 ? results.First() : null;
 			return result != null && !string.IsNullOrWhiteSpace(result.ToString()) ? result + " tangents" : "not produced";
 		}

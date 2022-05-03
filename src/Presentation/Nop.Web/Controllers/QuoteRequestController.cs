@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Albina.SpiralMath;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Nop.Core.Domain.Security;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
+using Nop.Services.Html;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
 using Nop.Web.Framework.Mvc.Filters;
@@ -30,6 +32,7 @@ namespace Nop.Web.Controllers
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly AlbinaConfig _albinaConfig;
+        private readonly IHtmlFormatter _htmlFormatter;
 
         public QuoteRequestController(CaptchaSettings captchaSettings,
             ICustomerService customerService,
@@ -39,8 +42,10 @@ namespace Nop.Web.Controllers
             IWorkContext workContext,
             IWorkflowMessageService workflowMessageService,
             IHostEnvironment hostEnvironment,
-            AlbinaConfig albinaConfig)
+            AlbinaConfig albinaConfig,
+            IHtmlFormatter htmlFormatter)
         {
+            _htmlFormatter = htmlFormatter;
             _captchaSettings = captchaSettings;
             _customerService = customerService;
             _genericAttributeService = genericAttributeService;
@@ -51,19 +56,21 @@ namespace Nop.Web.Controllers
             _hostEnvironment = hostEnvironment;
             _albinaConfig = albinaConfig;
         }
-        public IActionResult BendingAndFabrication()
+        public async Task<IActionResult> BendingAndFabrication()
         {
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
             var model = new BendingAndFabricationModel
             {
                 IncludeSpiral = HttpContext.Request.Query["include_spiral"].Equals("true"),
                 UploadDocumentMaxSize = _albinaConfig.UploadDocumentMaxSize,
-                Email = _workContext.CurrentCustomer.Email,
-                Contact = _customerService.GetCustomerFullName(_workContext.CurrentCustomer),
-                CompanyName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.CompanyAttribute),
+                Email = customer.Email,
+                Contact = await _customerService.GetCustomerFullNameAsync(customer),
+                CompanyName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute),
                 DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage
             };
 
-            var firstAddress = _customerService.GetAddressesByCustomerId(_workContext.CurrentCustomer.Id).OrderByDescending(x => x.CreatedOnUtc).FirstOrDefault();
+            var firstAddress = (await _customerService.GetAddressesByCustomerIdAsync(customer.Id)).OrderByDescending(x => x.CreatedOnUtc).FirstOrDefault();
             if (firstAddress != null)
             {
                 if (firstAddress.Company != null)
@@ -80,7 +87,7 @@ namespace Nop.Web.Controllers
                 model.City = firstAddress.City;
                 if (firstAddress.StateProvinceId != null)
                 {
-                    model.State = _stateProvinceService.GetStateProvinceById(firstAddress.StateProvinceId.Value).Name;
+                    model.State = (await _stateProvinceService.GetStateProvinceByIdAsync(firstAddress.StateProvinceId.Value)).Name;
                 }
                 model.ZipCode = firstAddress.ZipPostalCode;
             }
@@ -90,11 +97,11 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("BendingAndFabrication")]
         [ValidateCaptcha]
-        public virtual IActionResult BendingAndFabricationSend(BendingAndFabricationModel model, bool captchaValid, List<IFormFile> files)
+        public virtual async Task<IActionResult> BendingAndFabricationSend(BendingAndFabricationModel model, bool captchaValid, List<IFormFile> files)
         {
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -106,8 +113,11 @@ namespace Nop.Web.Controllers
                     model.WhereHeardList.Single(x => x.Value == model.WhereHeard).Text + "\n\nProject Description:\n" +
                     model.ProjectDescription + "\n\nProject Name: " + model.ProjectName + "\n\nBid Deadline: " + model.BidDeadline +
                     "\n\nMaterial Size/Type: " + model.MaterialType + "\n\nQuantity: " + model.Quantity + "\n\nNotes: " + model.Notes;
-                var bodyFormatted = Core.Html.HtmlHelper.FormatText(body, false, true, false, false, false, false);
+                var bodyFormatted = _htmlFormatter.FormatText(body, false, true, false, false, false, false);
                 var attachments = new List<string>();
+
+                var customer = await _workContext.GetCurrentCustomerAsync();
+                var language = await _workContext.GetWorkingLanguageAsync();
 
                 foreach (var formFile in files)
                 {
@@ -117,13 +127,13 @@ namespace Nop.Web.Controllers
                 }
                 if (model.IncludeSpiral)
                 {
-                    var spiralFileName = SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaConfig.SpiralMathReportCache, _workContext.CurrentCustomer.CustomerGuid.ToString());
+                    var spiralFileName = SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaConfig.SpiralMathReportCache, customer.CustomerGuid.ToString());
                     //copy File out to Server so that we don't delete the original with email send and they can download the original after email send
                     var newFileName = SaveFileToServer(System.IO.File.OpenRead(spiralFileName), model.CompanyName + "SpiralReport.pdf");
                     attachments.Add(newFileName);
                 }
 
-                _workflowMessageService.SendQuoteEmail(_workContext.WorkingLanguage.Id, model.Email.Trim(), model.Contact, subject, bodyFormatted, attachments);
+                await _workflowMessageService.SendQuoteEmailAsync(language.Id, model.Email.Trim(), model.Contact, subject, bodyFormatted, attachments);
 
                 model.SuccessfullySent = true;
             }
@@ -136,11 +146,12 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public IActionResult BendingAndFabricationSuccess()
+        public async Task<IActionResult> BendingAndFabricationSuccess()
         {
+            var customer = await _workContext.GetCurrentCustomerAsync();
             var model = new BendingAndFabricationSuccessModel
             {
-                IncludeSpiral = System.IO.File.Exists(SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaConfig.SpiralMathReportCache, _workContext.CurrentCustomer.CustomerGuid.ToString()))
+                IncludeSpiral = System.IO.File.Exists(SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaConfig.SpiralMathReportCache, customer.CustomerGuid.ToString()))
             };
             return View(model);
         }

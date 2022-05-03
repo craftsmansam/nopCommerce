@@ -77,7 +77,7 @@
 /* WISHLIST & COMPARE LIST */
 /* TOPICS */
 
-.enter-password-form input[type="password"] {
+.enter-password-form input {
 	width: 300px !important;
 }
 
@@ -197,9 +197,6 @@
 .customer-pages-body .block .list .customer-orders a:before {
     content: "C";
 }
-.customer-pages-body .block .list .customer-quotes a:before {
-    content: "I";
-}
 .customer-pages-body .block .list .return-requests a:before {
     content: "S";
 }
@@ -233,6 +230,9 @@
 .customer-pages-body .block .list .customer-check-gift-card-balance a:before {
     content: "\e900";
 }
+.customer-pages-body .block .list .customer-multiFactor-authentication a:before {
+    content: "d";
+}
 
 .html-return-request-page  .data-table .unit-price {
     display: table-cell;
@@ -240,7 +240,7 @@
 .html-my-product-reviews-list-page .customer-pages-body .master-column-wrapper {
     margin-bottom: 60px;
 }
-.html-my-product-reviews-list-page .customer-pages-body .master-column-wrapper .pager{
+.html-my-product-reviews-list-page .customer-pages-body .master-column-wrapper .pager {
     position: absolute;
     bottom: -80px;
     right: 0;
@@ -378,27 +378,27 @@
         width: 160px;
         overflow: hidden;
     }
-    .product-box-layout-2 .venture-product-grid .item-box input[type="button"] {
+    .product-box-layout-2 .venture-product-grid .item-box button {
         float: left;
         height: 50px;
         margin: 0 0 5px 5px;
     }
-    .product-box-layout-2 .venture-product-grid .item-box input[type="button"]:first-child {
+    .product-box-layout-2 .venture-product-grid .item-box button:first-child {
         margin: 0 0 5px;
     }
 
-    .product-box-layout-2 .venture-product-grid .item-box .items-3 input[type="button"] {
+    .product-box-layout-2 .venture-product-grid .item-box .items-3 button {
         width: 77px;
         margin: 0 0 5px 5px;
     }
-    .product-box-layout-2 .venture-product-grid .item-box .items-3 input[type="button"]:first-child {
+    .product-box-layout-2 .venture-product-grid .item-box .items-3 button:first-child {
         margin: 0 0 5px 0;
     }
     .product-box-layout-2 .venture-product-grid .item-box .items-2 {
         width: 100%;
     }
-    .product-box-layout-2 .venture-product-grid .item-box input[type="button"].product-box-add-to-cart-button,
-    .product-box-layout-2 .venture-product-grid .item-box .items-2 input[type="button"] {
+    .product-box-layout-2 .venture-product-grid .item-box button.product-box-add-to-cart-button,
+    .product-box-layout-2 .venture-product-grid .item-box .items-2 button {
         display: block;
         position: static;
         width: 100%;
@@ -413,7 +413,7 @@
         text-transform: uppercase;
         letter-spacing: 2px;
     }
-    .product-box-layout-2 .venture-product-grid .item-box input[type="button"]:last-child {
+    .product-box-layout-2 .venture-product-grid .item-box button:last-child {
         margin: 0;
     }
 

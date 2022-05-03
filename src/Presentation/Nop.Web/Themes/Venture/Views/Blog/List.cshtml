@@ -3,40 +3,40 @@
     Layout = "_ColumnsTwo";
 
     //title
-    Html.AddTitleParts(T("PageTitle.Blog").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Blog").Text);
     //page class
-    Html.AppendPageCssClassParts("html-blog-page");
+    NopHtml.AppendPageCssClassParts("html-blog-page");
 }
 @section left {
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBlogBefore })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBlogBefore, additionalData = Model })
     @await Component.InvokeAsync("BlogMonths")
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfterBlogArchive })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfterBlogArchive, additionalData = Model })
     @await Component.InvokeAsync("BlogTags")
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBlogAfter })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBlogAfter, additionalData = Model })
 }
 <div class="page blog-page">
     <div class="page-title">
         <a href="@Url.RouteUrl("BlogRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("Blog.RSS.Hint")">@T("Blog.RSS")</a>
         <h1>
-            @if (String.IsNullOrEmpty(Model.PagingFilteringContext.Tag))
+            @if (string.IsNullOrEmpty(Model.PagingFilteringContext.Tag))
             {
                 if (Model.PagingFilteringContext.GetParsedMonth().HasValue)
                 {
-                    @String.Format(T("Blog.FilteredByMonth").Text, Model.PagingFilteringContext.GetParsedMonth().Value.Year, Model.PagingFilteringContext.GetParsedMonth().Value.ToString("MMMM"))
+                @string.Format(T("Blog.FilteredByMonth").Text, Model.PagingFilteringContext.GetParsedMonth().Value.Year, Model.PagingFilteringContext.GetParsedMonth().Value.ToString("MMMM"))
                 }
                 else
                 {
-                    @T("Blog")
+                @T("Blog")
                 }
             }
             else
             {
-                @String.Format(T("Blog.TaggedWith").Text, Model.PagingFilteringContext.Tag)
+                @string.Format(T("Blog.TaggedWith").Text, Model.PagingFilteringContext.Tag)
             }
         </h1>
     </div>
     <div class="page-body">
-        @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_before_posts" })
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogListPageBeforePosts, additionalData = Model })
         <div class="blog-posts">
             @foreach (var item in Model.BlogPosts)
             {
@@ -50,13 +50,13 @@
                             <span class="year">@item.CreatedOn.Year</span>
                         </span>
                         <div class="buttons">
-                            <a href="@Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })" class="read-more">@T("Blog.MoreInfo")</a>
+                            <a href="@Url.RouteUrl("BlogPost", new {SeName = item.SeName})" class="read-more">@T("Blog.MoreInfo")</a>
                         </div>
                     </div>
                     <div class="post-body">
-                        <a class="post-title" href="@Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })">@item.Title</a>
+                        <a class="post-title" href="@Url.RouteUrl("BlogPost", new {SeName = item.SeName})">@item.Title</a>
                         <div class="post-text">
-                            @Html.Raw(!String.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
+                            @Html.Raw(!string.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
                         </div>
                     </div>
                     @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogListPageAfterPostBody, additionalData = item })
@@ -80,7 +80,7 @@
                         }
                         @if (item.AllowComments)
                         {
-                            <a href="@Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })#comments" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
+                            <a href="@Url.RouteUrl("BlogPost", new {SeName = item.SeName})#comments" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
                         }
                     </div>
                     @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogListPageInsidePost, additionalData = item })
@@ -91,12 +91,12 @@
         @{
             var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
         }
-        @if (!pager.IsEmpty())
+        @if (!(await pager.IsEmpty()))
         {
             <div class="pager">
                 @pager
             </div>
         }
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogListPageAfterPosts })
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BlogListPageAfterPosts, additionalData = Model })
     </div>
 </div>

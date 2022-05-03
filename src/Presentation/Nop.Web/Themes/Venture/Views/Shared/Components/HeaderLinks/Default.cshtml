@@ -1,4 +1,5 @@
 ﻿@model HeaderLinksModel
+@using Nop.Core.Domain.Customers
 @inject Nop.Core.IWebHelper webHelper
 
 <div class="header-links">
@@ -17,7 +18,7 @@
             }
         }
         <div class="header-links-box-top @isAuthenticated @threeItemsClass">
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderLinksBefore })
+        	@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderLinksBefore, additionalData = Model })
             @if (Model.IsAuthenticated)
             {
                 <div class="header-link-wrapper account"><a href="@Url.RouteUrl("CustomerInfo")" title="@T("Account.MyAccount")" class="ico-account">@T("Account.MyAccount")@*@Model.CustomerName*@</a></div>
@@ -37,8 +38,12 @@
                 var returnUrl = Context.Request.Query.TryGetValue("returnUrl", out var url) && !StringValues.IsNullOrEmpty(url) 
 	                ? url.ToString()
 	                : webHelper.GetRawUrl(Context.Request);
+                
                 <div class="header-link-wrapper login"><a href="@Url.RouteUrl("Login", new { returnUrl })" title="@T("Account.Login")" class="ico-login">@T("Account.Login")</a></div>
-                <div class="header-link-wrapper register"><a href="@Url.RouteUrl("Register", new { returnUrl })" title="@T("Account.Register")" class="ico-register">@T("Account.Register")</a></div>
+                @if (Model.RegistrationType != UserRegistrationType.Disabled)
+                {
+                    <div class="header-link-wrapper register"><a href="@Url.RouteUrl("Register", new { returnUrl })" title="@T("Account.Register")" class="ico-register">@T("Account.Register")</a></div>
+                }
             }
         </div>
         @if (Model.WishlistEnabled)
@@ -52,7 +57,7 @@
                 </div>
             </div>
         }
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderLinksAfter })
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderLinksAfter, additionalData = Model })
     </div>
     @if (Model.AllowPrivateMessages && !string.IsNullOrEmpty(Model.AlertMessage))
     {

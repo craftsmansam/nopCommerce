@@ -3,17 +3,17 @@
 @{
     Layout = "_Root.Head";
 
-    var shoppingCartEnabled = permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart);
+    var shoppingCartEnabled = await permissionService.AuthorizeAsync(StandardPermissionProvider.EnableShoppingCart);
 }
 
 @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
-@await Html.PartialAsync("_Notifications")
-@await Html.PartialAsync("_JavaScriptDisabledWarning")
-@await Html.PartialAsync("_OldInternetExplorerWarning")
+@{ await Html.RenderPartialAsync("_Notifications"); }
+@{ await Html.RenderPartialAsync("_JavaScriptDisabledWarning"); }
+@{ await Html.RenderPartialAsync("_OldInternetExplorerWarning"); }
 
 <div class="master-wrapper-page">
     @await Component.InvokeAsync("AdminHeaderLinks")
-    @await Html.PartialAsync("_Header")
+    @{ await Html.RenderPartialAsync("_Header"); }
     <script asp-location="Footer">
         var localized_data = {
             AjaxCartFailure: "@T("AjaxCart.Failure")"
@@ -42,10 +42,9 @@
     </div>
     <div class="master-wrapper-content">
         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
-        @if (IsSectionDefined("Breadcrumb"))
-        {
-            @RenderSection("Breadcrumb")
-        }
+        
+        @await RenderSectionAsync("Breadcrumb", false)
+
         <div class="master-column-wrapper">
             @RenderBody()
         </div>

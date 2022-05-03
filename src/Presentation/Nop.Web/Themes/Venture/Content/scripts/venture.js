@@ -138,7 +138,7 @@
                                 {
                                     elementToAttach: '.master-wrapper-page',
                                     opener: '.filters-button-wrapper .filters-button',
-                                    closer: '.nopAjaxFilters7Spikes .close-btn',
+                                    closer: '.nopAjaxFilters7Spikes .close-filters',
                                     content: '.nopAjaxFilters7Spikes',
                                     overlay: true,
                                     scrollbar: true
@@ -246,7 +246,7 @@
                                 {
                                     elementToAttach: '.master-wrapper-page',
                                     opener: '.filters-button-wrapper .filters-button',
-                                    closer: '.nopAjaxFilters7Spikes .close-btn',
+                                    closer: '.nopAjaxFilters7Spikes .close-filters',
                                     content: '.nopAjaxFilters7Spikes',
                                     overlay: true,
                                     scrollbar: true
@@ -381,7 +381,7 @@
                                 {
                                     elementToAttach: '.master-wrapper-page',
                                     opener: '.filters-button-wrapper .filters-button',
-                                    closer: '.nopAjaxFilters7Spikes .close-btn',
+                                    closer: '.nopAjaxFilters7Spikes .close-filters',
                                     content: '.nopAjaxFilters7Spikes',
                                     overlay: true,
                                     scrollbar: true
@@ -494,6 +494,9 @@
         handleHomePageVideoPlayer();
         
     });
+    // 
+    $('.cross-sells button').removeClass('button-2'); //Preventing a css conflict on Shopping Cart page
+    //
 
     $(document).on('ventureMapLoaded', function () {
 
@@ -578,10 +581,10 @@
     }
 
     function handleGridViewModes() {
-
         var gridViewModeSelector = $('.product-viewmode .grid').not('.hidden');
         var listViewModeSelector = $('.product-viewmode .list').not('.hidden');
         var hiddenViewModeGrid = $('.product-viewmode .grid.hidden');
+        var ajaxFiltersEnabled = $('.nopAjaxFilters7Spikes').length > 0;
 
         // If we have less than 2 grid options - do nothing.
         if (gridViewModeSelector.length < 2) {
@@ -605,7 +608,6 @@
         }
 
         gridViewModeSelector.on('click.venture', function (e) {
-
             // Do nothing if the selected view mode is already selected.
             if ($(this).hasClass('selected')) {
 
@@ -627,11 +629,41 @@
 
             // Switch selected grid view modes.
             gridViewModeSelector.removeClass('selected').filter('.items-' + items).addClass('selected');
+
+            listViewModeSelector.removeClass('selected');
+            hiddenViewModeGrid.addClass('selected');
+
+            if (!ajaxFiltersEnabled) {
+
+                CatalogProducts.getProducts();
+            } else {
+
+                hiddenViewModeGrid.click();
+            }
         });
 
         listViewModeSelector.on('click.venture', function (e) {
 
             gridViewModeSelector.removeClass('selected');
+            hiddenViewModeGrid.removeClass('selected');
+            listViewModeSelector.addClass('selected');            
+
+            if (!ajaxFiltersEnabled) {
+
+                CatalogProducts.getProducts();
+            }
+        });
+
+        $(document).on('SevenSpikesAjaxFiltersViewModeChange', function (element, viewModeElement) {
+
+            var type = $(viewModeElement).attr('data-viewmode');
+
+            if (type === 'list') {
+
+                gridViewModeSelector.removeClass('selected');
+                hiddenViewModeGrid.removeClass('selected');
+                listViewModeSelector.addClass('selected');
+            }
         });
     }
 
@@ -691,7 +723,7 @@
         }
     }
 
-    function handleHomePageVideoPlayer(vidoeId) {
+    function handleHomePageVideoPlayer() {
         
         function initYoutubePlayer() {
             player = new YT.Player('video-iframe', {
@@ -699,7 +731,7 @@
                     'onStateChange': function (state) {
                         if (state.data === 0) {
 
-                            isPlayerRunning[videoId] = false;
+                            isPlayerRunning = false;
 
                             player.destroy();
                         }
@@ -708,7 +740,25 @@
             });
         }
 
-        var playerElement = $('#video-player, .video-player-class');
+        function initVimeoPlayer(startTime) {
+            player = new Vimeo.Player('video-iframe');
+
+            player.setVolume(0);
+
+            if (startTime && startTime > 0) {
+
+                player.setCurrentTime(startTime);
+            }
+
+            player.on('ended', function () {
+
+                isPlayerRunning = false;
+
+                iFrame.remove();
+            });
+        }
+
+        var playerElement = $('#video-player');
 
         if (playerElement.length === 0) {
 
@@ -716,35 +766,48 @@
         }
 
         var platformUrl = playerElement.attr('data-platform-url');
+        var videoId = playerElement.attr('data-id');
         var startTime = playerElement.attr('data-start-time');
 
-        var isPlayerRunning = {};
+        var isPlayerRunning = false;
         var player;
         var iFrame;
+        var videoSettings;
 
-        // Embed video options
-        var videoSettings = {
-            autoplay: 1,
-            controls: 1,
-            rel: 0,
-            showinfo: 0,
-            iv_load_policy: 3,
-            mute: 1,
-            enablejsapi: 1,
-            start: startTime,
-            modestbranding: 1
-        };
+        if (platformUrl.indexOf('youtube') !== -1) {
 
+            // Embed video options
+            videoSettings = {
+                autoplay: 1,
+                controls: 0,
+                rel: 0,
+                showinfo: 0,
+                iv_load_policy: 3,
+                mute: 1,
+                enablejsapi: 1,
+                start: startTime
+            };
+
+        } else if (platformUrl.indexOf('vimeo') !== -1) {
+
+            // Embed video options
+            videoSettings = {
+                autoplay: 1,
+                byline: 0,
+                portrait: 0,
+                title: 0,
+                background: 1
+            };
+        }
 
         playerElement.on('click', function () {
-            var singlePlayer = $(this);
-            var videoId = singlePlayer.attr('data-id');
-            if (isPlayerRunning[videoId]) {
+
+            if (isPlayerRunning) {
 
                 return;
             }
 
-            isPlayerRunning[videoId] = true;
+            isPlayerRunning = true;
 
             iFrame = $('<iframe>', {
                 src: platformUrl + videoId + '?' + $.param(videoSettings),
@@ -753,9 +816,16 @@
                 allowfullscreen: 1
             });
 
-            iFrame.appendTo(singlePlayer).show('slow');
+            iFrame.appendTo(playerElement).show('slow');
 
-            initYoutubePlayer(videoId);
+            if (platformUrl.indexOf('youtube') !== -1) {
+
+                initYoutubePlayer();
+
+            } else if (platformUrl.indexOf('vimeo') !== -1) {
+                
+                initVimeoPlayer(startTime);
+            }
         });
     }
 

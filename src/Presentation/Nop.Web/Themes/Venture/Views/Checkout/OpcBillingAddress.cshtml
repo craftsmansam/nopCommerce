@@ -1,6 +1,7 @@
 ﻿@model CheckoutBillingAddressModel
+
 <div class="checkout-data">
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressTop })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressTop, additionalData = Model })
     @if (Model.ShipToSameAddressAllowed)
     {
         <div class="section ship-to-same-address">
@@ -60,7 +61,7 @@
             </div>
         </div>
     }
-    @await Component.InvokeAsync("Widget", new { widgetZone = "op_checkout_billing_address_middle" })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressMiddle, additionalData = Model })
     @{
         var existingAddresses = string.Empty;
         if (Model.ExistingAddresses.Count == 0)
@@ -78,5 +79,5 @@
             }
         </div>
     </div>
-    @await Component.InvokeAsync("Widget", new { widgetZone = "op_checkout_billing_address_bottom" })
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressBottom, additionalData = Model })
 </div>

@@ -4,14 +4,9 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Common
 {
-    public partial class BendingTolerancesTableModel : BaseNopModel
+    public partial record BendingTolerancesTableModel : BaseNopModel
     {
-        public BendingTolerancesTableModel()
-        {
-           BTRows = new List<BendingTolerancesRow>();
-        }
-
-        public List<BendingTolerancesRow> BTRows {get; set;}
+        public List<BendingTolerancesRow> BTRows { get; set; } = new();
 
 		public bool ShowFooter { get; set; }
 

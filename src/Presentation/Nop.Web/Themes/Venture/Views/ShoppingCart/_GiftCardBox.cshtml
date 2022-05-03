@@ -11,11 +11,10 @@
             <div class="inputs">
                 <label>@T("shoppingcart.totals.giftcardinfo")</label>
                 <input name="giftcardcouponcode" id="giftcardcouponcode" type="text" class="gift-card-coupon-code" aria-label="@T("ShoppingCart.GiftCardCouponCode.Label")"/>
-                <input type="submit" name="applygiftcardcouponcode" id="applygiftcardcouponcode"
-                       value="@T("ShoppingCart.GiftCardCouponCode.Button")" class="button-2 apply-gift-card-coupon-code-button" />
+                <button type="submit" name="applygiftcardcouponcode" id="applygiftcardcouponcode" class="button-2 apply-gift-card-coupon-code-button">@T("ShoppingCart.GiftCardCouponCode.Button")</button>
             </div>
         </div>
-        @if (!String.IsNullOrEmpty(Model.Message))
+        @if (!string.IsNullOrEmpty(Model.Message))
         {
             <div class="@(Model.IsApplied ? "message-success" : "message-failure")">
                 @Model.Message

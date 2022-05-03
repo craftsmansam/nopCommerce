@@ -71,14 +71,10 @@ script {
 
 @font-face {
     font-family: "venture-font";
-    src: url("../fonts/venture-font.eot");
-    src: url("../fonts/venture-font.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/venture-font.woff") format("woff"),
-    url("../fonts/venture-font.ttf") format("truetype"),
-    url("../fonts/venture-font.svg#venture-font") format("svg");
+    src: url("../fonts/venture-font.woff") format("woff"),
+         url("../fonts/venture-font.svg#venture-font") format("svg");
     font-weight: normal;
     font-style: normal;
-    font-display: swap;
 }
 
 [data-icon]:before {
@@ -194,7 +190,7 @@ script {
 
 body {
     max-width: 100%;
-	background-color: #fbfbfb;
+	background-color: #f0f0f0;
 	overflow-x: hidden; /* responsive navigation & filters scroll bug fix*/
 	font: normal 15px 'Fjalla One', sans-serif;
     color: #2c2c2c;
@@ -203,7 +199,7 @@ body {
 
 }
 a {
-	color: #2c2c2c;
+	color: inherit;
 	cursor: pointer;
 }
 img {
@@ -211,6 +207,9 @@ img {
 }
 a img {
 	opacity: 0.99; /*firefox scale bug fix*/
+}
+strong {
+    font-weight: normal;
 }
 em {
     font-style: normal;
@@ -298,7 +297,7 @@ button[disabled]  {
 
 .master-wrapper-content {
 	position: relative;
-    z-index: 4; /* giving priority to header and header-menu */
+	z-index: 4; /* giving priority to header and header-menu */
     max-width: 90%;
     margin: 0 auto;
     padding: 80px 0 100px;
@@ -561,7 +560,6 @@ body:after {
     bottom: 0;
     margin: auto;
 }
-
 .inputs input[type='checkbox']:checked ~ label:after,
 .inputs input[type='radio']:checked ~ label:after {
     content: '';
@@ -578,7 +576,7 @@ body:after {
     transition: all 0.2s ease-in-out;
 }
 .inputs input[type='radio'] ~ label:before,
-.inputs input[type='radio']:checked ~ label:after {
+.inputs input[type='radio'] ~ label:after {
     border-radius: 50%;
 }
 
@@ -747,7 +745,22 @@ body:after {
 .cart .add-to-cart,
 .data-table .select-boxes,
 .data-table .order {
+    position: relative;
     text-align: center;
+}
+.cart .remove-from-cart button {
+	position: absolute;
+	top: 0; right: 0;
+	bottom: 0; left: 0;
+    z-index: 1;
+	width: 24px;
+	height: 24px;
+	margin: auto;
+    border: none;
+    background: url('../img/clear-cart.svg') center no-repeat;
+}
+.cart .remove-from-cart button:hover {
+    background: url('../img/clear-cart-hover.svg') center no-repeat;
 }
 .cart .unit-price,
 .cart .sku,
@@ -1873,7 +1886,6 @@ body:after {
 }
 .block .list .active > a {
     color: #2c2c2c;
-    font-weight: bold;
 }
 .block .list a,
 .block .list strong {
@@ -1906,6 +1918,132 @@ body:after {
 }
 .block .view-all a:hover {
     color: #f3cc2e;
+}
+
+.block .product-filter {
+    margin-top: 20px;
+}
+.block .product-filter + div {
+    margin-top: 10px;
+}
+.block .filter-title {
+    /*margin: 30px 0 0;*/
+}
+.block .filter-title strong {
+    color: #2c2c2c;
+}
+.block .filter-content {
+    padding: 0 5px;
+}
+.block .filter-content ul {
+    padding: 10px 0;
+}
+.block .filter-content li.name {
+    margin-bottom: 10px;
+}
+.product-spec-filter .filter-title {
+    margin-bottom: 10px;
+}
+.block .filter-content strong {
+    text-transform: none;
+    color: #2c2c2c;
+}
+.block .filter-content input {
+    position: absolute;
+    opacity: 0;
+}
+.block .filter-content label {
+    display: block;
+    position: relative;
+    z-index: 1;
+    padding: 9px 9px 9px 25px;
+    text-transform: none;
+    text-align: left;
+    font-size: 15px;
+    color: #909090;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+.block .filter-content label:before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    bottom: 0;
+    width: 17px;
+    height: 17px;
+    margin: auto;
+    border: 1px solid #d4d4d4;
+}
+.block .filter-content input:checked + label {
+    color: #2c2c2c;
+}
+.block .filter-content input:checked + label:after {
+    content: '';
+    position: absolute;
+    top: 0; left: 3px;
+    bottom: 0;
+    width: 11px;
+    height: 11px;
+    margin: auto;
+    background: #f3cc2e;
+    transition: all 0.2s ease-in-out;
+}
+.block .attribute-square {
+    position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+    width: 17px !important;
+    height: 17px !important;
+    margin: auto;
+}
+.block .selected-price-range {
+    overflow: hidden;
+    padding: 20px 0 10px;
+}
+.block .selected-price-range span {
+    min-width: 38px;
+    height: 18px;
+    padding: 0 2px;
+    line-height: 18px;
+    color: rgba(255,255,255,.7);
+    font-size: 11px;
+    text-align: center;
+    background: #2c2c2c;
+}
+.block .selected-price-range .from {
+    float: left;
+}
+.block .selected-price-range .to {
+    float: right;
+}
+.block.price-range-filter {
+    overflow: hidden;
+}
+.price-range-filter .ui-slider {
+	position: relative;
+	width: auto;
+	height: 10px;
+	margin: 0 auto 30px;
+    max-width: 257px;
+    padding: 10px 0 0;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAKCAYAAAC9vt6cAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODg4N0YzOUU4NDAzMTFFNzgxM0NBQTJEM0RBNTUyQUYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODg4N0YzOUY4NDAzMTFFNzgxM0NBQTJEM0RBNTUyQUYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4ODg3RjM5Qzg0MDMxMUU3ODEzQ0FBMkQzREE1NTJBRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4ODg3RjM5RDg0MDMxMUU3ODEzQ0FBMkQzREE1NTJBRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjkDwfwAAAA2SURBVHjaYmBgYDBmIBH8//8fjpkYKAQ0McCYFP7g9AJ9DWABEZ9P68IFeE0vE+RT1QUAAQYA9zgS2K+I/V8AAAAASUVORK5CYII=') repeat-x top left;
+	border-bottom: 6px solid #bebebe;
+}
+.price-range-filter .ui-slider-range {
+    height: 6px;
+    background: #f3cc2e;
+    position: absolute;
+}
+.price-range-filter .ui-slider-handle {
+    position: absolute;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 13px rgba(0,0,0,.23);
 }
 
 .block .tags {
@@ -1996,7 +2134,7 @@ body:after {
 .poll .buttons {
     margin: 0;
 }
-.poll .buttons input {
+.poll .buttons button {
     border: none;
     background: #f5f5f5;
     color: #787878;
@@ -2005,11 +2143,11 @@ body:after {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
-.poll .buttons input:hover {
+.poll .buttons button:hover {
     background: #f3cc2e;
     color: #2c2c2c;
 }
-.light-theme .poll .buttons input:hover {
+.light-theme .poll .buttons button:hover {
     color: #fff;
 }
 .poll-total-votes {
@@ -2036,7 +2174,7 @@ body:after {
     padding: 8px 25px;
     margin: 0;
 }
-.block .poll .buttons input {
+.block .poll .buttons button {
     width: 100%;
     display: block;
     border-top: 1px dashed #ccc;
@@ -2045,7 +2183,7 @@ body:after {
     color: #2c2c2c;
     text-align: left;
 }
-.block .poll .buttons input:hover {
+.block .poll .buttons button:hover {
     background: #f5f5f5 !important;
 }
 
@@ -2400,6 +2538,7 @@ body:after {
 	margin: 0 0 20px;
     text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
 
 }
@@ -2422,9 +2561,6 @@ body:after {
 }
 .contact-vendor-button:hover {
     background: #ebbf0d;
-}
-.product-filters {
-	display: none;
 }
 .filters-button-wrapper {
     display: none !important;
@@ -2764,7 +2900,7 @@ body:after {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
-.item-box input[type="button"] {
+.item-box button {
 	width: 50px;
 	height: 0;
     border: none;
@@ -2776,7 +2912,7 @@ body:after {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
-.item-box input[type="button"].product-box-add-to-cart-button {
+.item-box button.product-box-add-to-cart-button {
     height: 50px !important;
     position: absolute;
     bottom: 0;
@@ -2784,10 +2920,10 @@ body:after {
     margin: 0;
     background-image: url('../img/product-shopping-cart.svg');
 }
-.item-box input.add-to-compare-list-button {
+.item-box button.add-to-compare-list-button {
 	background-image: url('../img/product-compare.svg');
 }
-.item-box input.add-to-wishlist-button {
+.item-box button.add-to-wishlist-button {
 	background-image: url('../img/product-wishlist.svg');
 }
 
@@ -2898,7 +3034,7 @@ body:after {
 }
 .pager li {
 	display: inline-block;
-	margin: 0 1.5px 3px;;
+	margin: 0 1.5px 3px;
 	vertical-align: middle;
 }
 .pager li * {
@@ -3226,6 +3362,12 @@ body:after {
 	width: 450px;
 	max-width: 100%;
 }
+.attributes option {
+    color: #2c2c2c;
+}
+.attributes option.disabled {
+	color: #ccc;
+}
 .attributes .qty-box {
 	margin: 10px 0;
 }
@@ -3250,6 +3392,13 @@ body:after {
 }
 .attributes .option-list li:last-child {
     margin-right: 0;
+}
+.attributes .option-list .disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+.attributes .option-list .disabled label {
+	text-decoration: line-through;
 }
 .attributes .option-list label {
 	display: inline-block;
@@ -3299,7 +3448,6 @@ body:after {
     bottom: 0;
     margin: auto;
 }
-
 .attributes .option-list  input[type='checkbox']:checked ~ label:after {
     content: '';
     display: block;
@@ -3454,6 +3602,23 @@ td.ui-datepicker-week-end {
 .selected-value .attribute-square {
     outline: 1px solid #b2b2b2;
 }
+.attribute-squares .disabled {
+	position: relative;
+	opacity: 1 !important;
+}
+.attribute-squares .disabled:before {
+	font-family: "venture-font";
+    text-transform: none;
+    content: "u";
+	position: absolute;
+	top: 0; bottom: 0;
+    left: 0; right: 0;
+	background-color: #fff;
+	text-align: center;
+	font-size: 15px;
+	line-height: 27px;
+	color: #e75862;
+}
 .attribute-squares .tooltip-container {
     display: none;
 	position: absolute;
@@ -3485,7 +3650,7 @@ td.ui-datepicker-week-end {
     border-width: 0 10px 10px 10px;
     border-color: transparent transparent #fff transparent;
 }
-.attribute-squares .tooltip-body{
+.attribute-squares .tooltip-body {
     background: #fff;
     border: 5px solid #fff;
     box-shadow: 0 0 14px rgba(0,0,0,0.09);
@@ -3712,6 +3877,7 @@ td.ui-datepicker-week-end {
 .overview .qty-label,
 .variant-overview .qty-label {
     font-size: 15px;
+    line-height: 50px;
     margin: 0 10px 10px 0;
     width: auto;
 }
@@ -3780,7 +3946,7 @@ td.ui-datepicker-week-end {
 .variant-overview .add-to-cart-button {
     padding: 15.5px 25px;
     width: 260px;
-    max-width: 45%;
+    max-width: 55%;
     border: none;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -3971,7 +4137,6 @@ td.ui-datepicker-week-end {
 }
 
 .product-estimate-shipping {
-    clear: both;
     font-size: 14px;
 	color: #8c8c8c;
 }
@@ -4005,6 +4170,7 @@ td.ui-datepicker-week-end {
     color: #2c2c2c;
 }
 .variant-overview .product-estimate-shipping {
+    clear: both;
     margin: 10px 0 12px;
 }
 
@@ -4060,6 +4226,9 @@ td.ui-datepicker-week-end {
     transform: skewX(-30deg);
 }
 
+.product-specs-box .spec-group-name {
+	display: none !important;
+}
 .product-specs-box .table-wrapper {
     width: 100%;
     background: #fff;
@@ -4098,6 +4267,10 @@ td.ui-datepicker-week-end {
 }
 .product-specs-box .data-table .spec-value a:hover {
     color: #f3cc2e;
+}
+.product-specs-box .data-table .attribute-squares {
+    display: inline-block;
+    vertical-align: middle;
 }
 .product-specs-box .data-table .attribute-square {
     margin: auto;
@@ -4819,6 +4992,7 @@ td.ui-datepicker-week-end {
 	display: block;
     color: #f3cc2e;
 }
+
 .compare-products-page {
 	position: relative;
 }
@@ -4868,6 +5042,10 @@ td.ui-datepicker-week-end {
 }
 .light-theme .compare-products-page .clear-list:hover:before {
     color: #fff;
+}
+.compare-products-page .attribute-squares {
+    display: inline-block;
+    vertical-align: middle;
 }
 .compare-products-table {
 	display: none;
@@ -4947,6 +5125,7 @@ td.ui-datepicker-week-end {
 .topic-block-body {
     text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
     max-width: 650px;
     margin: auto;
@@ -4958,15 +5137,17 @@ td.ui-datepicker-week-end {
 .topic-page .page-body {
 	text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
-    max-width: 1060px;
+    max-width: 900px;
     margin: auto;
+    text-align: center;
 }
 
 .home-page .topic-block {
-	margin: 20px auto;
+	margin: 80px auto;
     width: 90%;
-    max-width: 1060px;
+    max-width: 960px;
 }
 .home-page .topic-block-body {
     max-width: none;
@@ -4999,12 +5180,12 @@ td.ui-datepicker-week-end {
 	display: inline-block;
 	overflow: hidden;
 }
-.enter-password-form input[type="password"] {
+.enter-password-form input {
 	float: left !important;
 	width: 200px !important;
 	height: 50px !important;
 }
-.enter-password-form input[type="submit"] {
+.enter-password-form button {
 	float: left !important;
 	width: auto !important;
 	height: 50px !important;
@@ -5017,7 +5198,7 @@ td.ui-datepicker-week-end {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.enter-password-form input[type="submit"]:hover {
+.enter-password-form button:hover {
     background: #ebbf0d;
 }
 .password-error {
@@ -5726,7 +5907,7 @@ td.ui-datepicker-week-end {
 	width: 220px;
 	overflow: hidden;
 }
-.avatar-page input[type="submit"] {
+.avatar-page button {
     padding: 10px 25px;
     margin: 0 5px 0 0;
 }
@@ -5748,6 +5929,46 @@ td.ui-datepicker-week-end {
 .vendorinfo-page .vendor-picture img {
 	display: block;
 	margin: 0;
+}
+
+.multi-factor-authentication-page .description {
+    margin: 0 0 30px;
+}
+.multi-factor-authentication-page .payment-method {
+    max-width: none !important;
+}
+.multi-factor-authentication-page ul .buttons {
+    margin: 20px 0 0;
+    padding: 20px 0 0;
+}
+.multi-factor-authentication-page ul button {
+    background: none !important;
+    padding: 0 !important;
+}
+.configure-provider .instruction {
+    font-family: 'Lato', sans-serif;
+    line-height: 25px;
+    text-transform: none;
+    color: #909090;
+}
+.configure-provider .table-wrapper {
+    border: none;
+}
+.configure-provider table {
+	margin: 30px 0;
+	text-align: left;
+}
+.configure-provider table td {
+	vertical-align: top;
+}
+.configure-provider .qr-code img {
+    border: 1px solid #f5f5f5;
+}
+.configure-provider .manual-code {
+    padding: 0 0 0 10px;
+}
+.configure-provider .inputs {
+    margin: 10px 0 0;
 }
 
 
@@ -5897,7 +6118,7 @@ td.ui-datepicker-week-end {
 .cart-options .common-buttons {
 	font-size: 0;
 }
-.cart-options .common-buttons input {
+.cart-options .common-buttons button {
 	min-width: 150px;
 	margin: 0 5px 5px;
 }
@@ -6072,6 +6293,7 @@ td.ui-datepicker-week-end {
     color: #f3cc2e;
 }
 .min-amount-warning {
+    display: block;
     padding: 0 30px 30px;
     max-width: 360px;
     margin: auto;
@@ -6223,16 +6445,16 @@ td.ui-datepicker-week-end {
 	font-size: 0;
     padding: 10px 30px 30px;
 }
-.cart-collaterals .coupon-code input[type="text"] {
+.cart-collaterals .coupon-code input {
     width: 100%;
 }
-.cart-collaterals .coupon-code input[type="submit"] {
+.cart-collaterals .coupon-code button {
     width: 100%;
     margin: 5px 0 0;
     display: block;
     background: #f0f0f0;
 }
-.cart-collaterals .coupon-code input[type="submit"]:hover {
+.cart-collaterals .coupon-code button:hover {
     background: #f3cc2e;
 }
 .cart-collaterals .message-failure {
@@ -6299,7 +6521,7 @@ td.ui-datepicker-week-end {
 .shopping-cart-page .product-grid .title strong {
     font-size: 25px;
 }
-.shopping-cart-page .product-grid .item-box input[type="button"] {
+.shopping-cart-page .product-grid .item-box button {
     padding: 0;
 }
 
@@ -6431,7 +6653,7 @@ td.ui-datepicker-week-end {
     left: 0;
     right: 0;
 }
-.checkout-page .address-item input[type="button"] {
+.checkout-page .address-item button {
     padding: 15px 10px;
     border: none;
     letter-spacing: 2px;
@@ -6446,10 +6668,10 @@ td.ui-datepicker-week-end {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.checkout-page .address-item input[type="button"]:hover {
+.checkout-page .address-item button:hover {
     background: #ebbf0d;
 }
-.light-theme .checkout-page .address-item input[type="button"] {
+.light-theme .checkout-page .address-item button {
     color: #fff;
 }
 .checkout-page .address-item.enter-new-address {
@@ -6567,13 +6789,13 @@ td.ui-datepicker-week-end {
 .checkout-page .section.new-billing-address .inputs {
     width: 680px;
 }
-.billing-address-page .buttons input[type='submit'],
-.shipping-address-page .buttons input[type='submit'],
-.section.shipping-method .buttons input[type='submit'], 
-.section.payment-method .buttons input[type='submit'],
-.section.payment-info .buttons input[type='submit'],
-.section.confirm-order .buttons input[type='submit'],
-.section.order-completed .buttons input[type='button'] {
+.billing-address-page .buttons button,
+.shipping-address-page .buttons button,
+.section.shipping-method .buttons button, 
+.section.payment-method .buttons button,
+.section.payment-info .buttons button,
+.section.confirm-order .buttons button,
+.section.order-completed .buttons button {
     border: none;
     display: block;
     background: #f3cc2e;
@@ -6586,22 +6808,22 @@ td.ui-datepicker-week-end {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.billing-address-page .buttons input[type='submit']:hover,
-.shipping-address-page .buttons input[type='submit']:hover,
-.section.shipping-method .buttons input[type='submit']:hover, 
-.section.payment-method .buttons input[type='submit']:hover,
-.section.payment-info .buttons input[type='submit']:hover,
-.section.confirm-order .buttons input[type='submit']:hover,
-.section.order-completed .buttons input[type='button']:hover {
+.billing-address-page .buttons button:hover,
+.shipping-address-page .buttons button:hover,
+.section.shipping-method .buttons button:hover, 
+.section.payment-method .buttons button:hover,
+.section.payment-info .buttons button:hover,
+.section.confirm-order .buttons button:hover,
+.section.order-completed .buttons button:hover {
     background: #ebbf0d;
 }
-.light-theme .billing-address-page .buttons input[type='submit'],
-.light-theme .shipping-address-page .buttons input[type='submit'],
-.light-theme .section.shipping-method .buttons input[type='submit'], 
-.light-theme .section.payment-method .buttons input[type='submit'],
-.light-theme .section.payment-info .buttons input[type='submit'],
-.light-theme .section.confirm-order .buttons input[type='submit'],
-.light-theme .section.order-completed .buttons input[type='button'] {
+.light-theme .billing-address-page .buttons button,
+.light-theme .shipping-address-page .buttons button,
+.light-theme .section.shipping-method .buttons button, 
+.light-theme .section.payment-method .buttons button,
+.light-theme .section.payment-info .buttons button,
+.light-theme .section.confirm-order .buttons button,
+.light-theme .section.order-completed .buttons button {
     color: #fff;
 }
 .checkout-page .section.order-summary .title {
@@ -6643,6 +6865,9 @@ td.ui-datepicker-week-end {
 }
 .checkout-page .select-pickup-point {
 	text-align: center;
+}
+.checkout-page .select-pickup-point li {
+	display: inline-block;
 }
 .checkout-page .select-address select,
 .checkout-page .select-pickup-point select {
@@ -6707,11 +6932,11 @@ td.ui-datepicker-week-end {
 .payment-method .method-name {
     position: relative;
 }
-.section.shipping-method .buttons input[type='submit'], 
-.section.payment-method .buttons input[type='submit'],
-.section.payment-info .buttons input[type='submit'],
-.section.confirm-order .buttons input[type='submit'],
-.section.order-completed .buttons input[type='button'] {
+.section.shipping-method .buttons button, 
+.section.payment-method .buttons button,
+.section.payment-info .buttons button,
+.section.confirm-order .buttons button,
+.section.order-completed .buttons button {
     margin: 0 auto;
 }
 .shipping-method input[type='radio'],
@@ -6740,7 +6965,7 @@ td.ui-datepicker-week-end {
     display: block;
     width: 17px;
     height: 17px;
-    border: 1px solid #d4d4d4;;
+    border: 1px solid #d4d4d4;
     position: absolute;
     top: 0;
     left: 0;
@@ -6938,7 +7163,7 @@ td.ui-datepicker-week-end {
     display: block;
     margin: 0 0 15px;
 }
-.opc .section > label {
+.opc .section > label:not(.min-amount-warning) {
 	display: block;
 	margin: 0 0 10px;
 }
@@ -6954,7 +7179,7 @@ td.ui-datepicker-week-end {
     margin: 0;
     display: block;
 }
-.opc .buttons input {
+.opc .buttons button {
     padding: 15px 35px;
     border: none;
     letter-spacing: 2px;
@@ -7184,7 +7409,7 @@ td.ui-datepicker-week-end {
 	overflow: hidden;
 	font-size: 0;
 }
-.order-details-page .actions input {
+.order-details-page .actions button {
     width: 100%;
     padding: 15px 10px;
     margin: 0 0 15px;
@@ -7195,19 +7420,19 @@ td.ui-datepicker-week-end {
     -webkit-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
 }
-.order-details-page .actions input:hover,
-.order-details-page .actions input:last-child {
+.order-details-page .actions button:hover,
+.order-details-page .actions button:last-child {
     color: #323232;
     background: #f3cc2e;
 }
-.light-theme .order-details-page .actions input:hover,
-.light-theme .order-details-page .actions input:last-child {
+.light-theme .order-details-page .actions button:hover,
+.light-theme .order-details-page .actions button:last-child {
     color: #fff;
 }
-.order-details-page .actions input:last-child {
+.order-details-page .actions button:last-child {
     margin: 0;
 }
-.order-details-page .actions input:last-child:hover {
+.order-details-page .actions button:last-child:hover {
     background: #ebbf0d;
 }
 .order-details-page .section.products {
@@ -7788,8 +8013,8 @@ td.ui-datepicker-week-end {
 .blogpost-page .buttons {
     margin: 0;
 }
-.news-item-page .buttons input[type='submit'],
-.blogpost-page .buttons input[type='submit'] {
+.news-item-page .buttons button,
+.blogpost-page .buttons button {
     padding: 15px 35px;
     background: #f3cc2e;
     border: none;
@@ -7800,16 +8025,16 @@ td.ui-datepicker-week-end {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.light-theme .news-item-page .buttons input[type='submit'],
-.light-theme .blogpost-page .buttons input[type='submit'] {
+.light-theme .news-item-page .buttons button,
+.light-theme .blogpost-page .buttons button {
     color: #fff;
 }
-.news-item-page .buttons input[type='submit'][disabled]:hover,
-.blogpost-page .buttons input[type='submit'][disabled]:hover {
+.news-item-page .buttons button[disabled]:hover,
+.blogpost-page .buttons button[disabled]:hover {
     background: #f3cc2e;
 }
-.news-item-page .buttons input[type='submit']:hover,
-.blogpost-page .buttons input[type='submit']:hover {
+.news-item-page .buttons button:hover,
+.blogpost-page .buttons button:hover {
     background: #ebbf0d;
 }
 .news-item-page .new-comment .notifications,
@@ -8039,7 +8264,7 @@ td.ui-datepicker-week-end {
 .forum-search-page .buttons {
     padding: 0 30px 30px;
 }
-.forum-search-page .buttons input {
+.forum-search-page .buttons button {
     width: auto;
 }
 .forum-search-page .search-results {
@@ -8583,11 +8808,11 @@ td.ui-datepicker-week-end {
     padding: 30px;
     font-size: 0;
 }
-.forum-edit-page .buttons input,
-.private-message-send-page .buttons input,
-.private-messages-page .buttons input,
-.move-topic-page .buttons input,
-.private-message-view-page .buttons input {
+.forum-edit-page .buttons button,
+.private-message-send-page .buttons button,
+.private-messages-page .buttons button,
+.move-topic-page .buttons button,
+.private-message-view-page .buttons button {
     padding: 15.5px 28px;
     border: none;
     letter-spacing: 2px;
@@ -8598,38 +8823,38 @@ td.ui-datepicker-week-end {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.forum-edit-page .buttons input:hover,
-.private-message-send-page .buttons input:hover,
-.private-messages-page .buttons input:hover,
-.move-topic-page .buttons input:hover,
-.private-message-view-page .buttons input:hover{
+.forum-edit-page .buttons button:hover,
+.private-message-send-page .buttons button:hover,
+.private-messages-page .buttons button:hover,
+.move-topic-page .buttons button:hover,
+.private-message-view-page .buttons button:hover {
     background: #f3cc2e;
 }
-.light-theme .forum-edit-page .buttons input:hover,
-.light-theme .private-message-send-page .buttons input:hover,
-.light-theme .private-messages-page .buttons input:hover,
-.light-theme .move-topic-page .buttons input:hover,
-.light-theme .private-message-view-page .buttons input:hover {
+.light-theme .forum-edit-page .buttons button:hover,
+.light-theme .private-message-send-page .buttons button:hover,
+.light-theme .private-messages-page .buttons button:hover,
+.light-theme .move-topic-page .buttons button:hover,
+.light-theme .private-message-view-page .buttons button:hover {
     color: #fff;
 }
-.forum-edit-page .buttons input[type='submit'],
-.private-message-send-page .buttons input[type='submit'],
-.private-messages-page .buttons input[type='submit'],
-.move-topic-page .buttons input[type='submit'],
+.forum-edit-page .buttons button,
+.private-message-send-page .buttons button,
+.private-messages-page .buttons button,
+.move-topic-page .buttons button,
 .private-message-view-page .buttons .reply-pm-button {
     background: #f3cc2e;
 }
-.light-theme .forum-edit-page .buttons input[type='submit'],
-.light-theme .private-message-send-page .buttons input[type='submit'],
-.light-theme .private-messages-page .buttons input[type='submit'],
-.light-theme .move-topic-page .buttons input[type='submit'],
+.light-theme .forum-edit-page .buttons button,
+.light-theme .private-message-send-page .buttons button,
+.light-theme .private-messages-page .buttons button,
+.light-theme .move-topic-page .buttons button,
 .light-theme .private-message-view-page .buttons .reply-pm-button {
     color: #fff;
 }
-.forum-edit-page .buttons input[type='submit']:hover,
-.private-message-send-page .buttons input[type='submit']:hover,
-.private-messages-page .buttons input[type='submit']:hover,
-.move-topic-page .buttons input[type='submit']:hover,
+.forum-edit-page .buttons button:hover,
+.private-message-send-page .buttons button:hover,
+.private-messages-page .buttons button:hover,
+.move-topic-page .buttons button:hover,
 .private-message-view-page .buttons .reply-pm-button:hover {
     background: #ebbf0d;
 }
@@ -8732,7 +8957,7 @@ td.ui-datepicker-week-end {
     border-top: 1px dashed #ccc;
     font-size: 0;
 }
-.private-message-view-page .buttons input {
+.private-message-view-page .buttons button {
     margin: 0 2.5px 5px;
 }
 .private-message-view-page .message-body {

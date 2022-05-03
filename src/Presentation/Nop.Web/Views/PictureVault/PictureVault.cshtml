@@ -4,19 +4,19 @@
     Layout = "_ColumnsTwo";
 
     //title
-    Html.AddTitleParts(title);
+    NopHtml.AddTitleParts(title);
 
-    Html.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-account-page");
 
     // stolen from AnywhereSliders.cshtml
-    Html.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Core/Scripts/sevenspikes.core.min.js");
-    Html.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Scripts/AnywhereSliders.min.js");
-    Html.AddScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Core/Scripts/slick-slider-1.6.0.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Core/Scripts/sevenspikes.core.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Scripts/AnywhereSliders.min.js");
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "~/Plugins/SevenSpikes.Core/Scripts/slick-slider-1.6.0.min.js");
 
-    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Styles/nivo/nivo-slider.css");
-    Html.AddCssFileParts("~/Plugins/SevenSpikes.Core/Styles/slick-slider-1.6.0.css");
+    NopHtml.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Styles/nivo/nivo-slider.css");
+    NopHtml.AddCssFileParts("~/Plugins/SevenSpikes.Core/Styles/slick-slider-1.6.0.css");
 
-    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Themes/Venture/Content/slick/anywhereSliders.css");
+    NopHtml.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Themes/Venture/Content/slick/anywhereSliders.css");
 }
 
 @section left

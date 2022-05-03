@@ -1,23 +1,36 @@
 ﻿@using Nop.Core
+@using Nop.Core.Domain.Seo
 @using Nop.Core.Infrastructure
 @using Nop.Services.Configuration
 @using Microsoft.AspNetCore.WebUtilities
 
+@inject SeoSettings seoSettings
 @inject ISettingService settingService
 @inject IStoreContext storeContext
 
 @{
     Layout = "_ColumnsOne";
 
-    //page class
-    Html.AppendPageCssClassParts("html-home-page");
-    Html.AddMetaDescriptionParts("Learn how Albina bends steel for large structural projects as well as manufacturing projects requiring smaller repeat bends. Call 503-692-6010 for a quote!");
+    //title
+    if (!string.IsNullOrEmpty(seoSettings.HomepageTitle))
+    {
+        NopHtml.AddTitleParts(seoSettings.HomepageTitle);
+    }
 
-    var storeId = storeContext.CurrentStore.Id;
-    var homePageProductBoxLayout = settingService.GetSettingByKey("venturethemesettings.homepageitemboxlayout", "layout-1", storeId, true);
+    //meta
+    if (!string.IsNullOrEmpty(seoSettings.HomepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(seoSettings.HomepageDescription);
+    }
+
+    //page class
+    NopHtml.AppendPageCssClassParts("html-home-page");
+
+    var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
+    var homePageProductBoxLayout = await settingService.GetSettingByKeyAsync("venturethemesettings.homepageitemboxlayout", "layout-1", storeId, true);
     var homePageProductBoxLayoutClass = "product-box-" + homePageProductBoxLayout;
 
-    var homePageFeaturedVideoLink = settingService.GetSettingByKey("venturethemesettings.homepagefeaturedvideolink", string.Empty, storeId, true);
+    var homePageFeaturedVideoLink = await settingService.GetSettingByKeyAsync("venturethemesettings.homepagefeaturedvideolink", string.Empty, storeId, true);
 
     var videoIframe = string.Empty;
 
@@ -50,7 +63,7 @@
             @{
                 var carouselWidgetZone = await Component.InvokeAsync("Widget", new { widgetZone = "venture_home_page_bottom" });
             }
-            @if (!String.IsNullOrEmpty(carouselWidgetZone.ToHtmlString()))
+            @if (!String.IsNullOrEmpty(await carouselWidgetZone.RenderHtmlContentAsync()))
             {
                 <div class="carousel-wrapper">
                     @carouselWidgetZone

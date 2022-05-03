@@ -1,4 +1,5 @@
-﻿using Nop.Core.Domain.Orders;
+﻿using System.Threading.Tasks;
+using Nop.Core.Domain.Orders;
 using Nop.Web.Models.Order;
 
 namespace Nop.Web.Factories
@@ -18,6 +19,6 @@ namespace Nop.Web.Factories
         /// Prepare the customer order list model
         /// </summary>
         /// <returns>Customer order list model</returns>
-        CustomerQuoteListModel PrepareCustomerQuoteListModel();
+        Task<CustomerQuoteListModel> PrepareCustomerQuoteListModelAsync();
     }
 }

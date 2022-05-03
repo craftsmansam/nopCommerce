@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Services.Configuration;
 using Nop.Services.Customers;
@@ -27,21 +28,25 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement]
-        public virtual IActionResult CustomerQuotes()
+        public async virtual Task<IActionResult> CustomerQuotes()
         {
-            if (!_customerService.IsRegistered(_workContext.CurrentCustomer))
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
+            if (!(await _customerService.IsRegisteredAsync(customer)))
                 return Challenge();
             
-            var model = _quoteModelFactory.PrepareCustomerQuoteListModel();
+            var model = await _quoteModelFactory.PrepareCustomerQuoteListModelAsync();
             
             return View(model);
         }
 
         [HttpsRequirement]
-        public virtual IActionResult QuoteDetails(int quoteId)
+        public async virtual Task<IActionResult> QuoteDetails(int quoteId)
         {
+            var customer = await _workContext.GetCurrentCustomerAsync();
             var quote = _quoteService.GetQuoteByQuoteId(quoteId);
-            if (quote == null || _workContext.CurrentCustomer.JCCustomerID != quote.CustomerID)
+
+            if (quote == null || customer.JCCustomerID != quote.CustomerID)
                 return Challenge();
 
             var model = _quoteModelFactory.PrepareQuoteDetailsModel(quote);
@@ -49,12 +54,14 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement]
-        public virtual IActionResult QuoteReport(int quoteId)
+        public virtual async Task<IActionResult> QuoteReport(int quoteId)
         {
-            if (!_quoteService.TestQuotePermissions(quoteId, _workContext.CurrentCustomer.JCCustomerID, out var quote))
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
+            if (!_quoteService.TestQuotePermissions(quoteId, customer.JCCustomerID, out var quote))
                 return AccessDeniedView();
 
-            return ServeWebAttachment(_settingService, quote.QuoteReportFilename);
+            return await ServeWebAttachmentAsync(_settingService, quote.QuoteReportFilename);
         }
     }
 }

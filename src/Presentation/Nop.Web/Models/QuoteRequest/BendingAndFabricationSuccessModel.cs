@@ -2,7 +2,7 @@
 
 namespace Nop.Web.Models.QuoteRequest
 {
-    public partial class BendingAndFabricationSuccessModel : BaseNopModel
+    public partial record BendingAndFabricationSuccessModel : BaseNopModel
     {
         public bool IncludeSpiral { get; set; }
     }

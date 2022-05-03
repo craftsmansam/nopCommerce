@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Orders;
 using Nop.Data;
 
@@ -38,7 +39,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="customerID">The Job Costing customerID</param>
         /// <returns>Order</returns>
-        public virtual List<ShopOrder> ListShopOrdersForCustomer(int customerID)
+        public virtual Task<List<ShopOrder>> ListShopOrdersForCustomerAsync(int customerID)
         {
             if (customerID == 0)
                 return null;
@@ -46,15 +47,15 @@ namespace Nop.Services.Orders
             var query = _shopOrderRepository.Table;
             query = query.Where(x => x.CustomerID == customerID);
 
-            return query.ToList();
+            return query.ToListAsync();
         }
 
-        public ShopOrder GetShopOrderByShopOrderNumber(int shopOrderNumber)
+        public async Task<ShopOrder> GetShopOrderByShopOrderNumberAsync(int shopOrderNumber)
         {
             if (shopOrderNumber == 0)
                 return null;
 
-            var shopOrder = _shopOrderRepository.Table.SingleOrDefault(x => x.ShopOrderNumber == shopOrderNumber);
+            var shopOrder = await _shopOrderRepository.Table.SingleOrDefaultAsync(x => x.ShopOrderNumber == shopOrderNumber);
             return shopOrder;
         }
 

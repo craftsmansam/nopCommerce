@@ -6,7 +6,7 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Order
 {
-    public partial class ShopOrderDetailsModel : BaseNopEntityModel, IOrderDetailsModel
+    public partial record ShopOrderDetailsModel : BaseNopEntityModel, IOrderDetailsModel
     {
         public bool PrintMode { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Craftsman.Data;
 using Craftsman.DesignByContract;
 using Craftsman.IO;
@@ -35,26 +36,29 @@ namespace Nop.Web.Controllers
             _settingService = settingService;
         }
 
-        public IActionResult BrowsePictureVault()
+        public async Task<IActionResult> BrowsePictureVault()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.PictureVault))
+            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
                 return Challenge();
 
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
             var model = new BrowsePictureVaultModel();
-            var itemsTable = _pictureVaultService.CustomerListPurchaseOrders(_workContext.CurrentCustomer.SalesContactID);
+            var itemsTable = await _pictureVaultService.CustomerListPurchaseOrdersAsync(customer.SalesContactID);
             model.PurchaseOrderList = itemsTable;
 
             return View(model);
         }
 
-        public IActionResult PictureVault(string po)
+        public async Task<IActionResult> PictureVault(string po)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.PictureVault))
+            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
                 return Challenge();
 
-            var itemsTable = _pictureVaultService.CustomerListPictureVaultItems(_workContext.CurrentCustomer.SalesContactID, po);
+            var customer = await _workContext.GetCurrentCustomerAsync();
+            var itemsTable = await _pictureVaultService.CustomerListPictureVaultItemsAsync(customer.SalesContactID, po);
 
-            var showPictureUrl = $"/secure/show-picture?cscid={_workContext.CurrentCustomer.SalesContactID}&id=";
+            var showPictureUrl = $"/secure/show-picture?cscid={customer.SalesContactID}&id=";
             var groupedItems = itemsTable.GroupBy(x => new {x.ProcessName, x.ShopOrderNumber, x.ProjectName}, x => new { ImgSrc = $"{showPictureUrl}{x.ShopOrderPictureID}", Title = $"Taken {x.DateTimeUploaded.ToString(FormatStrings.DateTimeFormat)}"});
             var pvGroups = groupedItems.Select(x => new PictureVaultGroup($"{x.Key.ProjectName} (SO#{x.Key.ShopOrderNumber}) - {x.Key.ProcessName}", 
                                                                         x.Select(y => new PictureVaultImage(y.Title, y.ImgSrc)).ToList())).ToList();
@@ -63,28 +67,30 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public IActionResult ShowPicture(string cscid, string id)
+        public async Task<IActionResult> ShowPicture(string cscid, string id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.PictureVault))
+            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
                 return Challenge();
 
-            Check.RequireNotNull(_workContext.CurrentCustomer.SalesContactID);
+            var customer = await _workContext.GetCurrentCustomerAsync();
+
+            Check.RequireNotNull(customer.SalesContactID);
 
             if (id != null && int.TryParse(id, out var imageId))
             {
                 if (cscid != null && int.TryParse(cscid, out var customerSalesContactId))
                 {
-                    var isPictureForMyCompany = _pictureVaultService.IsPictureForMyCompany(customerSalesContactId, imageId);
+                    var isPictureForMyCompany = await _pictureVaultService.IsPictureForMyCompanyAsync(customerSalesContactId, imageId);
 
                     Check.Require(isPictureForMyCompany, "Someone is potentially trying to access some else's photos!");
-                    Check.Require(_workContext.CurrentCustomer.SalesContactID == customerSalesContactId, "The logged in user is potentially trying to look at someone else's photos!");
+                    Check.Require(customer.SalesContactID == customerSalesContactId, "The logged in user is potentially trying to look at someone else's photos!");
 
-                    var fullFilePath = _pictureVaultService.PictureVaultFileNameByShopOrderPictureId(imageId);
+                    var fullFilePath = await _pictureVaultService.PictureVaultFileNameByShopOrderPictureIdAsync(imageId);
                     var filenameOnly = Path.GetFileNameWithoutExtension(fullFilePath);
                     var fileExtension = Path.GetExtension(fullFilePath).ToLower().Replace(".", "");
 
-                    var shopOrderNumber = _pictureVaultService.PictureVaultSONumberBySOPictureId(imageId);
-                    var filenameOnNetwork = Path.Combine(PictureVaultFolderAsUnc(false, shopOrderNumber), $"{filenameOnly}.{fileExtension}");
+                    var shopOrderNumber = await _pictureVaultService.PictureVaultSONumberBySOPictureIdAsync(imageId);
+                    var filenameOnNetwork = Path.Combine(await PictureVaultFolderAsUncAsync(false, shopOrderNumber), $"{filenameOnly}.{fileExtension}");
                     Check.Require(System.IO.File.Exists(filenameOnNetwork), $"The file {filenameOnNetwork} doesn't exist!");
 
                     var mimeTypeString = MimeType.All.First(x => x.FileExtensions.Any(y => y.Extension.ToLower() == fileExtension)).MimeTypeString;
@@ -121,9 +127,9 @@ namespace Nop.Web.Controllers
             throw new ArgumentException($"{nameof(ShowPicture)} was called with invalid arguments!");
         }
 
-        public string PictureVaultFolderAsUnc(bool internalPhoto, int shopOrderNumber)
+        public async Task<string> PictureVaultFolderAsUncAsync(bool internalPhoto, int shopOrderNumber)
         {
-            var pictureVaultRootFolder = _settingService.PictureVaultRootFolder().UncPath;
+            var pictureVaultRootFolder = (await _settingService.PictureVaultRootFolderAsync()).UncPath;
 
             return CalculatePath(pictureVaultRootFolder, internalPhoto, shopOrderNumber);
         }
