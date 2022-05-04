@@ -58,8 +58,6 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("TopicWithPath", "{Path}/" + pattern, 
                 new { controller = "Topic", action = "TopicDetails" });
                 
-            endpointRouteBuilder.MapDynamicControllerRoute<SlugRouteTransformer>(genericPattern);
-
             endpointRouteBuilder.MapControllerRoute(name: "GenericUrl",
                 pattern: "{genericSeName}",
                 defaults: new { controller = "Common", action = "GenericUrl" });
