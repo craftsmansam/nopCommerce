@@ -4,13 +4,13 @@
     <div class="spc-categories-left">
         <div class="category-info">
             <div class="category-picture">
-                <a href="@Url.RouteUrl("Category", new {SeName = Model.SeName})" title="@Model.Name">
+                <a href="@Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" title="@Model.Name">
                     <img src="@Model.PictureModel.ImageUrl" alt="@Model.PictureModel.Title" />
                 </a>
             </div>
             <div class="category-details">
                 <h2 class="category-title">
-                    <a href="@Url.RouteUrl("Category", new {SeName = Model.SeName})" title="@Model.Name">@Model.Name</a>
+                    <a href="@Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" title="@Model.Name">@Model.Name</a>
                 </h2>
 
                 <div class="mobile-navigation category-mobile-navigation">
@@ -28,13 +28,13 @@
                         @foreach (var subcategory in Model.SubCategories)
                         {
                             <li>
-                                <a href="@Url.RouteUrl("Category", new {SeName = subcategory.SeName})" title="@subcategory.Name">@subcategory.Name</a>
+                                <a href="@Url.RouteUrl("CategoryWithPath", new { Path = subcategory.SeName.GetPathFromSeName(), SeName = subcategory.SeName.GetSeNameWithoutPath() })" title="@subcategory.Name">@subcategory.Name</a>
                             </li>
                         }
                         @if (Model.DisplayViewAllSubcategoriesLink)
                         {
                             <li>
-                                <a class="view-all" href="@Url.RouteUrl("Category", new {SeName = Model.SeName})" title="@Model.Name">
+                                <a class="view-all" href="@Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" title="@Model.Name">
                                     @T("SevenSpikes.Nop.Plugins.SmartProductCollections.Categories.ViewAll")
                                 </a>
                             </li>

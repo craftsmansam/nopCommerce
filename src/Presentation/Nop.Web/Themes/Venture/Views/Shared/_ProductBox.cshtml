@@ -63,7 +63,7 @@
 
 <div class="product-item" data-productid="@Model.Id">
     <div class="picture">
-        <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+        <a href="@Url.RouteUrl("ProductWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" title="@Model.DefaultPictureModel.Title">
             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
             {
                 @await Component.InvokeAsync("LazyLoadImage", new(string Key, string Value)[] 
@@ -82,7 +82,7 @@
     </div>
     <div class="details">
         <h2 class="product-title">
-            <a href="@Url.RouteUrl("Product", new {SeName = Model.SeName})">@Model.Name</a>
+            <a href="@Url.RouteUrl("ProductWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })">@Model.Name</a>
         </h2>
         @if (catalogSettings.ShowSkuOnCatalogPages && !string.IsNullOrEmpty(Model.Sku))
         {
@@ -111,7 +111,7 @@
             @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
             <div class="prices">
                 <div class="box-prices-wrapper">
-                    <span class="price actual-price">@Model.ProductPrice.Price</span>
+                    <span class="price actual-price">@Html.Raw(Model.ProductPrice.Price)</span>
                     @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
                     {
                     <span class="price old-price">@Model.ProductPrice.OldPrice</span>

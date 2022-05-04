@@ -80,10 +80,6 @@
                 <ul>
                     <li class="single-pickup-point name">@point.Name</li>
                     <li class="single-pickup-point address">@(BuildPickupPointName(point))</li>
-                    @if (!string.IsNullOrEmpty(point.PickupFee))
-                    {
-                        <li class="single-pickup-point fee">@point.PickupFee</li>
-                    }
                 </ul>
             }
             else

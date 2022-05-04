@@ -253,29 +253,26 @@
 }
 
 .header-links-box > div {
-    width: 38px;
-    height: 38px;
+    width: 89px;
+    height: 75px;
     position: absolute;
-    right: 0;
+    right: -51px;
 }
-.header-links-box-top {
+  .header-links-box-top {
     top: 0;
     background: #f2f2f2;
+    width: 89px;
+    height: 75px;
     overflow: hidden;
-    z-index: 2;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
-}
+  }
 .header-links-box-top:only-child {
     height: 75px;
 }
 .header-links-box-top:only-child:before {
     height: 75px;
     line-height: 75px;
-}
-.header-links-box-top:hover {
-    width: 89px;
-    height: 75px;
 }
 .header-links-box-top.three-items:hover {
     height: 114px;
@@ -284,8 +281,8 @@
     font-family: "venture-font";
     text-transform: none;
     content: "h";
-    width: 38px;
-    height: 38px;
+    width: 89px;
+    height: 75px;
     font-size: 14px;
     text-align: center;
     line-height: 38px;
@@ -300,13 +297,8 @@
 .header-links-box-top.not-authenticated:before {
     content: "d";
 }
-.header-links-box-top:hover:before {
-    opacity: 0;
-    z-index: -1;
-}
 .header-link-wrapper {
     height: 38px;
-    opacity: 0;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
@@ -381,8 +373,6 @@
     transition: all 0.3s ease-in-out;
 }
 .header-links-box-bottom:hover:before {
-    opacity: 0;
-    z-index: -1;
 }
 .ico-wishlist:before {
     font-size: 12px;
@@ -403,6 +393,10 @@
 .cart-wrapper .cart-qty-number:after {
     content: ')';
 }
+  .cart-wrapper {
+    width: 150px;
+    margin-left: 51px;
+  }
 #topcartlink {
     height: 75px;
     text-align: center;
@@ -622,7 +616,7 @@
 }
 
 .video-player {
-    margin: -6.4% 0;
+    margin: 0 0;
 }
 .video-button-title {
     font-size: 41px;
@@ -1039,7 +1033,6 @@
     display: block;
     text-transform: none;
     line-height: 25px;
-    color: #909090;
     font-family: 'Lato', sans-serif;
 }
 
@@ -1579,10 +1572,12 @@
 .checkout-attributes .qq-upload-button {
     margin: 0;
 }
-.cart-options .selected-checkout-attributes {
+  .cart-options .selected-checkout-attributes {
     padding: 30px 50px;
     text-align: left;
-}
+    font-weight: bold;
+    font-size: 20px;
+  }
 
 .cart-options .checkout-attributes {
     margin: 0 0
@@ -1598,7 +1593,6 @@
 	margin: 0;
 }
 .cart-collaterals {
-    float: left;
 	width: 66%;
 	margin: 0;
 }

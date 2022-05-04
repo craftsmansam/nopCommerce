@@ -53,16 +53,24 @@
             </div>
             <ul class="list footer-collapse">
                 <li class="address">
-                    <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
+                    <a href="https://www.google.com/maps/place/12080+SW+Myslony+St,+Tualatin,+OR+97062">
+                        <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
+                    </a>
                 </li>
+                @{
+                    var emailHrefString = "mailto:" + @T("SevenSpikes.Themes.Venture.Common.EMail");
+                }
                 <li class="e-mail">
-                    <span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span>
+                    <a href=@emailHrefString><span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span></a>
                 </li>
                 <li class="mobile-phone">
                     <span>@T("SevenSpikes.Themes.Venture.Common.MobilePhone")</span>
                 </li>
+                @{
+                    var telHrefString = "tel:" + @T("SevenSpikes.Themes.Venture.Common.Phone");
+                }
                 <li class="phone">
-                    <span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span>
+                    <a href=@telHrefString><span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span></a>
                 </li>
             </ul>
         </div>
@@ -77,7 +85,7 @@
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
                 {
-                    <li><a href="@Url.RouteUrl("Topic", new {SeName = topic.SeName})">@topic.Name</a></li>
+                    <li><a href="@Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() })">@topic.Name</a></li>
                 }
             </ul>
         </div>

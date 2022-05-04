@@ -106,7 +106,10 @@
         (controllerName.Equals("boards", StringComparison.InvariantCultureIgnoreCase) &&
                         actionName.Equals("customerforumsubscriptions", StringComparison.InvariantCultureIgnoreCase)) ||
         (controllerName.Equals("returnrequest", StringComparison.InvariantCultureIgnoreCase) &&
-                        actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase));
+                        actionName.Equals("customerreturnrequests", StringComparison.InvariantCultureIgnoreCase)) ||
+        (controllerName.Equals("quote", StringComparison.InvariantCultureIgnoreCase) &&
+         actionName.Equals("customerquotes", StringComparison.InvariantCultureIgnoreCase)) ||
+        (controllerName.Equals("picturevault", StringComparison.InvariantCultureIgnoreCase));
 
     if (isAccountPage)
     {
