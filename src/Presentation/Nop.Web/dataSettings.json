@@ -1,5 +1,5 @@
 ﻿{
-  "DataConnectionString": "Data Source=localhost;Initial Catalog=AlbinaWeb;Integrated Security=True;Persist Security Info=False",
+  "DataConnectionString": "Data Source=localhost;Initial Catalog=AlbinaWeb;Integrated Security=True;Persist Security Info=False;Encrypt=false",
   "DataProvider": "sqlserver",
   "RawDataSettings": {}
 }
