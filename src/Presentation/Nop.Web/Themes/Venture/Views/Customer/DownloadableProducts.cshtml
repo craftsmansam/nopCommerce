@@ -55,7 +55,7 @@
                                     <label>@T("DownloadableProducts.Fields.Date"): </label>@item.CreatedOn.ToString("d")
                                 </td>
                                 <td class="product">
-                                    <label>@T("DownloadableProducts.Fields.Product"): </label><a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })">@item.ProductName</a>
+                                    <label>@T("DownloadableProducts.Fields.Product"): </label><a href="@Url.RouteUrl("ProductWithPath", new { Path = item.ProductSeName.GetPathFromSeName(), SeName = item.ProductSeName.GetSeNameWithoutPath() })">@item.ProductName</a>
                                     @if (!string.IsNullOrEmpty(item.ProductAttributes))
                                     {
                                         <div class="attributes">

@@ -25,6 +25,7 @@
 
     //page class
     NopHtml.AppendPageCssClassParts("html-home-page");
+    NopHtml.AddMetaDescriptionParts("Learn how Albina bends steel for large structural projects as well as manufacturing projects requiring smaller repeat bends. Call 503-692-6010 for a quote!");
 
     var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
     var homePageProductBoxLayout = await settingService.GetSettingByKeyAsync("venturethemesettings.homepageitemboxlayout", "layout-1", storeId, true);
