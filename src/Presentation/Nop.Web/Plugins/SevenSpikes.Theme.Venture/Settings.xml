@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <Setting Name="VentureThemeSettings.Preset">
+    <Value>f3cc2e</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultPreset">
+    <Value>f3cc2e</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultProductImageProportion">
+    <Value>100.0000</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.ProductImageProportion">
+    <Value>100.0000</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultCategoryImageProportion">
+    <Value>66.0000</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.CategoryImageProportion">
+    <Value>66.0000</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultThemeColor">
+    <Value>dark-theme</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.ThemeColor">
+    <Value>dark-theme</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultHomePageItemBoxLayout">
+    <Value>layout-1</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.HomePageItemBoxLayout">
+    <Value>layout-1</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultCategoryGridItemsNumber">
+    <Value>items-3</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.CategoryGridItemsNumber">
+    <Value>items-3</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.DefaultAllowCustomersToSwitchCategoryGridItemsNumber">
+    <Value>True</Value>
+  </Setting>
+  <Setting Name="VentureThemeSettings.AllowCustomersToWwitchCategoryGridItemsNumber">
+    <Value>True</Value>
+  </Setting>
+
+  <Setting Name="mediasettings.productthumbpicturesize">
+    <Value>360</Value>
+  </Setting>
+  <Setting Name="mediasettings.productdetailspicturesize">
+    <Value>625</Value>
+  </Setting>
+  <Setting Name="mediasettings.minicartthumbpicturesize">
+    <Value>115</Value>
+  </Setting>
+  <Setting Name="mediasettings.cartthumbpicturesize">
+    <Value>200</Value>
+  </Setting>
+  <Setting Name="mediasettings.manufacturerthumbpicturesize">
+    <Value>345</Value>
+  </Setting>
+  <Setting Name="mediasettings.categorythumbpicturesize">
+    <Value>600</Value>
+  </Setting>
+  <Setting Name="mediasettings.avatarpicturesize">
+    <Value>220</Value>
+  </Setting>
+  <Setting Name="mediasettings.productthumbpicturesizeonproductdetailspage">
+    <Value>105</Value>
+  </Setting>
+  <Setting Name="mediasettings.associatedproductpicturesize">
+    <Value>250</Value>
+  </Setting>
+  <Setting Name="mediasettings.maximumimagesize">
+    <Value>1920</Value>
+  </Setting>
+
+  <Setting Name="ordersettings.onepagecheckoutenabled">
+    <Value>false</Value>
+  </Setting>
+  <Setting Name="catalogsettings.showproductsfromsubcategories">
+    <Value>true</Value>
+  </Setting>
+
+  <Setting Name="SevenSpikesCommonSettings.LazyLoadImages">
+    <Value>True</Value>
+  </Setting>
+  
+  <Setting Name="nopajaxcartsettings.productaddedtocartimagesize">
+    <Value>240</Value>
+  </Setting>
+  <Setting Name="nopajaxcartsettings.miniproductdetailsviewimagesize">
+    <Value>240</Value>
+  </Setting>
+  <Setting Name="nopajaxcartsettings.enableproductquantitytextbox">
+    <Value>false</Value>
+  </Setting>
+  <Setting Name="nopajaxfilterssettings.shownumberofreturnedproductsselector">
+    <Value>.nop7SpikesAjaxFiltersGrid</Value>
+  </Setting>
+  
+  <Setting Name="CloudZoomSettings.IsPictureThumbnailsCarouselVertical-Venture">
+    <Value>true</Value>
+  </Setting>
+  <Setting Name="CloudZoomSettings.NumberOfPictureThumbnailsInCarousel-Venture">
+    <Value>4</Value>
+  </Setting>
+  <Setting Name="CloudZoomSettings.NumberOfScrollablePictureThumbnailsInCarousel-Venture">
+    <Value>1</Value>
+  </Setting>
+  <Setting Name="CloudZoomSettings.EnablePictureThumbnailsInCarousel">
+    <Value>True</Value>
+  </Setting>
+  <Setting Name="CloudZoomSettings.ResponsiveBreakpointsForThumbnailsCarousel-Venture">
+    <Value>[{"breakpoint":1201,"settings":{"slidesToShow":5, "slidesToScroll":1,"arrows":false,"dots":true,"vertical":false}}]</Value>
+  </Setting>
+  
+  <Setting Name="instantsearchsettings.picturesize">
+    <Value>70</Value>
+  </Setting>
+  
+  <Setting Name="JCarouselGeneralSettings.ResponsiveBreakpointsForSlickSlider-Venture">
+    <Value>[{"breakpoint":1064,"settings":{"slidesToShow":3}},{"breakpoint":675,"settings":{"slidesToShow":2}},{"breakpoint":300,"settings":{"slidesToShow":1}}]</Value>
+  </Setting>
+  <Setting Name="JCarouselGeneralSettings.ResponsiveBreakpointsCategorySlider-Venture">
+    <Value>[{"breakpoint":1200,"settings":{"slidesToShow":2}},{"breakpoint":480,"settings":{"slidesToShow":1}}]</Value>
+  </Setting>
+
+  <Setting Name="quickviewsettings.productitemselectorchild">
+    <Value>.buttons</Value>
+  </Setting>
+  <Setting Name="quickviewsettings.productdetailspicturesize">
+    <Value>330</Value>
+  </Setting>
+  <Setting Name="quickviewsettings.productthumbpicturesize">
+    <Value>105</Value>
+  </Setting>
+  <Setting Name="quickviewsettings.accordionpanelsheightstyle">
+    <Value>content</Value>
+  </Setting>
+  
+  <Setting Name="RichBlogSettings.HomePageImageSize">
+    <Value>590</Value>
+  </Setting>
+
+  <Setting Name="SaleOfTheDaySettings.SlickSliderSettings-Venture">
+    <Value>{"slidesToShow":3,"centerMode":true,"arrows":true,"dots":false,"draggable":false}</Value>
+  </Setting>
+  <Setting Name="SaleOfTheDaySettings.SlickSliderResponsiveBreakpoints-Venture">
+    <Value>[{"breakpoint":1200,"settings":{"slidesToShow":1}}]</Value>
+  </Setting>
+  
+  <Setting Name="smartproductcollectionssettings.categorythumbimagesize">
+	<Value>950</Value>
+  </Setting>
+  <Setting Name="smartproductcollectionssettings.productthumbimagesize">
+	<Value>240</Value>
+  </Setting>
+</Settings>
