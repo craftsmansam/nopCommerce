@@ -22,11 +22,6 @@ namespace Nop.Web.Infrastructure
             //generic routes
             var genericPattern = $"{pattern}/{{SeName}}";
 
-            if (string.IsNullOrWhiteSpace(pattern))
-            {
-                pattern = "{SeName}";
-            }
-
             //default routes
             //these routes are not generic, they are just default to map requests that don't match other patterns, 
             //but we define them here since this route provider is with the lowest priority, to allow to add additional routes before them
@@ -35,16 +30,21 @@ namespace Nop.Web.Infrastructure
                 endpointRouteBuilder.MapControllerRoute(name: "DefaultWithLanguageCode",
                     pattern: $"{pattern}/{{controller=Home}}/{{action=Index}}/{{id?}}");
             }
+            else
+            {
+                pattern = "{SeName}";
+            }
+
+            if (!DataSettingsManager.IsDatabaseInstalled())
+                return;
+
             endpointRouteBuilder.MapDynamicControllerRoute<SlugRouteTransformer>("{**SeName}");
 
             endpointRouteBuilder.MapControllerRoute(name: "Default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            if (!DataSettingsManager.IsDatabaseInstalled())
-                return;
 
-
-           //generic URLs
+            //generic URLs
             endpointRouteBuilder.MapControllerRoute(
                 name: "GenericUrl",
                 pattern: "{GenericSeName}",
