@@ -36,7 +36,6 @@
     <Content Remove="Plugins\ExternalAuth.Facebook\**" />
     <Content Remove="Plugins\Misc.Sendinblue\**" />
     <Content Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <Content Remove="Plugins\Payments.Manual\**" />
     <Content Remove="Plugins\Payments.PayPalCommerce\**" />
     <Content Remove="Plugins\Payments.PayPalStandard\**" />
     <Content Remove="Plugins\Shipping.EasyPost\**" />
@@ -63,8 +62,6 @@
     <Compile Remove="Plugins\Misc.Sendinblue\**" />
 
     <Compile Remove="Plugins\Payments.CheckMoneyOrder\**" />
-
-    <Compile Remove="Plugins\Payments.Manual\**" />
 
     <Compile Remove="Plugins\Payments.PayPalCommerce\**" />
 
@@ -98,7 +95,6 @@
     <EmbeddedResource Remove="Plugins\ExternalAuth.Facebook\**" />
     <EmbeddedResource Remove="Plugins\Misc.Sendinblue\**" />
     <EmbeddedResource Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <EmbeddedResource Remove="Plugins\Payments.Manual\**" />
     <EmbeddedResource Remove="Plugins\Payments.PayPalCommerce\**" />
     <EmbeddedResource Remove="Plugins\Payments.PayPalStandard\**" />
     <EmbeddedResource Remove="Plugins\Shipping.EasyPost\**" />
@@ -118,7 +114,6 @@
     <None Remove="Plugins\ExternalAuth.Facebook\**" />
     <None Remove="Plugins\Misc.Sendinblue\**" />
     <None Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <None Remove="Plugins\Payments.Manual\**" />
     <None Remove="Plugins\Payments.PayPalCommerce\**" />
     <None Remove="Plugins\Payments.PayPalStandard\**" />
     <None Remove="Plugins\Shipping.EasyPost\**" />
@@ -228,16 +223,6 @@
     <None Remove="Plugins\Payments.CheckMoneyOrder\Views\Configure.cshtml" />
     <None Remove="Plugins\Payments.CheckMoneyOrder\Views\PaymentInfo.cshtml" />
     <None Remove="Plugins\Payments.CheckMoneyOrder\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Payments.Manual\logo.jpg" />
-    <None Remove="Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.deps.json" />
-    <None Remove="Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.dll" />
-    <None Remove="Plugins\Payments.Manual\Nop.Web.deps.json" />
-    <None Remove="Plugins\Payments.Manual\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Payments.Manual\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Payments.Manual\plugin.json" />
-    <None Remove="Plugins\Payments.Manual\Views\Configure.cshtml" />
-    <None Remove="Plugins\Payments.Manual\Views\PaymentInfo.cshtml" />
-    <None Remove="Plugins\Payments.Manual\Views\_ViewImports.cshtml" />
     <None Remove="Plugins\Payments.PayPalCommerce\BraintreeHttp-Dotnet.dll" />
     <None Remove="Plugins\Payments.PayPalCommerce\logo.png" />
     <None Remove="Plugins\Payments.PayPalCommerce\Nop.Plugin.Payments.PayPalCommerce.deps.json" />
@@ -368,12 +353,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Plugins\" />
     <Folder Include="Themes\Albina\Content\images\" />
     <Folder Include="wwwroot\app\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.pdb" />
     <None Include="wwwroot\css\albina\bendingtolerances.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>

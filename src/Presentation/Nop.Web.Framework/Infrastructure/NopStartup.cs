@@ -42,6 +42,7 @@ using Nop.Services.PictureVault;
 using Nop.Services.Plugins;
 using Nop.Services.Plugins.Marketplace;
 using Nop.Services.Polls;
+using Nop.Services.Quotes;
 using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
 using Nop.Services.Seo;
@@ -179,6 +180,8 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<ICheckoutAttributeService, CheckoutAttributeService>();
             services.AddScoped<IGiftCardService, GiftCardService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IShopOrderService, ShopOrderService>();
+            services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<IOrderReportService, OrderReportService>();
             services.AddScoped<IOrderProcessingService, OrderProcessingService>();
             services.AddScoped<IOrderTotalCalculationService, OrderTotalCalculationService>();

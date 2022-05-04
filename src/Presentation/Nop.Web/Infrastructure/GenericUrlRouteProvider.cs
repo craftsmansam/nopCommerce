@@ -19,6 +19,13 @@ namespace Nop.Web.Infrastructure
         public void RegisterRoutes(IEndpointRouteBuilder endpointRouteBuilder)
         {
             var pattern = GetLanguageRoutePattern();
+            //generic routes
+            var genericPattern = $"{pattern}/{{SeName}}";
+
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                pattern = "{SeName}";
+            }
 
             //default routes
             //these routes are not generic, they are just default to map requests that don't match other patterns, 
@@ -36,8 +43,6 @@ namespace Nop.Web.Infrastructure
             if (!DataSettingsManager.IsDatabaseInstalled())
                 return;
 
-            //generic routes
-            var genericPattern = $"{pattern}/{{SeName}}";
 
            //generic URLs
             endpointRouteBuilder.MapControllerRoute(
