@@ -5,6 +5,12 @@
 @{
     var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
 
+    
+    //We overwrite some bootstrap css here, so we want this after bootstrap loads, the higher in this list, the later it loads
+    NopHtml.AppendCssFileParts("/css/albina/custom.css");
+    NopHtml.AppendCssFileParts("~/Themes/Albina/Content/css/albina.css");
+
+
     if (supportRtl)
     {
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/1200.rtl.css");
@@ -12,6 +18,7 @@
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/480.rtl.css");
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/mobile.rtl.css");
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/styles.rtl.css");
+        NopHtml.AppendCssFileParts("~/lib/bootstrap/css/bootstrap.rtl.css");
     }
     else
     {
@@ -20,14 +27,11 @@
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/480.css");
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/mobile.css");
         NopHtml.AppendCssFileParts("~/Themes/Venture/Content/css/styles.css");
+        NopHtml.AppendCssFileParts("~/lib/bootstrap/css/bootstrap.min.css");
     }
 
     NopHtml.AppendCssFileParts("~/Plugins/SevenSpikes.Core/Styles/perfect-scrollbar.min.css");
 
-    //We overwrite some bootstrap css here, so we want this after bootstrap loads, the higher in this list, the later it loads
-    NopHtml.AppendCssFileParts("~/Themes/Albina/Content/css/calculators.css");
-
-    NopHtml.AppendCssFileParts("~/Themes/Albina/Content/css/albina.css");
 
     <script src="~/Plugins/SevenSpikes.Core/Scripts/perfect-scrollbar.min.js" asp-location="Footer"></script>
     <script src="~/Plugins/SevenSpikes.Core/Scripts/sevenspikes.core.min.js" asp-location="Footer"></script>
@@ -35,4 +39,9 @@
     <script src="~/Plugins/SevenSpikes.Core/Scripts/cookiehelper.min.js" asp-location="Footer"></script>
 
     <script src="~/Themes/Venture/Content/scripts/venture.js" asp-location="Footer"></script>
+
+    <script src="~/Themes/Albina/Content/scripts/albina.js" asp-location="Footer"></script>
+    <script src="~/Themes/Albina/Content/scripts/lazysizes.js" asp-location="Footer"></script>
+
+    <script src="~/lib/bootstrap/js/bootstrap.min.js" asp-location="Footer"></script>
 }
