@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:King;Mark;;;
+FN:Mark King
+ORG:Albina Co.\, Inc.;
+TITLE:Estimating / Project Management
+EMAIL;type=INTERNET;type=WORK;type=pref:mking@albinaco.com
+TEL;type=CELL;type=VOICE;type=pref:503-997-6423
+TEL;type=WORK;type=VOICE:503-692-6010\, #104
+CATEGORIES:Albina
+UID:70246bd9-54df-4efe-844c-d8d4bc3c0f81
+X-ABUID:F60BBF77-4266-4D89-A7C6-69DF47A2A911:ABPerson
+END:VCARD

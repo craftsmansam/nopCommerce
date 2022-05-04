@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Evans;Cindy;;;
+FN:Cindy Evans
+ORG:Albina Co.\, Inc.;
+TITLE:Office Administration
+EMAIL;type=INTERNET;type=WORK;type=pref:cevans@albinaco.com
+TEL;type=WORK;type=VOICE;type=pref:503-692-6010\, #100
+CATEGORIES:Albina
+UID:cd9710e0-add4-4b00-8764-9194f7076fa9
+X-ABUID:3B7811D3-ECBC-4212-BB56-20627FD39D51:ABPerson
+END:VCARD

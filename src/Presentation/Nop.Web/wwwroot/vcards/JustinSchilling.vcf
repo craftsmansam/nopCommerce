@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Schilling;Justin;;;
+FN:Justin Schilling
+ORG:Albina Co.\, Inc.;
+TITLE:Foreman
+EMAIL;type=INTERNET;type=WORK;type=pref:jschilling@albinaco.com
+CATEGORIES:Albina
+UID:0e16334a-8bc4-4d31-bce2-30ebfa7136c3
+X-ABUID:8E6A609E-F578-45CB-B888-9028B4B29B92:ABPerson
+END:VCARD

@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Smith;Brian;;;
+FN:Brian Smith
+ORG:Albina Co.\, Inc.;
+TITLE:President
+EMAIL;type=INTERNET;type=WORK;type=pref:bsmith@albinaco.com
+TEL;type=CELL;type=VOICE;type=pref:503-997-6464
+TEL;type=WORK;type=VOICE:503-692-6010\, #105
+CATEGORIES:Albina
+UID:d3abe3cf-fde1-45ab-b5cb-eb929f6cad40
+X-ABUID:55BA862C-3329-4016-B8FA-6F7B814EB822:ABPerson
+END:VCARD

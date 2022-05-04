@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Shroyer;Dale;;;
+FN:Dale Shroyer
+ORG:Albina Co.\, Inc.;
+TITLE:Maintenance
+EMAIL;type=INTERNET;type=WORK;type=pref:dshroyer@albinaco.com
+TEL;type=WORK;type=VOICE;type=pref:503-692-6010\, #111
+CATEGORIES:Albina
+UID:509eb018-0db0-4dc0-b74c-d60f0c33cba0
+X-ABUID:76922479-7850-4746-A19D-C9E03D837C58:ABPerson
+END:VCARD

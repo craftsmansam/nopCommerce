@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Lund;Brad;;;
+FN:Brad Lund
+ORG:Albina Co.\, Inc.;
+TITLE:VP of Sales
+EMAIL;type=INTERNET;type=WORK;type=pref:blund@albinaco.com
+TEL;type=CELL;type=VOICE;type=pref:503-290-4491
+TEL;type=WORK;type=VOICE:503-692-6010\, #114
+CATEGORIES:Albina
+UID:abe6e1be-2db7-4b8c-aac6-815e8294a7f8
+X-ABUID:86D2397A-3BB3-4F59-8375-2A85B4254063:ABPerson
+END:VCARD

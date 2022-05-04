@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Wilson;Deborah;;;
+FN:Deborah Wilson
+ORG:Albina Co.\, Inc.;
+TITLE:Accounting / HR Manager
+EMAIL;type=INTERNET;type=WORK;type=pref:dwilson@albinaco.com
+TEL;type=CELL;type=VOICE;type=pref:503-997-6440
+TEL;type=WORK;type=VOICE:503-692-6010\, #102
+CATEGORIES:Albina
+UID:564b3f78-868e-4662-8dca-746bc1c46e1d
+X-ABUID:4DEBCA6A-D064-41B3-B45E-53A9FAC3F24A:ABPerson
+END:VCARD

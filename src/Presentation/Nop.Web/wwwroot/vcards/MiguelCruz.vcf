@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Cruz;Miguel;;;
+FN:Miguel Cruz
+ORG:Albina Co.\, Inc.;
+TITLE:Foreman
+EMAIL;type=INTERNET;type=WORK;type=pref:mcruz@albinaco.com
+CATEGORIES:Albina
+UID:a8e66c77-d9da-4d3c-b5f6-339fc2e9324e
+X-ABUID:D867CCD8-1C22-4F44-8FA6-7394EE1819E2:ABPerson
+END:VCARD
