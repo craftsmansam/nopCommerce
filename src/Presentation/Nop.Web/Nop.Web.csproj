@@ -358,7 +358,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.pdb" />
     <None Include="wwwroot\css\albina\bendingtolerances.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
