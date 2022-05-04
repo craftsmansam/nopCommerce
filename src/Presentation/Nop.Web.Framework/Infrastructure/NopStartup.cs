@@ -54,6 +54,7 @@ using Nop.Services.Tax;
 using Nop.Services.Themes;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
+using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Menu;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.Themes;
@@ -181,7 +182,9 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<IGiftCardService, GiftCardService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IShopOrderService, ShopOrderService>();
+            services.AddScoped<IShopOrderModelFactory, ShopOrderModelFactory>();
             services.AddScoped<IQuoteService, QuoteService>();
+            services.AddScoped<IQuoteModelFactory, QuoteModelFactory>();
             services.AddScoped<IOrderReportService, OrderReportService>();
             services.AddScoped<IOrderProcessingService, OrderProcessingService>();
             services.AddScoped<IOrderTotalCalculationService, OrderTotalCalculationService>();

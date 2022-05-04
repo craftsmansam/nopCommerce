@@ -5,6 +5,7 @@ using Nop.Services.Configuration;
 using Nop.Services.Customers;
 using Nop.Services.Quotes;
 using Nop.Web.Factories;
+using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Controllers

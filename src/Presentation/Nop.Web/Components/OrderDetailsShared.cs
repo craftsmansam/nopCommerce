@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework.Components;
+using Nop.Web.Framework.Models.Order;
 
 namespace Nop.Web.Components
 {
@@ -13,23 +12,4 @@ namespace Nop.Web.Components
         }
 
     }
-
-    /// <summary>
-    /// Represents an order details common model
-    /// </summary>
-    public interface IOrderDetailsModel
-    {
-        public DateTime OrderDate { get; set; }
-        public string PurchaseOrder { get; }
-        public string ProjectName { get; }
-        public string Status { get; set; }
-        public DateTime? DateRTS { get; }
-        public DateTime? DateShipped { get; }
-        public string OrderTotal { get; }
-        public string ShippingTrackingUrl { get; set; }
-        public string ShopOrderConfirmationFilename { get; set; }
-        public List<int> MtrDocumentIDs { get; set; }
-        public int ShopOrderId { get; set; }
-    }
-
 }

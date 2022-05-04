@@ -16,6 +16,7 @@ using Nop.Services.Payments;
 using Nop.Services.Shipping;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Controllers

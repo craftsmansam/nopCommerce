@@ -1,4 +1,4 @@
-﻿@model Nop.Web.Components.IOrderDetailsModel
+﻿@model Nop.Web.Framework.Models.Order.IOrderDetailsModel
 @if (!string.IsNullOrWhiteSpace(Model.ShippingTrackingUrl) || !string.IsNullOrWhiteSpace(Model.ShopOrderConfirmationFilename) || (Model.MtrDocumentIDs?.Count ?? 0) > 0)
 {
     <div class="order-details-area">
