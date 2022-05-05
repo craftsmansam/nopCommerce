@@ -148,7 +148,10 @@
                             {
                                 <button type="button" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')">@T("Account.CustomerOrders.ReturnItems")</button>
                             }
-                            <button type="button" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderId = order.Id })')">@T("Account.CustomerOrders.OrderDetails")</button>
+                            @{
+                                var url = order.IsShopOrder ? Url.RouteUrl("ShopOrderDetails", new { shopOrderNumber = order.CustomOrderNumber }) : Url.RouteUrl("OrderDetails", new { orderId = order.Id });
+                            }
+                            <button type="button" class="button-2 order-details-button" onclick="setLocation('@url')">@T("Account.CustomerOrders.OrderDetails")</button>
                         </div>
                     </div>
                 }

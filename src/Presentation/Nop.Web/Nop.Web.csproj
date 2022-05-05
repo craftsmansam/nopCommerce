@@ -46,7 +46,6 @@
     <Content Remove="Plugins\Widgets.AccessiBe\**" />
     <Content Remove="Plugins\Widgets.FacebookPixel\**" />
     <Content Remove="Plugins\Widgets.What3words\**" />
-    <Content Remove="Themes\Venture\Views\Order\**" />
     <Content Remove="Themes\Venture\Views\Quote\**" />
     <Content Remove="wwwroot\bundles\**" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
@@ -83,8 +82,6 @@
 
     <Compile Remove="Plugins\Widgets.What3words\**" />
 
-    <Compile Remove="Themes\Venture\Views\Order\**" />
-
     <Compile Remove="Themes\Venture\Views\Quote\**" />
 
     <Compile Remove="wwwroot\bundles\**" />
@@ -105,7 +102,6 @@
     <EmbeddedResource Remove="Plugins\Widgets.AccessiBe\**" />
     <EmbeddedResource Remove="Plugins\Widgets.FacebookPixel\**" />
     <EmbeddedResource Remove="Plugins\Widgets.What3words\**" />
-    <EmbeddedResource Remove="Themes\Venture\Views\Order\**" />
     <EmbeddedResource Remove="Themes\Venture\Views\Quote\**" />
     <EmbeddedResource Remove="wwwroot\bundles\**" />
     <None Remove="Plugins\**;Themes\**" />
@@ -124,7 +120,6 @@
     <None Remove="Plugins\Widgets.AccessiBe\**" />
     <None Remove="Plugins\Widgets.FacebookPixel\**" />
     <None Remove="Plugins\Widgets.What3words\**" />
-    <None Remove="Themes\Venture\Views\Order\**" />
     <None Remove="Themes\Venture\Views\Quote\**" />
     <None Remove="wwwroot\bundles\**" />
     <Content Include="App_Data\appsettings.json" />
@@ -333,8 +328,6 @@
     <None Remove="Plugins\Widgets.What3words\Views\PublicInfo.cshtml" />
     <None Remove="Plugins\Widgets.What3words\Views\PublicOrderAddress.cshtml" />
     <None Remove="Plugins\Widgets.What3words\Views\_ViewImports.cshtml" />
-    <None Remove="Themes\Venture\Views\Order\CustomerOrders.cshtml" />
-    <None Remove="Themes\Venture\Views\Order\CustomerRewardPoints.cshtml" />
     <None Remove="Themes\Venture\Views\Quote\CustomerQuotes.cshtml" />
 
     <None Update="Areas\Admin\sitemap.config">
