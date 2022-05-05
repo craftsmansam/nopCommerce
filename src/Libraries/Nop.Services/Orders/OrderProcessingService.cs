@@ -3249,7 +3249,9 @@ namespace Nop.Services.Orders
         /// A task that represents the asynchronous operation
         /// The task result contains the rue - OK; false - minimum order total amount is not reached
         /// </returns>
+#pragma warning disable CS1998
         public virtual async Task<bool> IsPaymentWorkflowRequiredAsync(IList<ShoppingCartItem> cart, bool? useRewardPoints = null)
+#pragma warning restore CS1998
         {
             if (cart == null)
                 throw new ArgumentNullException(nameof(cart));

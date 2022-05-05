@@ -750,64 +750,65 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+#pragma warning disable CS1998
         public virtual async Task<IActionResult> ShippingMethod()
+#pragma warning restore CS1998
         {
-            //@@@@@
             if (_shippingSettings.ShipToSameAddress)
             {
                 return RedirectToRoute("CheckoutPaymentMethod");
             }
             return RedirectToRoute("CheckoutShippingAddress");
 
-            //validation
-            // ReSharper disable once HeuristicUnreachableCode
-            if (_orderSettings.CheckoutDisabled)
-                return RedirectToRoute("ShoppingCart");
+            ////validation
+            //// ReSharper disable once HeuristicUnreachableCode
+            //if (_orderSettings.CheckoutDisabled)
+            //    return RedirectToRoute("ShoppingCart");
 
-            var customer = await _workContext.GetCurrentCustomerAsync();
-            var store = await _storeContext.GetCurrentStoreAsync();
-            var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
+            //var customer = await _workContext.GetCurrentCustomerAsync();
+            //var store = await _storeContext.GetCurrentStoreAsync();
+            //var cart = await _shoppingCartService.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, store.Id);
 
-            if (!cart.Any())
-                return RedirectToRoute("ShoppingCart");
+            //if (!cart.Any())
+            //    return RedirectToRoute("ShoppingCart");
 
-            if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            //if (_orderSettings.OnePageCheckoutEnabled)
+            //    return RedirectToRoute("CheckoutOnePage");
 
-            if (await _customerService.IsGuestAsync(customer) && !_orderSettings.AnonymousCheckoutAllowed)
-                return Challenge();
+            //if (await _customerService.IsGuestAsync(customer) && !_orderSettings.AnonymousCheckoutAllowed)
+            //    return Challenge();
 
-            if (!await _shoppingCartService.ShoppingCartRequiresShippingAsync(cart))
-            {
-                await _genericAttributeService.SaveAttributeAsync<ShippingOption>(customer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, store.Id);
-                return RedirectToRoute("CheckoutPaymentMethod");
-            }
+            //if (!await _shoppingCartService.ShoppingCartRequiresShippingAsync(cart))
+            //{
+            //    await _genericAttributeService.SaveAttributeAsync<ShippingOption>(customer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, store.Id);
+            //    return RedirectToRoute("CheckoutPaymentMethod");
+            //}
 
-            //check if pickup point is selected on the shipping address step
-            if (!_orderSettings.DisplayPickupInStoreOnShippingMethodPage)
-            {
-                var selectedPickUpPoint = await _genericAttributeService
-                    .GetAttributeAsync<PickupPoint>(customer, NopCustomerDefaults.SelectedPickupPointAttribute, store.Id);
-                if (selectedPickUpPoint != null)
-                    return RedirectToRoute("CheckoutPaymentMethod");
-            }
+            ////check if pickup point is selected on the shipping address step
+            //if (!_orderSettings.DisplayPickupInStoreOnShippingMethodPage)
+            //{
+            //    var selectedPickUpPoint = await _genericAttributeService
+            //        .GetAttributeAsync<PickupPoint>(customer, NopCustomerDefaults.SelectedPickupPointAttribute, store.Id);
+            //    if (selectedPickUpPoint != null)
+            //        return RedirectToRoute("CheckoutPaymentMethod");
+            //}
 
-            //model
-            var model = await _checkoutModelFactory.PrepareShippingMethodModelAsync(cart, await _customerService.GetCustomerShippingAddressAsync(customer));
+            ////model
+            //var model = await _checkoutModelFactory.PrepareShippingMethodModelAsync(cart, await _customerService.GetCustomerShippingAddressAsync(customer));
 
-            if (_shippingSettings.BypassShippingMethodSelectionIfOnlyOne &&
-                model.ShippingMethods.Count == 1)
-            {
-                //if we have only one shipping method, then a customer doesn't have to choose a shipping method
-                await _genericAttributeService.SaveAttributeAsync(customer,
-                    NopCustomerDefaults.SelectedShippingOptionAttribute,
-                    model.ShippingMethods.First().ShippingOption,
-                    store.Id);
+            //if (_shippingSettings.BypassShippingMethodSelectionIfOnlyOne &&
+            //    model.ShippingMethods.Count == 1)
+            //{
+            //    //if we have only one shipping method, then a customer doesn't have to choose a shipping method
+            //    await _genericAttributeService.SaveAttributeAsync(customer,
+            //        NopCustomerDefaults.SelectedShippingOptionAttribute,
+            //        model.ShippingMethods.First().ShippingOption,
+            //        store.Id);
 
-                return RedirectToRoute("CheckoutPaymentMethod");
-            }
+            //    return RedirectToRoute("CheckoutPaymentMethod");
+            //}
 
-            return View(model);
+            //return View(model);
         }
 
         [HttpPost, ActionName("ShippingMethod")]

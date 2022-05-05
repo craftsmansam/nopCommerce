@@ -135,7 +135,9 @@ namespace Nop.Services.Messages
         /// <param name="attachedDownloadId">Attachment download ID (another attachment)</param>
         /// <param name="headers">Headers</param>
         /// <returns>A task that represents the asynchronous operation</returns>
+#pragma warning disable CS1998
         public virtual async Task SendEmailAsync(EmailAccount emailAccount, string subject, string body,
+#pragma warning restore CS1998
             string fromAddress, string fromName, string toAddress, string toName,
             string replyTo = null, string replyToName = null,
             IEnumerable<string> bcc = null, IEnumerable<string> cc = null,
