@@ -253,7 +253,7 @@
                 @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryCartFooter, additionalData = Model })
                 @if (Model.IsEditable)
                 {
-                    <div class="cart-collaterals">
+                    <div class="cart-collaterals" style="float: left;">
                         @{ 
                             var checkoutAttributes = await Html.PartialAsync("_CheckoutAttributes", Model);
                             var selectedCheckoutAttributes = await Component.InvokeAsync("SelectedCheckoutAttributes");
