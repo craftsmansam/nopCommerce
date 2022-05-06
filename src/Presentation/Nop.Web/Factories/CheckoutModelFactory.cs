@@ -204,14 +204,14 @@ namespace Nop.Web.Factories
             var shippingProviders = await _shippingPluginManager.LoadActivePluginsAsync(customer, store.Id);
             if (!shippingProviders.Any())
             {
-                if (!pickupPointProviders.Any())
-                {
-                    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.ShippingIsNotAllowed"));
-                    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.PickupPoints.NotAvailable"));
-                }
-                model.PickupInStoreOnly = true;
-                model.PickupInStore = true;
-                return model;
+                //if (!pickupPointProviders.Any())
+                //{
+                //    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.ShippingIsNotAllowed"));
+                //    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.PickupPoints.NotAvailable"));
+                //}
+                //model.PickupInStoreOnly = true;
+                //model.PickupInStore = true;
+                //return model;
             }
 
             return model;
