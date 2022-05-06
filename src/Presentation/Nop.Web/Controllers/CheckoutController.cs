@@ -660,7 +660,7 @@ namespace Nop.Web.Controllers
                 await _genericAttributeService.SaveAttributeAsync<PickupPoint>(customer, NopCustomerDefaults.SelectedPickupPointAttribute, null, store.Id);
             }
 
-            return RedirectToRoute("CheckoutShippingMethod");
+            return RedirectToRoute("CheckoutConfirm");
         }
 
         [HttpPost, ActionName("ShippingAddress")]
