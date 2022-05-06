@@ -135,7 +135,10 @@ namespace Nop.Web.Factories
         /// </returns>
         protected virtual async Task<CheckoutPickupPointsModel> PrepareCheckoutPickupPointsModelAsync(IList<ShoppingCartItem> cart)
         {
-            var model = new CheckoutPickupPointsModel { AllowPickupInStore = _shippingSettings.AllowPickupInStore };
+            var model = new CheckoutPickupPointsModel
+            {
+                AllowPickupInStore = _shippingSettings.AllowPickupInStore
+            };
 
             if (!model.AllowPickupInStore)
                 return model;
@@ -148,8 +151,8 @@ namespace Nop.Web.Factories
             if (pickupPointProviders.Any())
             {
                 var languageId = (await _workContext.GetWorkingLanguageAsync()).Id;
-                var address = customer.BillingAddressId.HasValue ? await _addressService.GetAddressByIdAsync(customer.BillingAddressId.Value) : null;
-                var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(cart, address, customer, storeId: store.Id);
+                var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(customer.BillingAddressId ?? 0,
+                    customer, storeId: store.Id);
                 if (pickupPointsResponse.Success)
                     model.PickupPoints = await pickupPointsResponse.PickupPoints.SelectAwait(async point =>
                     {
@@ -201,15 +204,14 @@ namespace Nop.Web.Factories
             var shippingProviders = await _shippingPluginManager.LoadActivePluginsAsync(customer, store.Id);
             if (!shippingProviders.Any())
             {
-                //if (!pickupPointProviders.Any())
-                //{
-                //    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.ShippingIsNotAllowed"));
-                //    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.PickupPoints.NotAvailable"));
-                //}
-
-                //model.PickupInStoreOnly = true;
-                //model.PickupInStore = true;
-                //return model;
+                if (!pickupPointProviders.Any())
+                {
+                    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.ShippingIsNotAllowed"));
+                    model.Warnings.Add(await _localizationService.GetResourceAsync("Checkout.PickupPoints.NotAvailable"));
+                }
+                model.PickupInStoreOnly = true;
+                model.PickupInStore = true;
+                return model;
             }
 
             return model;
@@ -295,7 +297,7 @@ namespace Nop.Web.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the shipping address model
         /// </returns>
-        public virtual async Task<CheckoutShippingAddressModel> PrepareShippingAddressModelAsync(IList<ShoppingCartItem> cart, 
+        public virtual async Task<CheckoutShippingAddressModel> PrepareShippingAddressModelAsync(IList<ShoppingCartItem> cart,
             int? selectedCountryId = null, bool prePopulateNewAddressWithCustomerFields = false, string overrideAttributesXml = "")
         {
             var model = new CheckoutShippingAddressModel
@@ -611,7 +613,7 @@ namespace Nop.Web.Factories
         public virtual Task<CheckoutProgressModel> PrepareCheckoutProgressModelAsync(CheckoutProgressStep step)
         {
             var model = new CheckoutProgressModel { CheckoutProgressStep = step };
-            
+
             return Task.FromResult(model);
         }
 

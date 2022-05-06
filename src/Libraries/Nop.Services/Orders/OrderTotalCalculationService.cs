@@ -418,9 +418,8 @@ namespace Nop.Services.Orders
                             //customer chose pickup in store method, try to get chosen pickup point
                             if (_shippingSettings.AllowPickupInStore)
                             {
-                                var address = await _addressService.GetAddressByIdAsync(updatedOrder.BillingAddressId);
-                                var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(restoredCart, address,
-                                    customer, updatedOrder.ShippingRateComputationMethodSystemName, store.Id);
+                                var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(updatedOrder.BillingAddressId, customer,
+                                    updatedOrder.ShippingRateComputationMethodSystemName, store.Id);
                                 if (pickupPointsResponse.Success)
                                 {
                                     var selectedPickupPoint =
@@ -463,9 +462,7 @@ namespace Nop.Services.Orders
                         if (_shippingSettings.AllowPickupInStore)
                         {
                             //try to get the cheapest pickup point
-                            var address = await _addressService.GetAddressByIdAsync(updatedOrder.BillingAddressId);
-                            var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(restoredCart, address,
-                                currentCustomer, storeId: store.Id);
+                            var pickupPointsResponse = await _shippingService.GetPickupPointsAsync(updatedOrder.BillingAddressId, currentCustomer, storeId: store.Id);
                             if (pickupPointsResponse.Success)
                             {
                                 updateOrderParameters.PickupPoint = pickupPointsResponse.PickupPoints
