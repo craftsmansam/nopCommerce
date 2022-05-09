@@ -36,10 +36,6 @@
         var addressLine = new StringBuilder();
         var parameters = new List<string>();
 
-        if (!string.IsNullOrEmpty(point.Name))
-        {
-            parameters.Add(point.Name);
-        }
         if (!string.IsNullOrEmpty(point.Address))
         {
             parameters.Add(point.Address);
@@ -60,7 +56,7 @@
         {
             parameters.Add(point.CountryName);
         }
-
+        addressLine.AppendJoin(", ", parameters);
         return addressLine.ToString();
     }
 }
