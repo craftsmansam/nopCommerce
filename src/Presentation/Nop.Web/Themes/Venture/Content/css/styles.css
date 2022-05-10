@@ -6858,9 +6858,7 @@ td.ui-datepicker-week-end {
 .checkout-page .select-pickup-point {
 	text-align: center;
 }
-.checkout-page .select-pickup-point li {
-	display: inline-block;
-}
+
 .checkout-page .select-address select,
 .checkout-page .select-pickup-point select {
 	max-width: 100%;
