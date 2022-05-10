@@ -74,7 +74,7 @@ namespace Nop.Web.Factories
         }
 
         #endregion
-        
+
         #region Methods
 
         /// <summary>
@@ -158,27 +158,17 @@ namespace Nop.Web.Factories
                 ? await _blogService.GetAllBlogPostsAsync(store.Id, language.Id, dateFrom, dateTo, command.PageNumber - 1, command.PageSize)
                 : await _blogService.GetAllBlogPostsByTagAsync(store.Id, language.Id, command.Tag, command.PageNumber - 1, command.PageSize);
 
-            blogPosts = await _blogService.GetAllBlogPostsByTagAsync(store.Id,  language.Id, command.Tag, command.PageNumber - 1, command.PageSize);
-            if (command.Tag?.Contains("-") ?? false)
+            var model = new BlogPostListModel
             {
-                var tag = command.Tag.Replace("-", " ");
-                var dashPosts = await _blogService.GetAllBlogPostsByTagAsync(store.Id, language.Id, tag, command.PageNumber - 1, command.PageSize);
-                foreach (var item in dashPosts.Where(x => !blogPosts.Contains(x)))
+                PagingFilteringContext = { Tag = command.Tag, Month = command.Month },
+                WorkingLanguageId = language.Id,
+                BlogPosts = await blogPosts.SelectAwait(async blogPost =>
                 {
-                    blogPosts.Add(item);
-                }
-            }
-
-            var model = new BlogPostListModel();
-            model.PagingFilteringContext.LoadPagedList(blogPosts);
-
-            model.BlogPosts = await blogPosts.SelectAwait(async x =>
-            {
-                var blogPostModel = new BlogPostModel();
-                await PrepareBlogPostModelAsync(blogPostModel, x, false);
-                return blogPostModel;
-            }).ToListAsync();
-          
+                    var blogPostModel = new BlogPostModel();
+                    await PrepareBlogPostModelAsync(blogPostModel, blogPost, false);
+                    return blogPostModel;
+                }).ToListAsync()
+            };
             model.PagingFilteringContext.LoadPagedList(blogPosts);
 
             return model;
@@ -281,7 +271,7 @@ namespace Nop.Web.Factories
 
             return cachedModel;
         }
-        
+
         /// <summary>
         /// Prepare blog comment model
         /// </summary>
