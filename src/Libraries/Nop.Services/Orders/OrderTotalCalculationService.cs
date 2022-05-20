@@ -1131,7 +1131,10 @@ namespace Nop.Services.Orders
             }
 
             if (!shippingTotal.HasValue)
-                return (null, taxRate, appliedDiscounts);
+            {
+                // albina modified since we're not doing shipping or taxes on the website
+                return (0m, taxRate, appliedDiscounts);
+            }
 
             if (shippingTotal.Value < decimal.Zero)
                 shippingTotal = decimal.Zero;

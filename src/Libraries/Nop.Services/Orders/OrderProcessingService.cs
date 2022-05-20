@@ -625,6 +625,7 @@ namespace Nop.Services.Orders
             //shipping total
             var (orderShippingTotalInclTax, _, shippingTotalDiscounts) = await _orderTotalCalculationService.GetShoppingCartShippingTotalAsync(details.Cart, true);
             var (orderShippingTotalExclTax, _, _) = await _orderTotalCalculationService.GetShoppingCartShippingTotalAsync(details.Cart, false);
+
             if (!orderShippingTotalInclTax.HasValue || !orderShippingTotalExclTax.HasValue)
                 throw new NopException("Shipping total couldn't be calculated");
 
@@ -655,6 +656,10 @@ namespace Nop.Services.Orders
 
             //order total (and applied discounts, gift cards, reward points)
             var (orderTotal, orderDiscountAmount, orderAppliedDiscounts, appliedGiftCards, redeemedRewardPoints,  redeemedRewardPointsAmount) = await _orderTotalCalculationService.GetShoppingCartTotalAsync(details.Cart);
+
+            // albina modified since we're not doing shipping and taxes on the website
+            orderTotal = subTotalWithoutDiscountBase;
+
             if (!orderTotal.HasValue)
                 throw new NopException("Order total couldn't be calculated");
 
