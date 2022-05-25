@@ -148,6 +148,10 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             {
                 return false;
             }
+            if (exception.ToString().Contains("at WebOptimizer.Asset.ExpandGlobs"))
+            {
+                return false;
+            }
 
             return true;
         }
