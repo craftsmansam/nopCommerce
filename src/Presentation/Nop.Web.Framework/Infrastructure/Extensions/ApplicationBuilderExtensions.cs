@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +28,6 @@ using Nop.Services.Logging;
 using Nop.Services.Media.RoxyFileman;
 using Nop.Services.Messages;
 using Nop.Core.Domain.Messages;
-using Nop.Core.Domain.Security;
 using Nop.Services.Plugins;
 using Nop.Services.ScheduleTasks;
 using Nop.Web.Framework.Globalization;
@@ -144,11 +142,23 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
         private static bool ShouldEmailError(Exception exception)
         {
-            if (exception is FormatException && exception.ToString().Contains("not a valid value for Boolean"))
+            var exceptionString = exception.ToString();
+
+            if (exception is FormatException && exceptionString.Contains("not a valid value for Boolean"))
             {
                 return false;
             }
-            if (exception.ToString().Contains("at WebOptimizer.Asset.ExpandGlobs"))
+            if (exceptionString.Contains("at WebOptimizer.Asset.ExpandGlobs"))
+            {
+                return false;
+            }
+
+            if (exceptionString.Contains("GenerateCssFiles()") && exceptionString.Contains("Collection was modified; enumeration operation may not execute"))
+            {
+                return false;
+            }
+
+            if (exceptionString.Contains("Operations that change non-concurrent collections must have exclusive access") && exceptionString.Contains("GetOrCreateBundle"))
             {
                 return false;
             }
