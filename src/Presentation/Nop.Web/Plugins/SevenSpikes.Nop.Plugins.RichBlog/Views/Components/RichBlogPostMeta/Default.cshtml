@@ -7,7 +7,7 @@
 
 @if (!string.IsNullOrEmpty(Model.BlogPostUrl))
 {
-    <meta property="og:url" content="@Model.BlogPostUrl.Replace("%2F", "/")" />
+    <meta property="og:url" content="@Model.BlogPostUrl" />
 }
 
 @if (!string.IsNullOrEmpty(Model.BlogPostTitle))

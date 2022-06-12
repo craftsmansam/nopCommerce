@@ -1,6 +1,5 @@
 ﻿@model RichBlogPostFooterModel
 @inject RichBlogSettings richBlogSettings
-@using Nop.Web.Framework.Extensions
 
 <div class="post-footer">
     @if (Model.Categories.Count > 0 || (Model.RelatedBlogPosts.Count > 0 && ViewBag.IsBlogDetailsPage))
@@ -38,7 +37,7 @@
                             var blogPost = Model.RelatedBlogPosts[i];
 
                             <li>
-                                <a href="@Url.RouteUrl("BlogPostWithPath", new { Path = blogPost.RelatedBlogPostSEName.GetPathFromSeName(), SeName = blogPost.RelatedBlogPostSEName.GetSeNameWithoutPath() })">@blogPost.RelatedBlogPostTitle</a>
+                                <a href="@Url.RouteUrl("BlogPost", new { SeName = blogPost.RelatedBlogPostSEName })">@blogPost.RelatedBlogPostTitle</a>
                             </li>
 
                             if (i != Model.RelatedBlogPosts.Count - 1)
@@ -55,13 +54,13 @@
     <div class="post-actions">
         @if (!ViewBag.IsBlogDetailsPage) 
         { 
-            <a href="@Url.RouteUrl("BlogPostWithPath", new { Path = Model.BlogPostSEName.GetPathFromSeName(), SeName = Model.BlogPostSEName.GetSeNameWithoutPath() })" class="read-more">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
+            <a href="@Url.RouteUrl("BlogPost", new { SeName = Model.BlogPostSEName })" class="read-more">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
         }
         
         @if (richBlogSettings.ShowFacebookShare || richBlogSettings.ShowTwitterShare ||
              richBlogSettings.ShowPinterestShare || richBlogSettings.ShowLinkedInShare)
         {
-            var shareUrl = Nop.Core.Infrastructure.EngineContext.Current.Resolve<Nop.Core.IWebHelper>().GetStoreLocation().TrimEnd('/') + Url.RouteUrl("BlogPostWithPath", new { Path = Model.BlogPostSEName.GetPathFromSeName(), SeName = Model.BlogPostSEName.GetSeNameWithoutPath() });
+            var shareUrl = Nop.Core.Infrastructure.EngineContext.Current.Resolve<Nop.Core.IWebHelper>().GetStoreLocation().TrimEnd('/') + Url.RouteUrl("BlogPost", new { SeName = Model.BlogPostSEName });
 
             <ul class="share-post" id="share-buttons">
                 @if (richBlogSettings.ShowFacebookShare)
