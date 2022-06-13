@@ -163,6 +163,11 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 return false;
             }
 
+            if (exceptionString.Contains("Collection was modified; enumeration operation may not execute") && exceptionString.Contains("GetOrCreateBundle"))
+            {
+                return false;
+            }
+
             return true;
         }
 
