@@ -54,6 +54,7 @@
   <WidgetZone>BendingProfilesPipeAndTubeSlider</WidgetZone>
   <WidgetZone>BendingProfilesSquareAndRectangularSlider</WidgetZone>
   <WidgetZone>BendingProfilesTeeSlider</WidgetZone>
+  <WidgetZone>BendingProfilesBulbFlatSlider</WidgetZone>
   <WidgetZone>SpecialtyBendsSpiralSlider</WidgetZone>
   <WidgetZone>SpecialtyBendsMultiPlaneSlider</WidgetZone>
   <WidgetZone>SpecialtyBendsOffAxisSlider</WidgetZone>
