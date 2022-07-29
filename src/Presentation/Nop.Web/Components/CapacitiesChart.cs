@@ -198,6 +198,15 @@ namespace Nop.Web.Components
 								                       "All sizes through 12\" Stems (weight per foot maximums would need to be calculated based on WF origin)"),
 							}
 					},
+					{
+						CapacitiesChartType.BulbFlatChartType, new List<CapacitiesChartRow>
+							{
+								new CapacitiesChartRow("Bulb Flat", "/images/capchart_images/3d/bulbflat_3d_sm.png", "Bulb flat in 3D image",
+								                       "/images/capchart_images/2d/bulbflat_2d_sm.png", "Bulb flat in 2D image", "/images/bulbflat_photo_sm.png",
+								                       "Bulb flat in example photo",
+								                       "All mill sized produced up to 430 mm x 20 mm (16.93\" wide x .787\" thick)."),
+							}
+					},
 				};
     }
 
@@ -211,7 +220,8 @@ namespace Nop.Web.Components
         RailChartType,
         RoundPipeTubeChartType,
         SquareRectangularTubeChartType,
-        TeeChartType
+        TeeChartType,
+        BulbFlatChartType
     }
 
     public class CapacitiesChartModel
