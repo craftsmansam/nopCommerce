@@ -15,7 +15,7 @@
                 <a asp-action="BlogPosts">@T("Admin.ContentManagement.Blog.BlogPosts.BackToList")</a>
             </small>
         </h1>
-        <div class="pull-right">
+        <div class="float-right">
             <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("BlogPostWithPath", new {Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })', 800, 600, true); return false;" class="btn bg-purple">
                 <i class="fa fa-eye"></i>
                 @T("Admin.Common.Preview")
