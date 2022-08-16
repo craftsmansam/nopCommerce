@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Misc",
+  "FriendlyName": "WebP images",
+  "SystemName": "FoxNetSoft.WebPImages",
+  "Version": "2.00",
+  "SupportedVersions": [ "4.50" ],
+  "Author": "FoxNetSoft",
+  "DisplayOrder": 1,
+  "FileName": "FoxNetSoft.Plugin.Misc.WebPImages.dll",
+  "Description": "This plugin adds support WebP images in nopcommerce"
+}
