@@ -117,7 +117,7 @@ namespace Nop.Web.Controllers
                 RiseHeight = row.IsRiseHeightNull() ? null : (decimal?) row.RiseHeight,
                 NumRises = row.IsNumRisesNull() ? null : (int?) row.NumRises,
                 NumTreads = row.IsNumTreadsNull() ? null : (int?) row.NumTreads,
-                OverallRun = row.OverallRun,
+                OverallRun = row.IsOverallRunNull() ? null : (decimal?)row.OverallRun,
                 DegreeTurnInPlan = row.IsDegreeTurnInPlanNull() ? null : (decimal?) row.DegreeTurnInPlan,
                 TreadWidth = row.IsTreadWidthNull() ? null : (decimal?) row.TreadWidth,
                 Pitch = row.IsPitchNull() ? null : (decimal?) row.Pitch,
