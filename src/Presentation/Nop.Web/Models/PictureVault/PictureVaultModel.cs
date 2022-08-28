@@ -45,12 +45,16 @@ namespace Nop.Web.Models.PictureVault
         public string Title { get; }
         public string ImgSrc { get; }
         public string VideoUrl { get; }
+        public int? VideoHeight { get; }
+        public int? VideoWidth { get; }
 
-        public PictureVaultImage(string title, string imgSrc, string videoUrl)
+        public PictureVaultImage(string title, string imgSrc, string videoUrl, int? videoWidth, int? videoHeight)
         {
             Title = title;
             ImgSrc = imgSrc;
             VideoUrl = videoUrl;
+            VideoHeight = videoHeight;
+            VideoWidth = videoWidth;
         }
     }
 }

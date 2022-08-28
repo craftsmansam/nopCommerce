@@ -1,19 +1,18 @@
 ﻿@using Craftsman.IO
 @model Nop.Web.Models.PictureVault.VideoPlayerModel
 @{
-    Layout = "_Root";
+    Layout = null;
 
     NopHtml.AddTitleParts("Picture Vault Video");
 }
-<div class="page home-page product-box-layout-2">
-    <div class="page-body">
+<div class="page">
+    <div class="page-body" style="margin: auto;">
         <div class="page-title">
-            <h3>Picture Vault Video</h3>
+            <h3></h3>
         </div>
-        <div class="home-page-bottom-wrapper" style="margin-left: -225px;">
-
-            <video style="width: @(Model.Width)px; height: @(Model.Height)px; left: 0; top: 5px;" controls playsinline>
-                <source src="@Model.VideoUrl" type="@(MimeType.VideoMp4.MimeTypeString)" codecs="hevc" />
+        <div class="home-page-bottom-wrapper">
+            <video style="width: @(Model.Width)px; height: @(Model.Height)px; left: 0; top: 5px;" controls playsinline autoplay>
+                <source src="@Model.VideoUrl" type="@(MimeType.VideoMp4.MimeTypeString)" />
             </video>
         </div>
     </div>

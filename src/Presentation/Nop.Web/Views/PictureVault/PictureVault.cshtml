@@ -1,4 +1,5 @@
-﻿@model Nop.Web.Models.PictureVault.PictureVaultModel
+﻿@using Craftsman.IO
+@model Nop.Web.Models.PictureVault.PictureVaultModel
 @{
     var title = $"Picture Vault - PO#{Model.PONumber}";
     Layout = "_ColumnsTwo";
@@ -44,26 +45,18 @@
                              @foreach (var pv in pvGroup.PictureVaultImages)
                                 {
                                     <div class="html-slide">
+                                        <p>@pv.Title</p>
+                                        @{ var srcTag = j == 0 ? "src" : "data-lazy"; }
                                         @if (!string.IsNullOrWhiteSpace(pv.VideoUrl))
                                         {
-                                            @(Html.Raw($"<a href='{pv.VideoUrl}' target='_blank' >"))
-                                        }
-                                        <p>@pv.Title</p>
-
-                                        @if (j == 0)
-                                        {
-                                            <img src="@pv.ImgSrc" alt="@pv.Title"/>
+                                            <video style="width: @(pv.VideoWidth.Value)px; height: @(pv.VideoHeight.Value)px; left: 0; top: 5px;" controls playsinline>
+                                                <source src="@pv.VideoUrl" type="@(MimeType.VideoMp4.MimeTypeString)" />
+                                            </video>
                                         }
                                         else
                                         {
-                                            <img data-lazy="@pv.ImgSrc" alt="@pv.Title"/>
+                                            <img @srcTag="@pv.ImgSrc" alt="@pv.Title"/>
                                         }
- 
-                                        @if (!string.IsNullOrWhiteSpace(pv.VideoUrl))
-                                        {
-                                            @(Html.Raw("</a>"))
-                                        }
-
                                     </div>
                                     
                                     j++;

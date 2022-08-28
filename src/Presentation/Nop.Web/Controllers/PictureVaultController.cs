@@ -61,36 +61,51 @@ namespace Nop.Web.Controllers
             var itemsTable = await _pictureVaultService.CustomerListPictureVaultItemsAsync(customer.SalesContactID, po);
 
             var showPictureUrl = $"/secure/show-picture?cscid={customer.SalesContactID}&id=";
-            var showVideoUrl = $"/secure/video-player?cscid={customer.SalesContactID}&id=";
+            var showVideoUrl = $"/secure/show-video?cscid={customer.SalesContactID}&id=";
             var groupedItems = itemsTable.GroupBy(x => new {x.ProcessName, x.ShopOrderNumber, x.ProjectName}, x =>
             {
                 var fileExtension = Path.GetExtension(x.Filename).Replace(".", string.Empty);
                 var isVideo = MimeType.VideoMp4.FileExtensions.Any(ext => ext.Extension.ToLower() == fileExtension.ToLower());
+                var size = (Size?)null;
+
+                if (isVideo)
+                {
+                    size = GetVideoSizeAsync(x.Filename).Result;
+                }
+
                 return new
                 {
                     ImgSrc = $"{showPictureUrl}{x.ShopOrderPictureID}", 
                     VideoUrl = isVideo ? $"{showVideoUrl}{x.ShopOrderPictureID}" : null, 
-                    Title = $"Taken {x.DateTimeUploaded.ToString(FormatStrings.DateTimeFormat)}"
+                    Title = $"Taken {x.DateTimeUploaded.ToString(FormatStrings.DateTimeFormat)}",
+                    VideoHeight = size?.Height,
+                    VideoWidth = size?.Width
                 };
             });
+            
             var pvGroups = groupedItems.Select(x => new PictureVaultGroup($"{x.Key.ProjectName} (SO#{x.Key.ShopOrderNumber}) - {x.Key.ProcessName}", 
-                                                                        x.Select(y => new PictureVaultImage(y.Title, y.ImgSrc, y.VideoUrl)).ToList())).ToList();
+                                                                        x.Select(y => new PictureVaultImage(y.Title, y.ImgSrc, y.VideoUrl, y.VideoWidth, y.VideoHeight)).ToList())).ToList();
             var model = new PictureVaultModel(po, pvGroups);
 
             return View(model);
+        }
+
+        private static async Task<Size> GetVideoSizeAsync(string filenameOnNetwork)
+        {
+            var jpgFilename = Path.ChangeExtension(filenameOnNetwork, MimeType.ImageJpg.FileExtensions[1].Extension);
+            using var image = await Image.LoadAsync(jpgFilename);
+            
+            return new Size(image.Width, image.Height);
         }
 
         public async Task<IActionResult> VideoPlayerAsync(string cscid, string id)
         {
             return await ShowItemAsync(cscid, id, async (_, filenameOnNetwork) =>
             {
-                var jpgFilename = Path.ChangeExtension(filenameOnNetwork, MimeType.ImageJpg.FileExtensions[1].Extension);
-                using var image = await Image.LoadAsync(jpgFilename);
-                var width = image.Width;
-                var height = image.Height;
+                var size = await GetVideoSizeAsync(filenameOnNetwork);
 
                 var videoUrl = $"/secure/show-video?cscid={cscid}&id={id}";
-                var model = new VideoPlayerModel(videoUrl, width, height);
+                var model = new VideoPlayerModel(videoUrl, size.Width, size.Height);
 
                 return View(model);
             });
