@@ -744,6 +744,12 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("ShowPicture", $"{pattern}/secure/show-picture",
                 new {controller = "PictureVault", action = "ShowPicture"});
 
+            endpointRouteBuilder.MapControllerRoute("ShowVideo", $"{pattern}/secure/show-video",
+                new {controller = "PictureVault", action = "ShowVideo"});
+
+            endpointRouteBuilder.MapControllerRoute("ShowVideo", $"{pattern}/secure/video-player",
+                new {controller = "PictureVault", action = "VideoPlayer"});
+
             //Albina Bending and Fabrication
             endpointRouteBuilder.MapControllerRoute("BendingAndFabrication", $"{pattern}/quote-request/bending-and-fabrication",
                 new {controller = "QuoteRequest", action = "BendingAndFabrication"});

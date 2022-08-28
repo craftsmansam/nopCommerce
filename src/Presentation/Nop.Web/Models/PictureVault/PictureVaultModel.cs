@@ -26,15 +26,31 @@ namespace Nop.Web.Models.PictureVault
         }
     }
 
+    public class VideoPlayerModel
+    {
+        public string VideoUrl { get; }
+        public int Width { get; }
+        public int Height { get; }
+
+        public VideoPlayerModel(string videoUrl, int width, int height)
+        {
+            VideoUrl = videoUrl;
+            Width = width;
+            Height = height;
+        }
+    }
+
     public class PictureVaultImage
     {
         public string Title { get; }
         public string ImgSrc { get; }
+        public string VideoUrl { get; }
 
-        public PictureVaultImage(string title, string imgSrc)
+        public PictureVaultImage(string title, string imgSrc, string videoUrl)
         {
             Title = title;
             ImgSrc = imgSrc;
+            VideoUrl = videoUrl;
         }
     }
 }

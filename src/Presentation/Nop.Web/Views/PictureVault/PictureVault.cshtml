@@ -34,32 +34,45 @@
             var i = 0;
             foreach (var pvGroup in Model.PictureVaultGroups)
             {
-                <h3>@pvGroup.PictureVaultGroupTitle</h3>
-                <div class=slider-wrapper>
-                    <div class="anywhere-slider anywhere-slick-slider" id="anywhereSlider@(i)" data-mobilebreakpoint="768" data-slick="{&#34;adaptiveWidth&#34;:true,&#34;adaptiveHeight&#34;:true,&#34;zIndex&#34;:0,&#34;autoplay&#34;:true,&#34;autoplaySpeed&#34;:3000,&#34;speed&#34;:1000,&#34;fade&#34;:true,&#34;infinite&#34;:true,&#34;dots&#34;:true,&#34;arrows&#34;:true,&#34;appendArrows&#34;:&#34;#anywhereSlider@(i) .slick-arrows&#34;,&#34;slide&#34;:&#34;.picture-slide, .html-slide&#34;,&#34;slidesToShow&#34;:1,&#34;slidesToScroll&#34;:1,&#34;responsive&#34;:[{&#34;breakpoint&#34;:768}],&#34;lazyLoad&#34;:&#34;ondemand&#34;,&#34;centerPadding&#34;:&#34;0px&#34;,&#34;centerMode&#34;:true,&#34;rtl&#34;:false}">
-                        @{
-                            var j = 0;
-                            i++;
-                        }
-                        @foreach (var pv in pvGroup.PictureVaultImages)
-                        {
-                            <div class="html-slide">
-                                <p>@pv.Title</p>
-                                @if (j == 0)
+                        <h3>@pvGroup.PictureVaultGroupTitle</h3>
+                        <div class=slider-wrapper>
+                        <div class="anywhere-slider anywhere-slick-slider" id="anywhereSlider@(i)" data-mobilebreakpoint="768" data-slick="{&#34;adaptiveWidth&#34;:true,&#34;adaptiveHeight&#34;:true,&#34;zIndex&#34;:0,&#34;autoplay&#34;:true,&#34;autoplaySpeed&#34;:3000,&#34;speed&#34;:1000,&#34;fade&#34;:true,&#34;infinite&#34;:true,&#34;dots&#34;:true,&#34;arrows&#34;:true,&#34;appendArrows&#34;:&#34;#anywhereSlider@(i) .slick-arrows&#34;,&#34;slide&#34;:&#34;.picture-slide, .html-slide&#34;,&#34;slidesToShow&#34;:1,&#34;slidesToScroll&#34;:1,&#34;responsive&#34;:[{&#34;breakpoint&#34;:768}],&#34;lazyLoad&#34;:&#34;ondemand&#34;,&#34;centerPadding&#34;:&#34;0px&#34;,&#34;centerMode&#34;:true,&#34;rtl&#34;:false}">
+                            @{
+                                var j = 0;
+                                i++;
+                            }
+                             @foreach (var pv in pvGroup.PictureVaultImages)
                                 {
-                                    <img src="@pv.ImgSrc" alt="@pv.Title"/>
+                                    <div class="html-slide">
+                                        @if (!string.IsNullOrWhiteSpace(pv.VideoUrl))
+                                        {
+                                            @(Html.Raw($"<a href='{pv.VideoUrl}' target='_blank' >"))
+                                        }
+                                        <p>@pv.Title</p>
+
+                                        @if (j == 0)
+                                        {
+                                            <img src="@pv.ImgSrc" alt="@pv.Title"/>
+                                        }
+                                        else
+                                        {
+                                            <img data-lazy="@pv.ImgSrc" alt="@pv.Title"/>
+                                        }
+ 
+                                        @if (!string.IsNullOrWhiteSpace(pv.VideoUrl))
+                                        {
+                                            @(Html.Raw("</a>"))
+                                        }
+
+                                    </div>
+                                    
+                                    j++;
                                 }
-                                else
-                                {
-                                    <img data-lazy="@pv.ImgSrc" alt="@pv.Title"/>
-                                }
-                            </div>
-                            j++;
-                        }
-                        <div class="slick-arrows"></div>
-                    </div>
-                </div>
+
+                            <div class="slick-arrows"></div>
+                        </div>
+                        </div>
             }
         }
+        </div>
     </div>
-</div>

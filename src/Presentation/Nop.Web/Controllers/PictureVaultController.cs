@@ -7,6 +7,7 @@ using Craftsman.DesignByContract;
 using Craftsman.IO;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Services.Configuration;
 using Nop.Services.PictureVault;
@@ -14,6 +15,7 @@ using Nop.Services.Security;
 using Nop.Web.Models.PictureVault;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace Nop.Web.Controllers
@@ -36,7 +38,7 @@ namespace Nop.Web.Controllers
             _settingService = settingService;
         }
 
-        public async Task<IActionResult> BrowsePictureVault()
+        public async Task<IActionResult> BrowsePictureVaultAsync()
         {
             if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
                 return Challenge();
@@ -50,7 +52,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> PictureVault(string po)
+        public async Task<IActionResult> PictureVaultAsync(string po)
         {
             if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
                 return Challenge();
@@ -59,17 +61,54 @@ namespace Nop.Web.Controllers
             var itemsTable = await _pictureVaultService.CustomerListPictureVaultItemsAsync(customer.SalesContactID, po);
 
             var showPictureUrl = $"/secure/show-picture?cscid={customer.SalesContactID}&id=";
-            var groupedItems = itemsTable.GroupBy(x => new {x.ProcessName, x.ShopOrderNumber, x.ProjectName}, x => new { ImgSrc = $"{showPictureUrl}{x.ShopOrderPictureID}", Title = $"Taken {x.DateTimeUploaded.ToString(FormatStrings.DateTimeFormat)}"});
+            var showVideoUrl = $"/secure/video-player?cscid={customer.SalesContactID}&id=";
+            var groupedItems = itemsTable.GroupBy(x => new {x.ProcessName, x.ShopOrderNumber, x.ProjectName}, x =>
+            {
+                var fileExtension = Path.GetExtension(x.Filename).Replace(".", string.Empty);
+                var isVideo = MimeType.VideoMp4.FileExtensions.Any(ext => ext.Extension.ToLower() == fileExtension.ToLower());
+                return new
+                {
+                    ImgSrc = $"{showPictureUrl}{x.ShopOrderPictureID}", 
+                    VideoUrl = isVideo ? $"{showVideoUrl}{x.ShopOrderPictureID}" : null, 
+                    Title = $"Taken {x.DateTimeUploaded.ToString(FormatStrings.DateTimeFormat)}"
+                };
+            });
             var pvGroups = groupedItems.Select(x => new PictureVaultGroup($"{x.Key.ProjectName} (SO#{x.Key.ShopOrderNumber}) - {x.Key.ProcessName}", 
-                                                                        x.Select(y => new PictureVaultImage(y.Title, y.ImgSrc)).ToList())).ToList();
+                                                                        x.Select(y => new PictureVaultImage(y.Title, y.ImgSrc, y.VideoUrl)).ToList())).ToList();
             var model = new PictureVaultModel(po, pvGroups);
 
             return View(model);
         }
 
-        public async Task<IActionResult> ShowPicture(string cscid, string id)
+        public async Task<IActionResult> VideoPlayerAsync(string cscid, string id)
         {
-            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
+            return await ShowItemAsync(cscid, id, async (_, filenameOnNetwork) =>
+            {
+                var jpgFilename = Path.ChangeExtension(filenameOnNetwork, MimeType.ImageJpg.FileExtensions[1].Extension);
+                using var image = await Image.LoadAsync(jpgFilename);
+                var width = image.Width;
+                var height = image.Height;
+
+                var videoUrl = $"/secure/show-video?cscid={cscid}&id={id}";
+                var model = new VideoPlayerModel(videoUrl, width, height);
+
+                return View(model);
+            });
+        }
+
+        public async Task<IActionResult> ShowVideoAsync(string cscid, string id)
+        {
+            return await ShowItemAsync(cscid, id, ShowVideoImplAsync);
+        }
+
+        public async Task<IActionResult> ShowPictureAsync(string cscid, string id)
+        {
+            return await ShowItemAsync(cscid, id, ShowPictureImplAsync);
+        }
+
+        private async Task<IActionResult> ShowItemAsync(string cscid, string id, Func<MimeType, string, Task<IActionResult>> showImpl)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault))
                 return Challenge();
 
             var customer = await _workContext.GetCurrentCustomerAsync();
@@ -93,38 +132,96 @@ namespace Nop.Web.Controllers
                     var filenameOnNetwork = Path.Combine(await PictureVaultFolderAsUncAsync(false, shopOrderNumber), $"{filenameOnly}.{fileExtension}");
                     Check.Require(System.IO.File.Exists(filenameOnNetwork), $"The file {filenameOnNetwork} doesn't exist!");
 
-                    var mimeTypeString = MimeType.All.First(x => x.FileExtensions.Any(y => y.Extension.ToLower() == fileExtension)).MimeTypeString;
+                    var mimeType = MimeType.All.First(x => x.FileExtensions.Any(y => y.Extension.ToLower() == fileExtension));
 
-                    using var image = Image.Load(filenameOnNetwork, out _);
-                    if (image.Width > _mediaSettings.MaximumImageSize || image.Height > _mediaSettings.MaximumImageSize)
-                    {
-                        var resizeOptions = new ResizeOptions
-                        {
-                            Size = new Size(_mediaSettings.MaximumImageSize, _mediaSettings.MaximumImageSize),
-                            Sampler = KnownResamplers.Lanczos3,
-                            Compand = true,
-                            Mode = ResizeMode.Max
-                        };
-                        image.Mutate(x => x.Resize(resizeOptions).AutoOrient());
-
-                        var encoder = new JpegEncoder
-                        {
-                            Quality = _mediaSettings.DefaultImageQuality
-                        };
-
-                        using var memoryStream = new MemoryStream();
-                        image.Save(memoryStream, encoder);
-                        memoryStream.Position = 0;
-
-                       return File(memoryStream.ToArray(), mimeTypeString);
-                    }
-
-                    return File(filenameOnNetwork, mimeTypeString);
-
+                    return await showImpl(mimeType, filenameOnNetwork);
                 }
             }
 
-            throw new ArgumentException($"{nameof(ShowPicture)} was called with invalid arguments!");
+            throw new ArgumentException($"{nameof(ShowPictureAsync)} was called with invalid arguments!");
+        }
+
+#pragma warning disable CS1998
+        private async Task<IActionResult> ShowVideoImplAsync(MimeType mimeType, string filenameOnNetwork)
+#pragma warning restore CS1998
+        {
+            var fileStream = new FileStream(filenameOnNetwork, FileMode.Open);
+            var filename = Path.GetFileName(filenameOnNetwork);
+            
+            Response.Headers.Add("Content-Disposition", $"inline; filename={filename}");
+
+            return File(fileStream, mimeType.MimeTypeString);
+        }
+
+        private async Task<IActionResult> ShowPictureImplAsync(MimeType mimeType, string filenameOnNetwork)
+        {
+            if (mimeType == MimeType.VideoMp4)
+            {
+                return await ServeVideoTypeAsync(filenameOnNetwork);
+            }
+
+            return await ServeImageTypeAsync(filenameOnNetwork, mimeType.MimeTypeString);
+        }
+
+        private async Task<IActionResult> ServeVideoTypeAsync(string filenameOnNetwork)
+        {
+            var mimeType = MimeType.ImageJpg;
+            var jpgFilename = Path.ChangeExtension(filenameOnNetwork, mimeType.FileExtensions[1].Extension);
+
+            return await ServeImageTypeAsync(jpgFilename, mimeType, true);
+        }
+
+        private async Task<IActionResult> ServeImageTypeAsync(string filenameOnNetwork, string mimeTypeString, bool overlayVideoIcon = false)
+        {
+            const string videoOverlayFilename = @"wwwroot\video_play.png";
+
+            var image = await Image.LoadAsync(filenameOnNetwork);
+            Image finalImage = null;
+            Image overlayImage = null;
+
+            try
+            {
+                if (image.Width > _mediaSettings.MaximumImageSize || image.Height > _mediaSettings.MaximumImageSize)
+                {
+                    var resizeOptions = new ResizeOptions { Size = new Size(_mediaSettings.MaximumImageSize, _mediaSettings.MaximumImageSize), Sampler = KnownResamplers.Lanczos3, Compand = true, Mode = ResizeMode.Max };
+                    image.Mutate(x => x.Resize(resizeOptions).AutoOrient());
+                }
+
+                if (overlayVideoIcon)
+                {
+                    overlayImage = await Image.LoadAsync(videoOverlayFilename);
+                    if (overlayImage.Width > image.Width || overlayImage.Height > image.Height)
+                    {
+                        var resize = new ResizeOptions { Size = new Size(image.Width, image.Height) };
+                        overlayImage.Mutate(x => x.Resize(resize).AutoOrient());
+                    }
+
+                    finalImage = new Image<Rgba32>(image.Width, image.Height);
+
+                    finalImage.Mutate(x => x.DrawImage(image, new Point(0, 0), 1f).DrawImage(overlayImage, new Point(0, 0), 1f));
+                }
+
+                var memoryStream = new MemoryStream();
+                var encoder = new JpegEncoder { Quality = _mediaSettings.DefaultImageQuality };
+                if (finalImage != null)
+                {
+                    await finalImage.SaveAsync(memoryStream, encoder);
+                }
+                else
+                {
+                    await image.SaveAsync(memoryStream, encoder);
+                }
+
+                memoryStream.Position = 0;
+
+                return File(memoryStream, mimeTypeString);
+            }
+            finally
+            {
+                finalImage?.Dispose();
+                overlayImage?.Dispose();
+                image.Dispose();
+            }
         }
 
         public async Task<string> PictureVaultFolderAsUncAsync(bool internalPhoto, int shopOrderNumber)
