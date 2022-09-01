@@ -75,7 +75,7 @@ namespace Nop.Web.Controllers
 
                     var mimeType = MimeType.All.First(x => x.FileExtensions.Any(y => y.Extension.ToLower() == fileExtension));
 
-                    var fileStream = new FileStream(fullFilePath, FileMode.Open);
+                    var fileStream = new FileStream(fullFilePath, FileMode.Open, FileAccess.Read);
                     
                     return File(fileStream, mimeType.MimeTypeString);
                 }
