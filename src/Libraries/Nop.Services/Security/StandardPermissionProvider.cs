@@ -67,6 +67,7 @@ namespace Nop.Services.Security
         public static readonly PermissionRecord AccessClosedStore = new PermissionRecord { Name = "Public store. Access a closed store", SystemName = "AccessClosedStore", Category = "PublicStore" };
         public static readonly PermissionRecord AccessProfiling = new() { Name = "Public store. Access MiniProfiler results", SystemName = "AccessProfiling", Category = "PublicStore" };
         public static readonly PermissionRecord PictureVault = new PermissionRecord { Name = "Public store. Picture Vault", SystemName = "PictureVault", Category = "PublicStore" };
+        public static readonly PermissionRecord AlbinaInvoice = new PermissionRecord { Name = "Public store. Albina Invoice", SystemName = "AlbinaInvoice", Category = "PublicStore" };
 
         /// <summary>
         /// Get permissions
@@ -130,7 +131,8 @@ namespace Nop.Services.Security
                 PublicStoreAllowNavigation,
                 AccessClosedStore,
                 AccessProfiling,
-                PictureVault
+                PictureVault,
+                AlbinaInvoice
             };
         }
 
@@ -200,7 +202,8 @@ namespace Nop.Services.Security
                         PublicStoreAllowNavigation,
                         AccessClosedStore,
                         AccessProfiling,
-                        PictureVault
+                        PictureVault,
+                        AlbinaInvoice
                     }
                 ),
                 (
@@ -231,7 +234,8 @@ namespace Nop.Services.Security
                         EnableShoppingCart,
                         EnableWishlist,
                         PublicStoreAllowNavigation,
-                        PictureVault
+                        PictureVault,
+                        AlbinaInvoice
                     }
                 ),
                 (

@@ -42,5 +42,6 @@ namespace Nop.Web.Models.Customer
         CheckGiftCardBalance = 130,
         MultiFactorAuthentication = 140,
         PictureVault = 150,
+        AlbinaInvoice = 160,
     }
 }

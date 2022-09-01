@@ -618,6 +618,14 @@ namespace Nop.Web.Factories
                 ItemClass = "browse-picture-vault"
             });
             
+            model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            {
+                RouteName = "AlbinaInvoiceList",
+                Title = "Invoices",
+                Tab = (int)CustomerNavigationEnum.AlbinaInvoice,
+                ItemClass = "albina-invoice-list"
+            });
+            
             var store = await _storeContext.GetCurrentStoreAsync();
             var customer = await _workContext.GetCurrentCustomerAsync();
 

@@ -1,4 +1,7 @@
 ﻿@media all and (min-width: 481px) {
+    .customer-pages-body .block .list .albina-invoice-list a:before {
+        content: "q";
+    }
     .customer-pages-body .block .list .browse-picture-vault a:before {
         content: "p";
     }

@@ -732,6 +732,12 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("BendingTolerances", $"{pattern}/calculators/bending-tolerances",
                 new { controller = "Calculators", action = "BendingTolerances"});
 
+            endpointRouteBuilder.MapControllerRoute("AlbinaInvoiceList", $"{pattern}/secure/invoice-list",
+                new {controller = "AlbinaInvoice", action = "InvoiceList"});
+
+            endpointRouteBuilder.MapControllerRoute("ShowInvoice", $"{pattern}/secure/show-invoice",
+                new {controller = "AlbinaInvoice", action = "ShowInvoice"});
+
             //Albina Browse Picture Vault
             endpointRouteBuilder.MapControllerRoute("BrowsePictureVault", $"{pattern}/secure/browse-picture-vault",
                 new {controller = "PictureVault", action = "BrowsePictureVault"});

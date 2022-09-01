@@ -1,0 +1,33 @@
+﻿@using Craftsman.IO
+@model List<Nop.Web.Models.AlbinaInvoice.AlbinaInvoiceModel>
+@{
+    var title = "Invoices";
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(title);
+
+    NopHtml.AppendPageCssClassParts("html-account-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.AlbinaInvoice })
+}
+<div class="page account-page browse-vault-page">
+    <div class="page-title">
+        <h3>@title</h3>
+    </div>
+    <div class="page-body">
+        <br/>
+        @{
+            var i = 0;
+            foreach (var invoice in Model.OrderByDescending(x => x.InvoiceDate))
+            {
+                <h3>Shop Order #@invoice.ShopOrderNumber</h3>
+                <p><a href="@invoice.ShowInvoiceUrl" target="_blank">Invoice #@invoice.InvoiceNumber</a> @(invoice.InvoiceDate.ToShortDateString())</p>
+                <br/>
+            }
+        }
+        </div>
+    </div>
