@@ -15,7 +15,7 @@ namespace Nop.Web.Models.Blogs
                 var tempDate = Month.Split(new [] { '-' });
                 if (tempDate.Length == 2)
                 {
-                    result = new DateTime(Convert.ToInt32(tempDate[0]), Convert.ToInt32(tempDate[1]), 1);
+                    result = new DateTime(Convert.ToInt32(tempDate[0]), Convert.ToInt32(tempDate[1].Replace(">", string.Empty)), 1);
                 }
             }
             return result;

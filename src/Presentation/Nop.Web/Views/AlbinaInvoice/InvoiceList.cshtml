@@ -1,5 +1,4 @@
-﻿@using Craftsman.IO
-@model List<Nop.Web.Models.AlbinaInvoice.AlbinaInvoiceModel>
+﻿@model List<Nop.Web.Models.AlbinaInvoice.AlbinaInvoiceModel>
 @{
     var title = "Invoices";
     Layout = "_ColumnsTwo";
@@ -21,7 +20,6 @@
     <div class="page-body">
         <br/>
         @{
-            var i = 0;
             foreach (var invoice in Model.OrderByDescending(x => x.InvoiceDate))
             {
                 <h3>Shop Order #@invoice.ShopOrderNumber</h3>
