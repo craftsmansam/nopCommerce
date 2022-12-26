@@ -64,6 +64,10 @@ namespace Nop.Data.Migrations
                         migrationProcessType != migrationAttribute.TargetMigrationProcess)
                         return false;
 
+                    if (migrationProcessType == MigrationProcessType.NoDependencies &&
+                        migrationAttribute.TargetMigrationProcess != MigrationProcessType.NoDependencies)
+                        return false;
+
                     return assembly == null || t.Assembly == assembly;
 
                 }) ?? Enumerable.Empty<IMigration>();
@@ -111,13 +115,15 @@ namespace Nop.Data.Migrations
         /// </summary>
         /// <param name="assembly">Assembly to find migrations</param>
         /// <param name="migrationProcessType">Type of migration process</param>
-        public virtual void ApplyUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Installation)
+        /// <param name="commitVersionOnly">Commit only version information</param>
+        public virtual void ApplyUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Installation, bool commitVersionOnly = false)
         {
             if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
             foreach (var migrationInfo in GetUpMigrations(assembly, migrationProcessType))
             {
+                if (!commitVersionOnly)
                 _migrationRunner.Up(migrationInfo.Migration);
 
 #if DEBUG
@@ -131,12 +137,12 @@ namespace Nop.Data.Migrations
         }
         
         /// <summary>
-        /// Executes all found (and applied) migrations
+        /// Executes a Down for all found (and applied) migrations
         /// </summary>
         /// <param name="assembly">Assembly to find the migration</param>
         public void ApplyDownMigrations(Assembly assembly)
         {
-            if(assembly is null)
+            if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
             foreach (var migrationInfo in GetDownMigrations(assembly).Reverse())
@@ -144,6 +150,37 @@ namespace Nop.Data.Migrations
                 _migrationRunner.Down(migrationInfo.Migration);
                 _versionLoader.Value.DeleteVersion(migrationInfo.Version);
             }
+        }
+
+        /// <summary>
+        /// Executes down expressions for the passed migration
+        /// </summary>
+        /// <param name="migration">Migration to rollback</param>
+        public void DownMigration(IMigration migration)
+        {
+            if (migration is null)
+                throw new ArgumentNullException(nameof(migration));
+
+            var migrationInfo = _migrationRunnerConventions.GetMigrationInfoForMigration(migration);
+
+            _migrationRunner.Down(migrationInfo.Migration);
+            _versionLoader.Value.DeleteVersion(migrationInfo.Version);
+        }
+
+        /// <summary>
+        /// Executes up expressions for the passed migration
+        /// </summary>
+        /// <param name="migration">Migration to apply</param>
+        public void UpMigration(IMigration migration)
+        {
+            if (migration is null)
+                throw new ArgumentNullException(nameof(migration));
+
+            var migrationInfo = _migrationRunnerConventions.GetMigrationInfoForMigration(migration);
+            _migrationRunner.Up(migrationInfo.Migration);
+
+            _versionLoader.Value
+                    .UpdateVersionInfo(migrationInfo.Version, migrationInfo.Description ?? migrationInfo.Migration.GetType().Name);
         }
 
         #endregion

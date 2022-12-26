@@ -49,6 +49,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IEventPublisher _eventPublisher;
         private readonly IExportManager _exportManager;
         private readonly IGiftCardService _giftCardService;
+        private readonly IImportManager _importManager;
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;
         private readonly IOrderModelFactory _orderModelFactory;
@@ -66,6 +67,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IShipmentService _shipmentService;
         private readonly IShippingService _shippingService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IStoreContext _storeContext;
         private readonly IWorkContext _workContext;
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly OrderSettings _orderSettings;
@@ -84,6 +86,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IEventPublisher eventPublisher,
             IExportManager exportManager,
             IGiftCardService giftCardService,
+            IImportManager importManager,
             ILocalizationService localizationService,
             INotificationService notificationService,
             IOrderModelFactory orderModelFactory,
@@ -101,6 +104,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IShipmentService shipmentService,
             IShippingService shippingService,
             IShoppingCartService shoppingCartService,
+            IStoreContext storeContext,
             IWorkContext workContext,
             IWorkflowMessageService workflowMessageService,
             OrderSettings orderSettings)
@@ -115,6 +119,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _eventPublisher = eventPublisher;
             _exportManager = exportManager;
             _giftCardService = giftCardService;
+            _importManager = importManager;
             _localizationService = localizationService;
             _notificationService = notificationService;
             _orderModelFactory = orderModelFactory;
@@ -132,6 +137,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _shipmentService = shipmentService;
             _shippingService = shippingService;
             _shoppingCartService = shoppingCartService;
+            _storeContext = storeContext;
             _workContext = workContext;
             _workflowMessageService = workflowMessageService;
             _orderSettings = orderSettings;
@@ -255,7 +261,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (order == null)
                 return await List();
 
-            return RedirectToAction("Edit", "Order", new { id = order.Id });
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         #endregion
@@ -461,6 +467,39 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
+                return AccessDeniedView();
+
+            //a vendor cannot import orders
+            if (await _workContext.GetCurrentVendorAsync() != null)
+                return AccessDeniedView();
+
+            try
+            {
+                if (importexcelfile != null && importexcelfile.Length > 0)
+                {
+                    await _importManager.ImportOrdersFromXlsxAsync(importexcelfile.OpenReadStream());
+                }
+                else
+                {
+                    _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Admin.Common.UploadFile"));
+                    return RedirectToAction("List");
+                }
+
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Orders.Imported"));
+
+                return RedirectToAction("List");
+            }
+            catch (Exception exc)
+            {
+                await _notificationService.ErrorNotificationAsync(exc);
+                return RedirectToAction("List");
+            }
+        }
+
         #endregion
 
         #region Order details
@@ -481,17 +520,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 await _orderProcessingService.CancelOrderAsync(order, true);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -517,20 +553,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 var errors = await _orderProcessingService.CaptureAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
                 foreach (var error in errors)
                     _notificationService.ErrorNotification(error);
 
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -556,17 +589,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 await _orderProcessingService.MarkOrderAsPaidAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -592,20 +622,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 var errors = await _orderProcessingService.RefundAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
                 foreach (var error in errors)
                     _notificationService.ErrorNotification(error);
 
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -631,17 +658,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 await _orderProcessingService.RefundOfflineAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -667,20 +691,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 var errors = await _orderProcessingService.VoidAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
                 foreach (var error in errors)
                     _notificationService.ErrorNotification(error);
 
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -706,17 +727,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
                 await _orderProcessingService.VoidOfflineAsync(order);
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -740,7 +758,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             //prepare model
             var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
@@ -762,7 +780,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
@@ -825,12 +843,16 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             try
             {
+                var prevOrderStatus = order.OrderStatus;
+
                 order.OrderStatusId = model.OrderStatusId;
                 await _orderService.UpdateOrderAsync(order);
+
+                await _eventPublisher.PublishAsync(new OrderStatusChangedEvent(order, prevOrderStatus));
 
                 //add a note
                 await _orderService.InsertOrderNoteAsync(new OrderNote
@@ -843,10 +865,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                model = await _orderModelFactory.PrepareOrderModelAsync(model, order);
-
-                return View(model);
+                return RedirectToAction("Edit", new { id = order.Id });
             }
             catch (Exception exc)
             {
@@ -895,7 +914,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             await _orderProcessingService.DeleteOrderAsync(order);
 
@@ -911,26 +930,20 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
 
+            //a vendor should have access only to their orders
+            if (!await HasAccessToOrderAsync(orderId))
+                return RedirectToAction("List");
+
             //a vendor should have access only to his products
             var currentVendor = await _workContext.GetCurrentVendorAsync();
-            var vendorId = 0;
-            if (currentVendor != null)
-            {
-                vendorId = currentVendor.Id;
-            }
 
             var order = await _orderService.GetOrderByIdAsync(orderId);
-            var orders = new List<Order>
-            {
-                order
-            };
 
             byte[] bytes;
-            await using (var stream = new MemoryStream())
-            {
-                await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id, vendorId);
+            await using var stream = new MemoryStream();
+
+            await _pdfService.PrintOrderToPdfAsync(stream, order, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), store: null, vendor: currentVendor);
                 bytes = stream.ToArray();
-            }
 
             return File(bytes, MimeTypes.ApplicationPdf, $"order_{order.CustomOrderNumber}.pdf");
         }
@@ -999,11 +1012,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 byte[] bytes;
                 await using (var stream = new MemoryStream())
                 {
-                    await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id, model.VendorId);
+                    await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), currentVendor);
                     bytes = stream.ToArray();
                 }
 
-                return File(bytes, MimeTypes.ApplicationPdf, "orders.pdf");
+                return File(bytes, "application/zip", "orders.zip");
             }
             catch (Exception exc)
             {
@@ -1030,11 +1043,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor should have access only to his products
             var currentVendor = await _workContext.GetCurrentVendorAsync();
-            var vendorId = 0;
             if (currentVendor != null)
             {
                 orders = await orders.WhereAwait(HasAccessToOrderAsync).ToListAsync();
-                vendorId = currentVendor.Id;
             }
 
             try
@@ -1042,11 +1053,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 byte[] bytes;
                 await using (var stream = new MemoryStream())
                 {
-                    await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id, vendorId);
+                    await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), currentVendor);
                     bytes = stream.ToArray();
                 }
 
-                return File(bytes, MimeTypes.ApplicationPdf, "orders.pdf");
+                return File(bytes, "application/zip", "orders.zip");
             }
             catch (Exception exc)
             {
@@ -1107,7 +1118,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             if (order.AllowStoringCreditCardNumber)
             {
@@ -1139,10 +1150,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            model = await _orderModelFactory.PrepareOrderModelAsync(model, order);
-
-            return View(model);
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1159,7 +1167,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             order.OrderSubtotalInclTax = model.OrderSubtotalInclTaxValue;
             order.OrderSubtotalExclTax = model.OrderSubtotalExclTaxValue;
@@ -1186,10 +1194,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            model = await _orderModelFactory.PrepareOrderModelAsync(model, order);
-
-            return View(model);
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1206,7 +1211,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             order.ShippingMethod = model.ShippingMethod;
             await _orderService.UpdateOrderAsync(order);
@@ -1222,13 +1227,10 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            model = await _orderModelFactory.PrepareOrderModelAsync(model, order);
-
             //selected card
-            SaveSelectedCardName("order-billing-shipping", persistForTheNextRequest: false);
+            SaveSelectedCardName("order-billing-shipping");
 
-            return View(model);
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1245,7 +1247,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             //get order item identifier
             var orderItemId = 0;
@@ -1327,16 +1329,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
             foreach (var warning in updateOrderParameters.Warnings)
                 _notificationService.WarningNotification(warning);
 
             //selected card
-            SaveSelectedCardName("order-products", persistForTheNextRequest: false);
+            SaveSelectedCardName("order-products");
 
-            return View(model);
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1353,7 +1352,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             //get order item identifier
             var orderItemId = 0;
@@ -1369,15 +1368,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //we cannot delete an order item with associated gift cards
                 //a store owner should delete them first
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
                 _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Admin.Orders.OrderItem.DeleteAssociatedGiftCardRecordError"));
-
-                //selected card
-                SaveSelectedCardName("order-products", persistForTheNextRequest: false);
-
-                return View(model);
             }
             else
             {
@@ -1405,17 +1396,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 await LogEditOrderAsync(order.Id);
 
-                //prepare model
-                var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
                 foreach (var warning in updateOrderParameters.Warnings)
                     _notificationService.WarningNotification(warning);
+            }
 
                 //selected card
-                SaveSelectedCardName("order-products", persistForTheNextRequest: false);
+            SaveSelectedCardName("order-products");
 
-                return View(model);
-            }
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1447,13 +1435,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             await _orderService.UpdateOrderItemAsync(orderItem);
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
             //selected card
-            SaveSelectedCardName("order-products", persistForTheNextRequest: false);
+            SaveSelectedCardName("order-products");
 
-            return View(model);
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         [HttpPost, ActionName("Edit")]
@@ -1486,12 +1471,10 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             await LogEditOrderAsync(order.Id);
 
-            //prepare model
-            var model = await _orderModelFactory.PrepareOrderModelAsync(null, order);
-
             //selected card
-            SaveSelectedCardName("order-products", persistForTheNextRequest: false);
-            return View(model);
+            SaveSelectedCardName("order-products");
+
+            return RedirectToAction("Edit", new { id = order.Id });
         }
 
         public virtual async Task<IActionResult> UploadLicenseFilePopup(int id, int orderItemId)
@@ -1699,9 +1682,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!warnings.Any())
             {
                 //no errors
+                var currentStore = await _storeContext.GetCurrentStoreAsync();
 
                 //attributes
-                var attributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product, attributesXml, customer);
+                var attributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product, attributesXml, customer, currentStore);
 
                 //weight
                 var itemWeight = await _shippingService.GetShoppingCartItemWeightAsync(product, attributesXml);
@@ -1791,7 +1775,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //selected card
                 SaveSelectedCardName("order-products");
-                return RedirectToAction("Edit", "Order", new { id = order.Id });
+                return RedirectToAction("Edit", new { id = order.Id });
             }
 
             //prepare model
@@ -1844,7 +1828,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //a vendor does not have access to this functionality
             if (await _workContext.GetCurrentVendorAsync() != null)
-                return RedirectToAction("Edit", "Order", new { id = order.Id });
+                return RedirectToAction("Edit", new { id = order.Id });
 
             //try to get an address with the specified id
             var address = await _addressService.GetAddressByIdAsync(model.Address.Id)
@@ -2445,15 +2429,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (await _workContext.GetCurrentVendorAsync() != null && !await HasAccessToShipmentAsync(shipment))
                 return RedirectToAction("List");
 
-            var shipments = new List<Shipment>
-            {
-                shipment
-            };
-
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id);
+                await _pdfService.PrintPackagingSlipToPdfAsync(stream, shipment, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
                 bytes = stream.ToArray();
             }
 
@@ -2504,11 +2483,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 byte[] bytes;
                 await using (var stream = new MemoryStream())
                 {
-                    await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id);
+                    await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
                     bytes = stream.ToArray();
                 }
 
-                return File(bytes, MimeTypes.ApplicationPdf, "packagingslips.pdf");
+                return File(bytes, "application/zip", "packagingslips.zip");
             }
             catch (Exception exc)
             {
@@ -2543,7 +2522,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 byte[] bytes;
                 await using (var stream = new MemoryStream())
                 {
-                    await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? 0 : (await _workContext.GetWorkingLanguageAsync()).Id);
+                    await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
                     bytes = stream.ToArray();
                 }
 

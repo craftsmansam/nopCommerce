@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Copyright>Copyright © Nop Solutions, Ltd</Copyright>
     <Company>Nop Solutions, Ltd</Company>
     <Authors>Nop Solutions, Ltd</Authors>
@@ -21,316 +21,48 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Projects\Albina\Source\Albina.StandardBase\Albina.StandardBase.csproj" />
     <ProjectReference Include="..\..\..\..\CraftsmanSolutions\Projects\Albina_NopCommerce\Source\Albina.CoreBase\Albina.CoreBase.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Core\Nop.Core.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
     <ProjectReference Include="..\Nop.Web.Framework\Nop.Web.Framework.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Themes\Albina\Content\images\" />
+    <Folder Include="wwwroot\app\" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\albina\bendingtolerances.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Include="wwwroot\images\calculatorbg.png" />
+    <None Include="wwwroot\images\calculatorpic_a.png" />
+    <None Include="wwwroot\images\calculatorpic_b.png" />
+    <None Include="wwwroot\images\toolboxbg.png" />
+  </ItemGroup>
+  
   <ItemGroup>
     <!-- We copy the entire \App_Data directory. But we ignore JSON files and data protection keys  -->
     <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Remove="App_Data\*.json" />
-    <Content Remove="Plugins\bin\**" />
-    <Content Remove="Plugins\ExchangeRate.EcbExchange\**" />
-    <Content Remove="Plugins\ExternalAuth.Facebook\**" />
-    <Content Remove="Plugins\Misc.Sendinblue\**" />
-    <Content Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <Content Remove="Plugins\Payments.PayPalCommerce\**" />
-    <Content Remove="Plugins\Payments.PayPalStandard\**" />
-    <Content Remove="Plugins\Shipping.EasyPost\**" />
-    <Content Remove="Plugins\Shipping.FixedByWeightByTotal\**" />
-    <Content Remove="Plugins\Shipping.ShipStation\**" />
-    <Content Remove="Plugins\Shipping.UPS\**" />
-    <Content Remove="Plugins\Tax.FixedOrByCountryStateZip\**" />
-    <Content Remove="Plugins\Widgets.AccessiBe\**" />
-    <Content Remove="Plugins\Widgets.FacebookPixel\**" />
-    <Content Remove="Plugins\Widgets.What3words\**" />
-    <Content Remove="Themes\Venture\Views\Quote\**" />
-    <Content Remove="wwwroot\bundles\**" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
 
     <Compile Remove="Plugins\**;Themes\**" />
-
-    <Compile Remove="Plugins\bin\**" />
-
-    <Compile Remove="Plugins\ExchangeRate.EcbExchange\**" />
-
-    <Compile Remove="Plugins\ExternalAuth.Facebook\**" />
-
-    <Compile Remove="Plugins\Misc.Sendinblue\**" />
-
-    <Compile Remove="Plugins\Payments.CheckMoneyOrder\**" />
-
-    <Compile Remove="Plugins\Payments.PayPalCommerce\**" />
-
-    <Compile Remove="Plugins\Payments.PayPalStandard\**" />
-
-    <Compile Remove="Plugins\Shipping.EasyPost\**" />
-
-    <Compile Remove="Plugins\Shipping.FixedByWeightByTotal\**" />
-
-    <Compile Remove="Plugins\Shipping.ShipStation\**" />
-
-    <Compile Remove="Plugins\Shipping.UPS\**" />
-
-    <Compile Remove="Plugins\Tax.FixedOrByCountryStateZip\**" />
-
-    <Compile Remove="Plugins\Widgets.AccessiBe\**" />
-
-    <Compile Remove="Plugins\Widgets.FacebookPixel\**" />
-
-    <Compile Remove="Plugins\Widgets.What3words\**" />
-
-    <Compile Remove="Themes\Venture\Views\Quote\**" />
-
-    <Compile Remove="wwwroot\bundles\**" />
     <Content Remove="Plugins\**;Themes\**" />
     <EmbeddedResource Remove="Plugins\**;Themes\**" />
-    <EmbeddedResource Remove="Plugins\bin\**" />
-    <EmbeddedResource Remove="Plugins\ExchangeRate.EcbExchange\**" />
-    <EmbeddedResource Remove="Plugins\ExternalAuth.Facebook\**" />
-    <EmbeddedResource Remove="Plugins\Misc.Sendinblue\**" />
-    <EmbeddedResource Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <EmbeddedResource Remove="Plugins\Payments.PayPalCommerce\**" />
-    <EmbeddedResource Remove="Plugins\Payments.PayPalStandard\**" />
-    <EmbeddedResource Remove="Plugins\Shipping.EasyPost\**" />
-    <EmbeddedResource Remove="Plugins\Shipping.FixedByWeightByTotal\**" />
-    <EmbeddedResource Remove="Plugins\Shipping.ShipStation\**" />
-    <EmbeddedResource Remove="Plugins\Shipping.UPS\**" />
-    <EmbeddedResource Remove="Plugins\Tax.FixedOrByCountryStateZip\**" />
-    <EmbeddedResource Remove="Plugins\Widgets.AccessiBe\**" />
-    <EmbeddedResource Remove="Plugins\Widgets.FacebookPixel\**" />
-    <EmbeddedResource Remove="Plugins\Widgets.What3words\**" />
-    <EmbeddedResource Remove="Themes\Venture\Views\Quote\**" />
-    <EmbeddedResource Remove="wwwroot\bundles\**" />
     <None Remove="Plugins\**;Themes\**" />
-    <None Remove="Plugins\bin\**" />
-    <None Remove="Plugins\ExchangeRate.EcbExchange\**" />
-    <None Remove="Plugins\ExternalAuth.Facebook\**" />
-    <None Remove="Plugins\Misc.Sendinblue\**" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\**" />
-    <None Remove="Plugins\Payments.PayPalCommerce\**" />
-    <None Remove="Plugins\Payments.PayPalStandard\**" />
-    <None Remove="Plugins\Shipping.EasyPost\**" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\**" />
-    <None Remove="Plugins\Shipping.ShipStation\**" />
-    <None Remove="Plugins\Shipping.UPS\**" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\**" />
-    <None Remove="Plugins\Widgets.AccessiBe\**" />
-    <None Remove="Plugins\Widgets.FacebookPixel\**" />
-    <None Remove="Plugins\Widgets.What3words\**" />
-    <None Remove="Themes\Venture\Views\Quote\**" />
-    <None Remove="wwwroot\bundles\**" />
-    <Content Include="App_Data\appsettings.json" />
-    <Content Include="App_Data\plugins.json" />
-    <Content Include="Plugins\bin\placeholder.txt" CopyToPublishDirectory="PreserveNewest" />
     <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" Exclude="Plugins\**\runtimes\**;Plugins\**\ref\**;Plugins\**\*.pdb" />
 
-    <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" Exclude="Themes\**\*.config;Themes\**\*.cshtml;Themes\**\*.json" />
-    <None Include="Themes\**" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Never" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
-    <Content Remove="Themes\Albina\Content\css\albina.css" />
-    <Content Remove="Themes\Albina\Content\css\calculators.css" />
-    <Content Remove="Themes\Albina\Content\images\calculatorpic_a.png" />
-    <Content Remove="Themes\Albina\Content\images\calculatorpic_b.png" />
-    <Content Remove="Themes\Albina\Content\scripts\albina.js" />
-    <Content Remove="Themes\Albina\Content\scripts\lazysizes.js" />
-    <Content Remove="wwwroot\css\albina\bendingtolerances.css" />
-    <None Remove="Plugins\bin\dotless.Core.dll" />
-    <None Remove="Plugins\bin\J2N.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.Analysis.Common.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.Highlighter.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.Memory.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.Queries.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.QueryParser.dll" />
-    <None Remove="Plugins\bin\Lucene.Net.Sandbox.dll" />
-    <None Remove="Plugins\bin\Nop.Plugin.DiscountRules.CustomerRoles.dll" />
-    <None Remove="Plugins\bin\Nop.Plugin.Payments.Manual.dll" />
-    <None Remove="Plugins\bin\Nop.Plugin.Pickup.PickupInStore.dll" />
-    <None Remove="Plugins\bin\Nop.Plugin.Widgets.GoogleAnalytics.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Conditions.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Core.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.EntitySettings.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Framework.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Mappings.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxCart.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxFilters.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AjaxFilters.Pro.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.AnywhereSliders.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.CloudZoom.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.Core.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.FacebookShop.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.InstantSearch.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.JCarousel.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.MegaMenu.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.NopQuickTabs.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.ProductRibbons.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.QuickView.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.RichBlog.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.SaleOfTheDay.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Plugins.SmartProductCollections.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Scheduling.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Nop.Services.dll" />
-    <None Remove="Plugins\bin\SevenSpikes.Theme.Venture.dll" />
-    <None Remove="Plugins\ExchangeRate.EcbExchange\logo.jpg" />
-    <None Remove="Plugins\ExchangeRate.EcbExchange\Nop.Plugin.ExchangeRate.EcbExchange.deps.json" />
-    <None Remove="Plugins\ExchangeRate.EcbExchange\Nop.Plugin.ExchangeRate.EcbExchange.dll" />
-    <None Remove="Plugins\ExchangeRate.EcbExchange\plugin.json" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Content\facebookstyles.css" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Content\Images\facebook_logo.png" />
-    <None Remove="Plugins\ExternalAuth.Facebook\logo.jpg" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Microsoft.AspNetCore.Authentication.Facebook.dll" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Nop.Plugin.ExternalAuth.Facebook.deps.json" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Nop.Plugin.ExternalAuth.Facebook.dll" />
-    <None Remove="Plugins\ExternalAuth.Facebook\plugin.json" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Views\Configure.cshtml" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Views\PublicInfo.cshtml" />
-    <None Remove="Plugins\ExternalAuth.Facebook\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Misc.Sendinblue\Content\styles.css" />
-    <None Remove="Plugins\Misc.Sendinblue\FubarCoder.RestSharp.Portable.Core.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\FubarCoder.RestSharp.Portable.HttpClient.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\JsonSubTypes.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\logo.png" />
-    <None Remove="Plugins\Misc.Sendinblue\Nop.Plugin.Misc.SendinBlue.deps.json" />
-    <None Remove="Plugins\Misc.Sendinblue\Nop.Plugin.Misc.Sendinblue.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\Nop.Web.deps.json" />
-    <None Remove="Plugins\Misc.Sendinblue\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Misc.Sendinblue\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Misc.Sendinblue\plugin.json" />
-    <None Remove="Plugins\Misc.Sendinblue\RestSharp.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\SendinblueMarketingAutomation.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\sib_api_v3_sdk.dll" />
-    <None Remove="Plugins\Misc.Sendinblue\Views\Configure.cshtml" />
-    <None Remove="Plugins\Misc.Sendinblue\Views\PublicInfo.cshtml" />
-    <None Remove="Plugins\Misc.Sendinblue\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\logo.jpg" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Nop.Plugin.Payments.CheckMoneyOrder.deps.json" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Nop.Plugin.Payments.CheckMoneyOrder.dll" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Nop.Web.deps.json" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\plugin.json" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Views\Configure.cshtml" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Views\PaymentInfo.cshtml" />
-    <None Remove="Plugins\Payments.CheckMoneyOrder\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Payments.PayPalCommerce\BraintreeHttp-Dotnet.dll" />
-    <None Remove="Plugins\Payments.PayPalCommerce\logo.png" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Nop.Plugin.Payments.PayPalCommerce.deps.json" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Nop.Plugin.Payments.PayPalCommerce.dll" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Nop.Web.deps.json" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Payments.PayPalCommerce\PayPalCheckoutSdk.dll" />
-    <None Remove="Plugins\Payments.PayPalCommerce\PayPalHttp-Dotnet.dll" />
-    <None Remove="Plugins\Payments.PayPalCommerce\plugin.json" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Source.dll" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Views\Buttons.cshtml" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Views\Configure.cshtml" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Views\PaymentInfo.cshtml" />
-    <None Remove="Plugins\Payments.PayPalCommerce\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Payments.PayPalStandard\logo.jpg" />
-    <None Remove="Plugins\Payments.PayPalStandard\Nop.Plugin.Payments.PayPalStandard.deps.json" />
-    <None Remove="Plugins\Payments.PayPalStandard\Nop.Plugin.Payments.PayPalStandard.dll" />
-    <None Remove="Plugins\Payments.PayPalStandard\Nop.Web.deps.json" />
-    <None Remove="Plugins\Payments.PayPalStandard\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Payments.PayPalStandard\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Payments.PayPalStandard\plugin.json" />
-    <None Remove="Plugins\Payments.PayPalStandard\Views\Configure.cshtml" />
-    <None Remove="Plugins\Payments.PayPalStandard\Views\PaymentInfo.cshtml" />
-    <None Remove="Plugins\Payments.PayPalStandard\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\EasyPost.dll" />
-    <None Remove="Plugins\Shipping.EasyPost\EasyPost.NetCore20.dll" />
-    <None Remove="Plugins\Shipping.EasyPost\logo.png" />
-    <None Remove="Plugins\Shipping.EasyPost\Nop.Plugin.Shipping.EasyPost.deps.json" />
-    <None Remove="Plugins\Shipping.EasyPost\Nop.Plugin.Shipping.EasyPost.dll" />
-    <None Remove="Plugins\Shipping.EasyPost\Nop.Web.deps.json" />
-    <None Remove="Plugins\Shipping.EasyPost\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Shipping.EasyPost\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Shipping.EasyPost\plugin.json" />
-    <None Remove="Plugins\Shipping.EasyPost\RestSharp.dll" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Batch\Edit.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Batch\List.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Batch\Shipments.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Configuration\Configure.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Pickup\_PickupButtons.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Pickup\_PickupDetails.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Product\_CreateOrUpdate.EasyPost.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Shipment\ShipmentDetails.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Shipment\_ShipmentButtons.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\Shipment\_ShipmentDetails.EasyPost.cshtml" />
-    <None Remove="Plugins\Shipping.EasyPost\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\logo.jpg" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Nop.Plugin.Shipping.FixedByWeightByTotal.deps.json" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Nop.Plugin.Shipping.FixedByWeightByTotal.dll" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\plugin.json" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\AddRateByWeightByTotalPopup.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\Configure.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\EditRateByWeightByTotalPopup.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\_ByWeightByTotal.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\_CreateOrUpdateRateByWeightByTotal.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\_FixedRate.cshtml" />
-    <None Remove="Plugins\Shipping.FixedByWeightByTotal\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Shipping.ShipStation\logo.png" />
-    <None Remove="Plugins\Shipping.ShipStation\Nop.Plugin.Shipping.ShipStation.deps.json" />
-    <None Remove="Plugins\Shipping.ShipStation\Nop.Plugin.Shipping.ShipStation.dll" />
-    <None Remove="Plugins\Shipping.ShipStation\Nop.Web.deps.json" />
-    <None Remove="Plugins\Shipping.ShipStation\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Shipping.ShipStation\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Shipping.ShipStation\plugin.json" />
-    <None Remove="Plugins\Shipping.ShipStation\Views\Configure.cshtml" />
-    <None Remove="Plugins\Shipping.ShipStation\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Shipping.UPS\logo.jpg" />
-    <None Remove="Plugins\Shipping.UPS\Nop.Plugin.Shipping.UPS.deps.json" />
-    <None Remove="Plugins\Shipping.UPS\Nop.Plugin.Shipping.UPS.dll" />
-    <None Remove="Plugins\Shipping.UPS\plugin.json" />
-    <None Remove="Plugins\Shipping.UPS\Views\Configure.cshtml" />
-    <None Remove="Plugins\Shipping.UPS\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\logo.jpg" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Nop.Plugin.Tax.FixedOrByCountryStateZip.deps.json" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Nop.Plugin.Tax.FixedOrByCountryStateZip.dll" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\plugin.json" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Views\Configure.cshtml" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Views\_CountryStateZip.cshtml" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Views\_FixedRate.cshtml" />
-    <None Remove="Plugins\Tax.FixedOrByCountryStateZip\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Widgets.AccessiBe\logo.png" />
-    <None Remove="Plugins\Widgets.AccessiBe\Nop.Plugin.Widgets.AccessiBe.deps.json" />
-    <None Remove="Plugins\Widgets.AccessiBe\Nop.Plugin.Widgets.AccessiBe.dll" />
-    <None Remove="Plugins\Widgets.AccessiBe\plugin.json" />
-    <None Remove="Plugins\Widgets.AccessiBe\Views\Configure.cshtml" />
-    <None Remove="Plugins\Widgets.AccessiBe\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Widgets.FacebookPixel\logo.png" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Nop.Plugin.Widgets.FacebookPixel.deps.json" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Nop.Plugin.Widgets.FacebookPixel.dll" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Nop.Web.deps.json" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Widgets.FacebookPixel\plugin.json" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Views\Configuration\Configure.cshtml" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Views\Configuration\Create.cshtml" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Views\Configuration\Edit.cshtml" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Views\Configuration\_CreateOrUpdate.cshtml" />
-    <None Remove="Plugins\Widgets.FacebookPixel\Views\_ViewImports.cshtml" />
-    <None Remove="Plugins\Widgets.What3words\Content\styles.css" />
-    <None Remove="Plugins\Widgets.What3words\logo.png" />
-    <None Remove="Plugins\Widgets.What3words\Nop.Plugin.Widgets.What3words.deps.json" />
-    <None Remove="Plugins\Widgets.What3words\Nop.Plugin.Widgets.What3words.dll" />
-    <None Remove="Plugins\Widgets.What3words\Nop.Web.deps.json" />
-    <None Remove="Plugins\Widgets.What3words\Nop.Web.runtimeconfig.json" />
-    <None Remove="Plugins\Widgets.What3words\Nop.Web.staticwebassets.runtime.json" />
-    <None Remove="Plugins\Widgets.What3words\plugin.json" />
-    <None Remove="Plugins\Widgets.What3words\Views\AdminOrderAddress.cshtml" />
-    <None Remove="Plugins\Widgets.What3words\Views\Configure.cshtml" />
-    <None Remove="Plugins\Widgets.What3words\Views\PublicInfo.cshtml" />
-    <None Remove="Plugins\Widgets.What3words\Views\PublicOrderAddress.cshtml" />
-    <None Remove="Plugins\Widgets.What3words\Views\_ViewImports.cshtml" />
-    <None Remove="Themes\Venture\Views\Quote\CustomerQuotes.cshtml" />
+    <None Remove="Plugins\Uploaded\placeholder.txt" />
+    <Content Include="Plugins\Uploaded\placeholder.txt">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -346,32 +78,6 @@
     <Content Update="**\*.config;**\*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Themes\Albina\Content\images\" />
-    <Folder Include="wwwroot\app\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\css\albina\bendingtolerances.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <None Include="wwwroot\images\calculatorbg.png" />
-    <None Include="wwwroot\images\calculatorpic_a.png" />
-    <None Include="wwwroot\images\calculatorpic_b.png" />
-    <None Include="wwwroot\images\toolboxbg.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Fizzler" Version="1.3.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-    <PackageReference Include="ShimSkiaSharp" Version="0.5.12" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
-    <PackageReference Include="Svg.Custom" Version="0.5.12" />
-    <PackageReference Include="Svg.Model" Version="0.5.12" />
-    <PackageReference Include="Svg.Skia" Version="0.5.12" />
-  </ItemGroup>
-
   <!-- This target execute after "Build" target.
     We use it to clean up folder with plugins from unnecessary and obsolete libraries. -->
   <Target Name="NopTarget" AfterTargets="Build">
@@ -381,11 +87,6 @@
       <!-- Get paths for all plugins -->
       <PluginsFolders Include="@(PluginsDescription->'%(relativedir)')" />
 
-      <!-- Get all the libraries from the shadow copy folder to remove them,
-        because depending on the settings, this may not happen when the application is starting,
-        but this can lead to unpredictable results during debugging of the project. -->
-      <ShadowCopiesLibraries Include="$(MSBuildProjectDirectory)\Plugins\bin\*.*" Exclude="$(MSBuildProjectDirectory)\Plugins\bin\placeholder.txt" />
-
       <!-- Get paths for ClearPluginAssemblies project -->
       <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
 
@@ -393,8 +94,6 @@
     <PropertyGroup>
       <PluginsFolders>@(PluginsFolders)</PluginsFolders>
     </PropertyGroup>
-    <!-- Delete libraries from the shadow copy folder -->
-    <Delete Files="@(ShadowCopiesLibraries)" />
     <!-- When .NET Core builds a project, it copies all referenced libraries to the output folder.
       For plugins it creates too many unnecessary files that just take up space.
       At the moment you can't disable this behavior. That's why we have to manually delete all unnecessary libraries from plugin output directories. -->
@@ -426,7 +125,6 @@
       
       More details here: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#concurrent-garbage-collection-->
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
-    <UserSecretsId>75483039-8a29-4989-ac9e-df3ca3d5c0f5</UserSecretsId>
   </PropertyGroup>
 
 </Project>

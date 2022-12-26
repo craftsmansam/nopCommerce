@@ -1,4 +1,11 @@
-﻿@model ApplyVendorModel
+﻿@using Nop.Web.Framework.Mvc.Routing
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Nop.Web.Framework.TagHelpers.Shared
+@using Nop.Web.Framework.TagHelpers.Public
+@using LabelTagHelper = Microsoft.AspNetCore.Mvc.TagHelpers.LabelTagHelper
+@using TextAreaTagHelper = Microsoft.AspNetCore.Mvc.TagHelpers.TextAreaTagHelper
+@using InputTagHelper = Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper
+@model ApplyVendorModel
 @{
     Layout = "_ColumnsOne";
 
@@ -89,7 +96,7 @@
                             }
                             else
                             {
-                                <a class="read" id="read-acceptterms" href="@Url.RouteUrl("Topic", new {SeName = await Html.GetTopicSeNameAsync("VendorTermsOfService") })">@T("Vendors.ApplyAccount.AcceptTermsOfService.Read")</a>
+                                <a class="read" id="read-acceptterms" href="@Url.RouteTopicUrl("VendorTermsOfService"))">@T("Vendors.ApplyAccount.AcceptTermsOfService.Read")</a>
                             }
                         </label>
                     </div>

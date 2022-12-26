@@ -64,6 +64,8 @@ namespace Nop.Data.Mapping
 
                 var columnSystemType = (memberInfo as PropertyInfo)?.PropertyType ?? typeof(string);
 
+                var mappingSchema = _mappingEntityAccessor.GetMappingSchema();
+
                 return new ColumnAttribute
                 {
                     Name = entityField.Name,
@@ -73,7 +75,7 @@ namespace Nop.Data.Mapping
                     Length = entityField.Size ?? 0,
                     Precision = entityField.Precision ?? 0,
                     IsIdentity = entityField.IsIdentity,
-                    DataType = SqlDataType.GetDataType(columnSystemType).Type.DataType
+                    DataType = mappingSchema.GetDataType(columnSystemType).Type.DataType
                 };
             });
 

@@ -1,6 +1,7 @@
 ﻿@using Nop.Core
 @using Nop.Core.Domain.Tax
 @using Nop.Services.Configuration
+@using Nop.Web.Framework.Mvc.Routing
 
 @model FooterModel
 
@@ -139,7 +140,7 @@
         {
             var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
             <div class="footer-tax-shipping">
-                @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteUrl("Topic", new { SeName = await Html.GetTopicSeNameAsync("shippinginfo") }))
+                @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteTopicUrl("shippinginfo"))
             </div>
         }
         @await Component.InvokeAsync("StoreThemeSelector")

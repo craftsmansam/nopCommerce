@@ -16,6 +16,7 @@ using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Authentication.MultiFactor;
 using Nop.Services.Blogs;
+using Nop.Services.Caching;
 using Nop.Services.Calculators;
 using Nop.Services.Catalog;
 using Nop.Services.Cms;
@@ -66,7 +67,7 @@ namespace Nop.Web.Framework.Infrastructure
     /// <summary>
     /// Represents the registering services on application startup
     /// </summary>
-    public class NopStartup : INopStartup
+    public partial class NopStartup : INopStartup
     {
         /// <summary>
         /// Add and configure any of the middleware
@@ -84,24 +85,30 @@ namespace Nop.Web.Framework.Infrastructure
             //user agent helper
             services.AddScoped<IUserAgentHelper, UserAgentHelper>();
 
-            //data layer
-            services.AddTransient<IDataProviderManager, DataProviderManager>();
-            services.AddTransient(serviceProvider =>
-                serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
-
-            //repositories
-            services.AddScoped(typeof(IRepository<>), typeof(EntityRepository<>));
-
             //plugins
             services.AddScoped<IPluginService, PluginService>();
             services.AddScoped<OfficialFeedManager>();
 
             //static cache manager
             var appSettings = Singleton<AppSettings>.Instance;
-            if (appSettings.Get<DistributedCacheConfig>().Enabled)
+            var distributedCacheConfig = appSettings.Get<DistributedCacheConfig>();
+            if (distributedCacheConfig.Enabled)
             {
-                services.AddScoped<ILocker, DistributedCacheManager>();
-                services.AddScoped<IStaticCacheManager, DistributedCacheManager>();
+                switch (distributedCacheConfig.DistributedCacheType)
+            {
+                    case DistributedCacheType.Memory:
+                        services.AddScoped<ILocker, MemoryDistributedCacheManager>();
+                        services.AddScoped<IStaticCacheManager, MemoryDistributedCacheManager>();
+                        break;
+                    case DistributedCacheType.SqlServer:
+                        services.AddScoped<ILocker, MsSqlServerCacheManager>();
+                        services.AddScoped<IStaticCacheManager, MsSqlServerCacheManager>();
+                        break;
+                    case DistributedCacheType.Redis:
+                        services.AddScoped<ILocker, RedisCacheManager>();
+                        services.AddScoped<IStaticCacheManager, RedisCacheManager>();
+                        break;
+                }
             }
             else
             {
@@ -211,7 +218,6 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IDateTimeHelper, DateTimeHelper>();
-            services.AddScoped<ISitemapGenerator, SitemapGenerator>();
             services.AddScoped<INopHtmlHelper, NopHtmlHelper>();
             services.AddScoped<IScheduleTaskService, ScheduleTaskService>();
             services.AddScoped<IExportManager, ExportManager>();
@@ -227,6 +233,8 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IBBCodeHelper, BBCodeHelper>();
             services.AddScoped<IHtmlFormatter, HtmlFormatter>();
+            services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<INopUrlHelper, NopUrlHelper>();
             services.AddScoped<ITangentMaterialService, TangentMaterialService>();
             services.AddScoped<IPictureVaultService, PictureVaultService>();
             services.AddScoped<IAlbinaInvoiceService, AlbinaInvoiceService>();
@@ -242,6 +250,7 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<IPickupPluginManager, PickupPluginManager>();
             services.AddScoped<IShippingPluginManager, ShippingPluginManager>();
             services.AddScoped<ITaxPluginManager, TaxPluginManager>();
+            services.AddScoped<ISearchPluginManager, SearchPluginManager>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -267,19 +276,11 @@ namespace Nop.Web.Framework.Infrastructure
             else
                 services.AddScoped<IPictureService, PictureService>();
 
-            //roxy file manager service
-            services.AddTransient<DatabaseRoxyFilemanService>();
-            services.AddTransient<FileRoxyFilemanService>();
-
-            services.AddScoped<IRoxyFilemanService>(serviceProvider =>
-            {
-                return serviceProvider.GetRequiredService<IPictureService>().IsStoreInDbAsync().Result
-                    ? serviceProvider.GetRequiredService<DatabaseRoxyFilemanService>()
-                    : serviceProvider.GetRequiredService<FileRoxyFilemanService>();
-            });
+            //roxy file manager
+            services.AddScoped<IRoxyFilemanService, RoxyFilemanService>();
+            services.AddScoped<IRoxyFilemanFileProvider, RoxyFilemanFileProvider>();
 
             //installation service
-            if (!DataSettingsManager.IsDatabaseInstalled())
                 services.AddScoped<IInstallationService, InstallationService>();
 
             //slug route transformer
@@ -302,9 +303,14 @@ namespace Nop.Web.Framework.Infrastructure
 
             //XML sitemap
             services.AddScoped<IXmlSiteMap, XmlSiteMap>();
+
+            //register the Lazy resolver for .Net IoC
+            var useAutofac = appSettings.Get<CommonConfig>().UseAutofac;
+            if (!useAutofac)
+                services.AddScoped(typeof(Lazy<>), typeof(LazyInstance<>));
         }
 
-        // <summary>
+        /// <summary>
         /// Configure the using of added middleware
         /// </summary>
         /// <param name="application">Builder for configuring an application's request pipeline</param>

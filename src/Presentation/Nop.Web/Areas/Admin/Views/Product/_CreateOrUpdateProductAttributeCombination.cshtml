@@ -1,3 +1,4 @@
+
 @model ProductAttributeCombinationModel
 
 @if (ViewBag.RefreshPage == true)
@@ -37,7 +38,7 @@
         <div class="container-fluid"> 
             <div class="form-horizontal">
                 <div class="cards-group">
-                    @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ProductAttributeCombinationDetailsTop, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.ProductAttributeCombinationDetailsTop, additionalData = Model })
                     <div class="card card-default card-popup">
                         <div class="card-body">
                             @await Html.PartialAsync("_ProductAttributes", Model.ProductAttributes)
@@ -140,7 +141,7 @@
                             </div>
                         </div>
                     </div>
-                    @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ProductAttributeCombinationDetailsBottom, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.ProductAttributeCombinationDetailsBottom, additionalData = Model })
                 </div>
             </div>
         </div>

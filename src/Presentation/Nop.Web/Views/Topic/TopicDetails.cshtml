@@ -1,8 +1,12 @@
 ﻿@model TopicModel
+
+@using Nop.Core
 @using Nop.Core.Domain.Seo
-@using Nop.Web.Components
-@inject Nop.Core.IWebHelper webHelper
+@using Nop.Core.Domain.Topics
+
+@inject IWebHelper webHelper
 @inject SeoSettings seoSettings
+
 @{
     var isPopup = ViewBag.IsPopup ?? false;
 
@@ -28,7 +32,6 @@
 
     //page class
     NopHtml.AppendPageCssClassParts("html-topic-page");
-    NopHtml.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Themes/Venture/Content/RichBlog.css");
 }
 @if (Model.IsPasswordProtected)
 {
@@ -89,10 +92,12 @@
     </div>
 }
 <div class="page topic-page" id="ph-topic">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.TopicDetailsTop, additionalData = Model })
     <div class="page-title" id="ph-title">
         <h1>@Model.Title</h1>
     </div>
     <div class="page-body">
-        @Html.Raw(await Component.ParseWidgetAndComponentsFromText(Model.Body))
+        @Html.Raw(Model.Body)
     </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.TopicDetailsBottom, additionalData = Model })
 </div>

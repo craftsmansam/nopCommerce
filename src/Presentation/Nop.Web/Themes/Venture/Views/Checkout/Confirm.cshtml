@@ -1,4 +1,7 @@
-﻿@model CheckoutConfirmModel
+﻿@using Nop.Web.Framework.Mvc.Routing
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Nop.Web.Framework.TagHelpers.Shared
+@model CheckoutConfirmModel
 
 @{
     Layout = "_ColumnsOne";
@@ -71,7 +74,7 @@
 	                            }
 	                            else
 	                            {
-	                                <a class="read" id="read-terms" href="@Url.RouteUrl("Topic", new { SeName = await Html.GetTopicSeNameAsync("conditionsofuse") })">@T("Checkout.TermsOfService.Read")</a>
+	                                <a class="read" id="read-terms" href="@Url.RouteTopicUrl("conditionsofuse"))">@T("Checkout.TermsOfService.Read")</a>
 	                            }
 							</label>
                         </div>

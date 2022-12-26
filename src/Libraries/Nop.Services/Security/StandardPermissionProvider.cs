@@ -59,6 +59,9 @@ namespace Nop.Services.Security
         public static readonly PermissionRecord ManageScheduleTasks = new() { Name = "Admin area. Manage Schedule Tasks", SystemName = "ManageScheduleTasks", Category = "Configuration" };
         public static readonly PermissionRecord ManageAppSettings = new() { Name = "Admin area. Manage App Settings", SystemName = "ManageAppSettings", Category = "Configuration" };
 
+        //Security
+        public static readonly PermissionRecord EnableMultiFactorAuthentication = new() { Name = "Security. Enable Multi-factor authentication", SystemName = "EnableMultiFactorAuthentication", Category = "Security" };
+
         //public store permissions
         public static readonly PermissionRecord DisplayPrices = new PermissionRecord { Name = "Public store. Display Prices", SystemName = "DisplayPrices", Category = "PublicStore" };
         public static readonly PermissionRecord EnableShoppingCart = new PermissionRecord { Name = "Public store. Enable shopping cart", SystemName = "EnableShoppingCart", Category = "PublicStore" };
@@ -66,6 +69,8 @@ namespace Nop.Services.Security
         public static readonly PermissionRecord PublicStoreAllowNavigation = new PermissionRecord { Name = "Public store. Allow navigation", SystemName = "PublicStoreAllowNavigation", Category = "PublicStore" };
         public static readonly PermissionRecord AccessClosedStore = new PermissionRecord { Name = "Public store. Access a closed store", SystemName = "AccessClosedStore", Category = "PublicStore" };
         public static readonly PermissionRecord AccessProfiling = new() { Name = "Public store. Access MiniProfiler results", SystemName = "AccessProfiling", Category = "PublicStore" };
+
+        // albina permissions
         public static readonly PermissionRecord PictureVault = new PermissionRecord { Name = "Public store. Picture Vault", SystemName = "PictureVault", Category = "PublicStore" };
         public static readonly PermissionRecord AlbinaInvoice = new PermissionRecord { Name = "Public store. Albina Invoice", SystemName = "AlbinaInvoice", Category = "PublicStore" };
 
@@ -131,6 +136,7 @@ namespace Nop.Services.Security
                 PublicStoreAllowNavigation,
                 AccessClosedStore,
                 AccessProfiling,
+                EnableMultiFactorAuthentication,
                 PictureVault,
                 AlbinaInvoice
             };
@@ -202,6 +208,7 @@ namespace Nop.Services.Security
                         PublicStoreAllowNavigation,
                         AccessClosedStore,
                         AccessProfiling,
+                        EnableMultiFactorAuthentication,
                         PictureVault,
                         AlbinaInvoice
                     }
@@ -234,6 +241,7 @@ namespace Nop.Services.Security
                         EnableShoppingCart,
                         EnableWishlist,
                         PublicStoreAllowNavigation,
+                        EnableMultiFactorAuthentication,
                         PictureVault,
                         AlbinaInvoice
                     }

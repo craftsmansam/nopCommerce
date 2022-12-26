@@ -1,4 +1,7 @@
 @model CategoryModel
+
+@using Nop.Core.Domain.Catalog
+
 @{
     //page title
     ViewBag.PageTitle = T("Admin.Catalog.Categories.EditCategoryDetails").Text;
@@ -15,9 +18,9 @@
                 <a asp-action="List">@T("Admin.Catalog.Categories.BackToList")</a>
             </small>
         </h1>
-        <div class="pull-right">
-            <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })', 800, 600, true); return false;" class="btn bg-purple">
-                <i class="fa fa-eye"></i>
+        <div class="float-right">
+            <button type="button" onclick="javascript:OpenWindow('@(Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }))', 800, 600, true); return false;" class="btn btn-info">
+                <i class="far fa-eye"></i>
                 @T("Admin.Common.Preview")
             </button>
             <button type="submit" name="save" class="btn btn-primary">
@@ -32,7 +35,7 @@
                 <i class="far fa-trash-alt"></i>
                 @T("Admin.Common.Delete")
             </span>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.CategoryDetailsButtons, additionalData = Model })
+            @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.CategoryDetailsButtons, additionalData = Model })
         </div>
     </div>
     @await Html.PartialAsync("_CreateOrUpdate", Model)

@@ -15,7 +15,9 @@
     var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }
 
-<form asp-controller="Order" asp-action="List" method="post">
+@if (Model.LicenseCheckModel.BlockPages != true)
+{
+    <form asp-controller="Order" asp-action="List" method="post">
     <div class="content-header clearfix">
         <h1 class="float-left">
             @T("Admin.Orders")
@@ -57,6 +59,10 @@
                     </li>
                 </ul>
             </div>
+                <button type="button" name="importexcel" class="btn bg-olive" data-toggle="modal" data-target="#importexcel-window">
+                    <i class="fas fa-upload"></i>
+                    @T("Admin.Common.Import")
+                </button>
             <div class="btn-group">
                 <button type="button" class="btn btn-info">
                     <i class="far fa-file-pdf"></i>
@@ -78,7 +84,7 @@
                     </li>
                 </ul>
             </div>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.OrderListButtons, additionalData = Model })
+                @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.OrderListButtons, additionalData = Model })
         </div>
     </div>
     <section class="content">
@@ -464,7 +470,48 @@
             </div>
         </div>
     </section>
-</form>
+    </form>
+}
+
+<script>
+    $(document).ready(function () {
+        var displayModal = @((Model.LicenseCheckModel.DisplayWarning == true || Model.LicenseCheckModel?.BlockPages == true).ToString().ToLower());
+        if (displayModal){
+            $('#license-window').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            $('#license-window').on('shown.bs.modal', function (event) {
+                var modalCloseEl = $(this).find('button.close');
+                var closeTextEl = $('span', modalCloseEl);
+
+                var startFrom = 5;
+                closeTextEl.text(startFrom);
+
+                const timer = setInterval(function() {
+                    if (startFrom-- > 0)
+                        closeTextEl.text(startFrom);
+                }, 1000);
+
+                setTimeout(function() {
+                    closeTextEl.html('&times;');
+                    modalCloseEl.on('click', function() {
+                        $('#license-window').modal('hide')
+                    });
+                    clearInterval(timer);
+                }, startFrom*1000);
+            });
+        }
+    });
+</script>
+<div id="license-window" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @Html.Raw(Model.LicenseCheckModel?.WarningText)
+        </div>
+    </div>
+</div>
 
 @*export selected (XML). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
 <form asp-controller="Order" asp-action="ExportXmlSelected" method="post" id="export-xml-selected-form">
@@ -540,3 +587,46 @@
     });
 </script>
 <nop-alert asp-alert-id="pdfInvoiceSelected" />
+
+@*import orders form*@
+<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                
+            </div>
+            <form asp-controller="Order" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <ul class="common-list">
+                            <li>
+                                <em>@T("Admin.Orders.List.ImportFromExcelTip")</em>
+                            </li>
+                            <li>
+                                <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>
+                            </li>
+                        </ul>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="col-form-label">
+                                        @T("Admin.Common.ExcelFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.ImportFromExcel")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -22,7 +22,7 @@
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.js");
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/public.common.js");
     
-    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/custom.js", "", false, true);
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/custom.js", "", true);
 
     //when jQuery migrate script logging is active you will see the log in the browser console
     if (commonSettings.JqueryMigrateScriptLoggingActive)
@@ -77,10 +77,10 @@
         }
     </style>
 
-    <title>@NopHtml.GenerateTitle()</title>
+    <title>@(await NopHtml.GenerateTitleAsync())</title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
-    <meta name="description" content="@NopHtml.GenerateMetaDescription()"/>
-    <meta name="keywords" content="@NopHtml.GenerateMetaKeywords()"/>
+    <meta name="description" content="@(await NopHtml.GenerateMetaDescriptionAsync())"/>
+    <meta name="keywords" content="@(await NopHtml.GenerateMetaKeywordsAsync())"/>
     <meta name="generator" content="nopCommerce"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0"/>
     <!link rel="preload" as="font" href="@Url.Content($"~/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/fonts/venture-font.woff")" crossorigin/>

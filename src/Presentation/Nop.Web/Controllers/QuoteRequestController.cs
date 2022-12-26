@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Nop.Core;
 using Nop.Core.Configuration;
-using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Security;
 using Nop.Services.Common;
 using Nop.Services.Customers;
@@ -56,6 +55,7 @@ namespace Nop.Web.Controllers
             _hostEnvironment = hostEnvironment;
             _albinaConfig = albinaConfig;
         }
+
         public async Task<IActionResult> BendingAndFabrication()
         {
             var customer = await _workContext.GetCurrentCustomerAsync();
@@ -66,7 +66,7 @@ namespace Nop.Web.Controllers
                 UploadDocumentMaxSize = _albinaConfig.UploadDocumentMaxSize,
                 Email = customer.Email,
                 Contact = await _customerService.GetCustomerFullNameAsync(customer),
-                CompanyName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute),
+                CompanyName = customer.Company,
                 DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage
             };
 
