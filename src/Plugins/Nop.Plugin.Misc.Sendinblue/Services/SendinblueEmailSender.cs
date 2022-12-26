@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Nop.Core;
+using Nop.Core.Configuration;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Infrastructure;
 using Nop.Services.Media;
@@ -26,7 +27,8 @@ namespace Nop.Plugin.Misc.Sendinblue.Services
             INopFileProvider fileProvider,
             ISmtpBuilder smtpBuilder,
             IStoreContext storeContext,
-            SendinblueSettings sendinblueSettings) : base(downloadService, fileProvider, smtpBuilder)
+            SendinblueSettings sendinblueSettings,
+            AlbinaConfig albinaConfig) : base(downloadService, fileProvider, smtpBuilder, albinaConfig)
         {
             _storeContext = storeContext;
             _sendinblueSettings = sendinblueSettings;
