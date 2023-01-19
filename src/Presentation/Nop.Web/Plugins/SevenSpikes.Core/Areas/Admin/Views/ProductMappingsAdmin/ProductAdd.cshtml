@@ -5,7 +5,7 @@
     Layout = "";
 
     var entityType = Model.CustomProperties.ContainsKey("EntityType") ? Model.CustomProperties["EntityType"] : null;
-    var entityId = Model.CustomProperties.ContainsKey("EntityId") ? Model.CustomProperties["EntityId"] : 0;
+    var entityId = Model.CustomProperties.ContainsKey("EntityId") ? int.Parse(Model.CustomProperties["EntityId"]) : 0;
 
     var prefix = string.Format("prefix{0}", entityId);
 

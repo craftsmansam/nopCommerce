@@ -3,17 +3,18 @@
 * http://www.nop-templates.com/t/licensinginfo
 */
 
-.gallery {
+.picture-gallery {
     display: none;
 }
-.gallery.sevenspikes-cloudzoom-gallery {
-    display: block;
+.sevenspikes-cloudzoom-gallery {
+	display: block;
 }
 .gallery .picture-wrapper {
     position: relative;
 }
 .sevenspikes-cloudzoom-gallery .picture {
-    width: 100%;
+    width: 100% !important;
+    float: none !important;
 }
 .gallery .picture-wrapper > img { /* Transitional image (on thumbnail click) */
 	top: 0;
@@ -48,11 +49,10 @@
 .cloudzoom-zoom-inside {
 	top: 0 !important;
 	right: 0;
+    bottom: 0;
     left: 0 !important;
-	/*these coordinates center the zoomed image horizontally, the main image should be always centered too*/
-	/*coordinates may be different than 0 if there is a border around the main picture*/
 	z-index: 1;
-	height: 100% !important;
+	height: auto !important;
 	margin: auto;
     cursor: crosshair;
 }
@@ -146,9 +146,6 @@
 
 @media all and (min-width: 1201px) {
 
-    .gallery.sevenspikes-cloudzoom-gallery {
-        margin: 0 0 40px;
-    }
     .sevenspikes-cloudzoom-gallery .picture-wrapper {
         width: 80%;
         float: right;
@@ -156,5 +153,4 @@
     .sevenspikes-cloudzoom-gallery .picture-wrapper:only-child {
         width: 100%;
     }
-
 }

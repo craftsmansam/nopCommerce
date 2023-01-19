@@ -51,9 +51,6 @@
                 requestStart: function (e) {
                     $("#rich-blog-searchterms").addClass("rich-blog-search-busy");
                 },
-                requestEnd: function (e) {
-                    e.response.push({ Title: '@T("SevenSpikes.RichBlog.Public.Search.AdvancedSearchFor") "' + $('#rich-blog-searchterms').val() + '"', Id: 0 });
-                },
                 change: function (e) {
                     $("#rich-blog-searchterms").removeClass("rich-blog-search-busy");
                 },
@@ -64,6 +61,7 @@
                     }
                 }
             }),
+            noDataTemplate: "@T("SevenSpikes.RichBlog.Public.Search.NoResults")",
             change: function () {
                 var selected = $(".k-list").find(".k-state-selected");
                 var url = selected.find('.rich-blog-search-item').attr('data-url');

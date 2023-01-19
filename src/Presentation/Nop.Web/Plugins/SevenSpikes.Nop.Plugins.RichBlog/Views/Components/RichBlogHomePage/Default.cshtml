@@ -1,5 +1,4 @@
 ﻿@model IList<BlogPostModel7Spikes>
-@using Nop.Web.Framework.Extensions
 @inject IViewComponentSelector viewComponentSelector
 
 <div class="rich-blog-homepage">
@@ -13,15 +12,15 @@
                 <div class="post-primary">
                     @if (!string.IsNullOrWhiteSpace(post.HomePagePictureUrl))
                     {
-                        <a class="post-picture" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">
+                        <a class="post-picture" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })">
                             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                             {
                                 @await Component.InvokeAsync("LazyLoadImage", new (string Key, string Value)[]
-                    {
-                    ("src", post.HomePagePictureUrl),
-                    ("alt", post.Title),
-                    ("title", post.Title)
-                    })
+                                {
+                                    ("src", post.HomePagePictureUrl),
+                                    ("alt", post.Title),
+                                    ("title", post.Title)
+                                })
                             }
                             else
                             {
@@ -29,16 +28,16 @@
                             }
                         </a>
                     }
-                    <a class="post-title" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">@post.Title</a>
+                    <a class="post-title" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })">@post.Title</a>
                 </div>
                 <div class="post-details">
-                    <span class="post-date">@post.CreatedOn.ToString("D")</span>
+					<span class="post-date">@post.CreatedOn.ToString("D")</span>
 
                     <div class="post-description">
                         @Html.Raw(!string.IsNullOrEmpty(post.BodyOverview) ? post.BodyOverview : post.Body)
                     </div>
 
-                    <a class="read-more" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
+                    <a class="read-more" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
                 </div>
             </div>
         }

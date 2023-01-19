@@ -4,13 +4,15 @@
 */
 
 @media all and (min-width: 600px) {
+
 	.product-box-layout-2 .venture-product-grid .item-box .product-item .ribbon-wrapper {
 		float: left;
 	}
 }
 
 @media all and (min-width: 1201px) {
-     .gallery > .ribbon-wrapper {
+
+     .picture-gallery > .ribbon-wrapper {
         float: left;
      }
 }

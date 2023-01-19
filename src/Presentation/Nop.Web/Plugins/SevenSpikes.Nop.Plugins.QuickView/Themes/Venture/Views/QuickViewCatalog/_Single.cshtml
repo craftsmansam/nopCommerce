@@ -203,7 +203,7 @@
 
                 </div>
                 <div class="links-panel">
-                    <a href="@Url.RouteUrl("ProductWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" class="link-to-product-page">@T("SevenSpikes.QuickView.Public.GoToProductPageLink")</a>
+                    <a href="@(Url.RouteUrl<Product>( new { SeName = Model.SeName }))" class="link-to-product-page">@T("SevenSpikes.QuickView.Public.GoToProductPageLink")</a>
                 </div>
             </div>
         </div>

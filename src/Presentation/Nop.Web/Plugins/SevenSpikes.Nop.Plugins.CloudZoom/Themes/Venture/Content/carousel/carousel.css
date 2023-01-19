@@ -8,18 +8,24 @@
    create new settings for your theme if necessary*/
 
 .picture-thumbs.in-carousel {
-    margin: 0 auto;
+    margin: 2% auto 0;
     text-align: center;
 }
 .picture-thumbs .picture-thumbs-list {
+    display: none; /*hide thumbs until slick slider is loaded*/
     margin: -5px 0;
+}
+.picture-thumbs .slick-initialized {
+    display: block; /*show thumbs after slick slider is loaded*/
 }
 .picture-thumbs .picture-thumbs-item {
     padding: 5px 0;
-    height: 110px !important;
 }
 .picture-thumbs button + .slick-list {
     margin: 40px 0;
+}
+.picture-thumbs .slick-track {
+    margin: auto;
 }
 
 /* arrows nav */
@@ -124,13 +130,24 @@
 }
 
 
-@media all and (max-width: 1201px) {
+@media all and (max-width: 1200px) {
 
     .picture-thumbs .picture-thumbs-list {
         margin: 0 -5px;
     }
     .picture-thumbs .picture-thumbs-item {
         padding: 0 5px;
+    }
+
+}
+
+@media all and (min-width: 1201px) {
+
+    .picture-thumbs.in-carousel {
+        margin-top: 0;
+    }
+    .picture-thumbs .picture-thumbs-item {
+        height: 110px !important;
     }
 
 }
