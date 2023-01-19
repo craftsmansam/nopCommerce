@@ -264,14 +264,19 @@ var Billing = {
       url: url + '?opc=true',
       data: $(this.form).serialize(),
       type: "POST",
-      success: function(response) {
+      success: function (response) {
+        if (response.error) {
+          alert(response.message);
+          return false;
+        } else {
         selectedId = response.selected_id;
         Checkout.setStepResponse(response);
         Billing.resetBillingForm();
+        }        
       },
       complete: function() {
         var selectElement = $('#billing-address-select');
-        if (selectElement) {
+        if (selectElement && selectedId) {
           selectElement.val(selectedId);
         }
       },
@@ -331,7 +336,7 @@ var Shipping = {
           $('#delete-shipping-address-button').hide();
         } else {
             $('#shipping-new-address-form').hide();
-          if (id == billingAddressId) {
+          if (id == billingAddressId || (id != undefined && billingAddressId == undefined)) {
             $('#edit-shipping-address-button').hide();
             $("#save-shipping-address-button").hide();
             $('#delete-shipping-address-button').hide();            
@@ -418,13 +423,18 @@ var Shipping = {
         data: $(this.form).serialize(),
         type: "POST",
         success: function (response) {
+          if (response.error) {
+            alert(response.message);
+            return false;
+          } else {
           selectedId = response.selected_id;
           Checkout.setStepResponse(response);
           Shipping.resetShippingForm();
+          }
         },
         complete: function () {
           var selectElement = $('#shipping-address-select');
-          if (selectElement) {
+          if (selectElement && selectedId) {
             selectElement.val(selectedId);
           }
         },
