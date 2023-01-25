@@ -69,6 +69,7 @@ namespace Nop.Web.Infrastructure
 
             endpointRouteBuilder.MapControllerRoute("TopicWithPath", "{Path}/" + pattern, 
                 new { controller = "Topic", action = "TopicDetails" });
+
                 
             //routes for not found slugs
             if (!string.IsNullOrEmpty(lang))
@@ -121,6 +122,10 @@ namespace Nop.Web.Infrastructure
                 defaults: new { controller = "Blog", action = "BlogPost" });
 
             endpointRouteBuilder.MapControllerRoute(name: NopRoutingDefaults.RouteName.Generic.Topic,
+                pattern: genericPattern,
+                defaults: new { controller = "Topic", action = "TopicDetails" });
+
+            endpointRouteBuilder.MapControllerRoute(name: "Topic",
                 pattern: genericPattern,
                 defaults: new { controller = "Topic", action = "TopicDetails" });
 
