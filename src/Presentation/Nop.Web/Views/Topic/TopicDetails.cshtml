@@ -2,7 +2,6 @@
 
 @using Nop.Core
 @using Nop.Core.Domain.Seo
-@using Nop.Core.Domain.Topics
 
 @inject IWebHelper webHelper
 @inject SeoSettings seoSettings
@@ -97,7 +96,7 @@
         <h1>@Model.Title</h1>
     </div>
     <div class="page-body">
-        @Html.Raw(Model.Body)
+        @Html.Raw(await Component.ParseWidgetAndComponentsFromTextAsync(Model.Body))
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.TopicDetailsBottom, additionalData = Model })
 </div>
