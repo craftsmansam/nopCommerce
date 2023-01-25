@@ -38,7 +38,7 @@
             {
                 hasSublistClass = "width-sublist";
             }
-            <a href="@(Url.RouteUrl<Category>(new { SeName = lineModel.Category.SeName }))" class="@hasSublistClass">
+            <a href="@(Url.RouteUrl("CategoryWithPath", new { Path = lineModel.Category.SeName.GetPathFromSeName(), SeName = lineModel.Category.SeName.GetSeNameWithoutPath() }))" class="@hasSublistClass">
                 @lineModel.Category.Name
                 @if (lineModel.Category.NumberOfProducts.HasValue)
                 {

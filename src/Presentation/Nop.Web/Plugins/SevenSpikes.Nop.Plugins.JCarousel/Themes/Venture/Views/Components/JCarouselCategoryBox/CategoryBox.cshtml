@@ -10,7 +10,7 @@
         </a>
     </h2>
     <div class="picture">
-        <a href="@Url.RouteUrl("Category", new { SeName = Model.SeName })" title="@Model.PictureModel.Title">
+        <a href="@Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() })" title="@Model.PictureModel.Title">
             <img alt="@Model.PictureModel.AlternateText" src="@Model.PictureModel.ImageUrl" title="@Model.PictureModel.Title" />
             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
             {
