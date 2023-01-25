@@ -1,9 +1,9 @@
-﻿@using Nop.Core
-@using Nop.Core.Domain.Tax
-@using Nop.Services.Configuration
-@using Nop.Web.Framework.Mvc.Routing
+﻿@model FooterModel
 
-@model FooterModel
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Domain.Topics
+@using Nop.Services.Configuration
 
 @inject IWorkContext workContext
 @inject IStoreContext storeContext
@@ -54,21 +54,16 @@
             </div>
             <ul class="list footer-collapse">
                 <li class="address">
-                    <a href="https://www.google.com/maps/place/12080+SW+Myslony+St,+Tualatin,+OR+97062">
-                        <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
-                    </a>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.Address")</span>
                 </li>
-                @{
-                    var emailHrefString = "mailto:" + @T("SevenSpikes.Themes.Venture.Common.EMail");
-                }
                 <li class="e-mail">
-                    <a href=@emailHrefString><span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span></a>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.EMail")</span>
                 </li>
-                @{
-                    var telHrefString = "tel:" + @T("SevenSpikes.Themes.Venture.Common.Phone");
-                }
+                <li class="mobile-phone">
+                    <span>@T("SevenSpikes.Themes.Venture.Common.MobilePhone")</span>
+                </li>
                 <li class="phone">
-                    <a href=@telHrefString><span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span></a>
+                    <span>@T("SevenSpikes.Themes.Venture.Common.Phone")</span>
                 </li>
             </ul>
         </div>
@@ -83,7 +78,7 @@
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
                 {
-                    <li><a href="@Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() })">@topic.Name</a></li>
+                    <li><a href="@(Url.RouteUrl<Topic>(new { SeName = topic.SeName }))">@topic.Name</a></li>
                 }
             </ul>
         </div>
@@ -114,9 +109,18 @@
                 }
             </ul>
         </div>
+        <div class="footer-block newsetter">
+            <div class="title">
+                <strong>@T("SevenSpikes.Themes.Venture.Common.Newsletter")</strong>
+            </div>
+            <div class="footer-collapse">
+                <p class="newsletter-subscribe-text">@T("SevenSpikes.Themes.Venture.Common.NewsletterSubscribeText")</p>
+                @await Component.InvokeAsync(typeof(NewsletterBoxViewComponent))
+            </div>
+        </div>
     </div>
     <div class="footer-middle">
-        @await Component.InvokeAsync("SocialButtons")
+        @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
     </div>
     <div class="footer-lower">
         <div class="footer-disclaimer">
@@ -143,7 +147,7 @@
                 @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteTopicUrl("shippinginfo"))
             </div>
         }
-        @await Component.InvokeAsync("StoreThemeSelector")
+        @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
     </div>
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
 </div>

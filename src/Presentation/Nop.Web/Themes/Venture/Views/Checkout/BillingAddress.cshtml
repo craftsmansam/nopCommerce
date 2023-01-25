@@ -20,14 +20,14 @@
 <script src="~/js/public.billingaddress.js" asp-location="Footer" asp-exclude-from-bundle="true"></script>
 
 <div class="page checkout-page billing-address-page">
-    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
+    @await Component.InvokeAsync(typeof(CheckoutProgressViewComponent), new { step = CheckoutProgressStep.Address })
     <div class="page-title">
         <h1>@T("Checkout.BillingAddress")</h1>
     </div>
     <div class="page-body checkout-data">
         <form asp-route="CheckoutBillingAddress" method="post">
             <div class="billing-addresses">
-            	@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressTop, additionalData = Model })
+            	@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutBillingAddressTop, additionalData = Model })
                 @if (Model.ShipToSameAddressAllowed)
                 {
                     <div class="section ship-to-same-address">
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressMiddle, additionalData = Model })
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutBillingAddressMiddle, additionalData = Model })
                 <div class="section new-billing-address address-section-collapse">
                     <div class="title">
                         @if (Model.ExistingAddresses.Count > 0)
@@ -192,14 +192,14 @@
                         <button type="submit" name="nextstep" class="button-1 new-address-next-step-button">@T("Checkout.NextButton")</button>
                     </div>
                 </div>
-                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutBillingAddressBottom, additionalData = Model })
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutBillingAddressBottom, additionalData = Model })
             </div>
         </form>
         <div class="section order-summary">
             <div class="title">
                 <strong>@T("Checkout.OrderSummary")</strong>
             </div>
-            @await Component.InvokeAsync("OrderSummary")
+            @await Component.InvokeAsync(typeof(OrderSummaryViewComponent))
         </div>
     </div>
 </div>

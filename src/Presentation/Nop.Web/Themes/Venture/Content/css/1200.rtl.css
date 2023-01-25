@@ -60,7 +60,11 @@
     font-size: 0;
     width: 17px;
     height: 17px;
-    padding: 0 !important;;
+    padding: 0 !important;
+}
+.data-table td.picture {
+    padding: 20px !important;
+    font-size: 0;
 }
 
 /* GLOBAL FORMS */
@@ -1252,14 +1256,13 @@
 .gallery {
 	float: right;
 	width: 52%;
-} 
+}
 .gallery .picture {
     box-shadow: none;
 }
 .gallery .picture {
     width: 80%;
     float: left;
-    margin: 0 0 40px;
 }
 .gallery .picture:only-child {
     width: 100%;
@@ -1268,6 +1271,7 @@
 .gallery .picture-thumbs {
     width: 16%;
     float: right;
+    margin-bottom: 0;
 }
 .gallery .thumb-item {
     width: 100%;
@@ -1279,6 +1283,13 @@
 .gallery .thumb-item {
     box-shadow: none;
 }
+.picture-gallery + .video-gallery {
+    margin-top: 25px;
+}
+.gallery:has(.picture-thumbs) .video-gallery {
+    margin-right: 20%;
+}
+
 .overview {
 	float: left;
 	width: 44.5%;

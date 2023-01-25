@@ -24,15 +24,36 @@
                     </td>
                 </tr>
             }
-        <tr class="shipping-cost">
-            <td class="cart-total-left">
-                <label>@T("ShoppingCart.Totals.Shipping"):</label>
-            </td>
-            <td class="cart-total-right">
-                <span class="value-summary">TBD</span>
-            </td>
-        </tr>
-        @if (!string.IsNullOrEmpty(Model.PaymentMethodAdditionalFee))
+            @if (!Model.HideShippingTotal)
+            {
+                <tr class="shipping-cost">
+                    <td class="cart-total-left">
+                        <label>@T("ShoppingCart.Totals.Shipping"):</label>
+                        @if (Model.RequiresShipping && !string.IsNullOrEmpty(Model.SelectedShippingMethod))
+                        {
+                            <span class="selected-shipping-method">@T("ShoppingCart.Totals.Shipping.Method", Model.SelectedShippingMethod)</span>
+                        }
+                    </td>
+                    <td class="cart-total-right">
+                        @if (Model.RequiresShipping)
+                        {
+                            if (!string.IsNullOrEmpty(Model.Shipping))
+                            {
+                            <span class="value-summary">@Model.Shipping</span>
+                            }
+                            else
+                            {
+                            <span>@T("ShoppingCart.Totals.CalculatedDuringCheckout")</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>@T("ShoppingCart.Totals.Shipping.NotRequired")</span>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.PaymentMethodAdditionalFee))
             {
                 <tr class="additional-fees">
                     <td class="cart-total-left">
@@ -43,15 +64,32 @@
                     </td>
                 </tr>
             }
-        <tr class="tax-rate">
-            <td class="cart-total-left">
-                <label>Tax:</label>
-            </td>
-            <td class="cart-total-right">
-                <span>TBD</span>
-            </td>
-        </tr>
-        @if (!string.IsNullOrEmpty(Model.OrderTotalDiscount))
+            @if (Model.DisplayTaxRates && Model.TaxRates.Count > 0)
+            {
+                foreach (var taxRate in Model.TaxRates)
+                {
+                <tr class="tax-rate">
+                    <td class="cart-total-left">
+                        <label>@string.Format(T("ShoppingCart.Totals.TaxRateLine").Text, taxRate.Rate):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@taxRate.Value</span>
+                    </td>
+                </tr>
+                }
+            }
+            @if (Model.DisplayTax)
+            {
+                <tr class="tax-value">
+                    <td class="cart-total-left">
+                        <label>@T("ShoppingCart.Totals.Tax"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span class="value-summary">@Model.Tax</span>
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.OrderTotalDiscount))
             {
                 <tr class="discount-total">
                     <td class="cart-total-left">

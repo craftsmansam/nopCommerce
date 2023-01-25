@@ -1,6 +1,10 @@
-﻿@model CheckoutShippingAddressModel
+﻿@inject IWebHelper webHelper
+@using Nop.Core
+@model CheckoutShippingAddressModel
 @{
     Layout = "_ColumnsOne";
+
+    var storeLocation = webHelper.GetStoreLocation();
 
     //title
     NopHtml.AddTitleParts(T("PageTitle.Checkout").Text);
@@ -9,12 +13,12 @@
     NopHtml.AppendPageCssClassParts("html-shipping-address-page");
 }
 <div class="page checkout-page shipping-address-page">
-    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Address })
+    @await Component.InvokeAsync(typeof(CheckoutProgressViewComponent), new { step = CheckoutProgressStep.Address })
     <div class="page-title">
         <h1>@T("Checkout.ShippingAddress")</h1>
     </div>
     <div class="page-body checkout-data">
-        <form asp-route="CheckoutShippingAddress" method="post">
+        <form id="shipping-form" asp-route="CheckoutShippingAddress" method="post">
 
             @if (Model.DisplayPickupInStore && Model.PickupPointsModel.AllowPickupInStore)
             {
@@ -34,7 +38,7 @@
             @if (Model.PickupPointsModel == null || !Model.PickupPointsModel.PickupInStoreOnly)
             {
                 <div class="shipping-addresses" id="shipping-addresses-form">
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressTop, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutShippingAddressTop, additionalData = Model })
                     @if (Model.ExistingAddresses.Count > 0)
                     {
                         <div class="section select-shipping-address">
@@ -92,17 +96,17 @@
                                                 </li>
                                             }
                                             @if (item.CityEnabled && !string.IsNullOrEmpty(item.City) ||
-                                               item.CountyEnabled && !string.IsNullOrEmpty(item.County) ||
-                                               item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) ||
-                                               item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
+                                                 item.CountyEnabled && !string.IsNullOrEmpty(item.County) ||
+                                                 item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) ||
+                                                 item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                             {
                                                 <li class="city-state-zip">
                                                     @if (item.CityEnabled && !string.IsNullOrEmpty(item.City))
                                                     {
                                                         @item.City
                                                         @if (item.CountyEnabled && !string.IsNullOrEmpty(item.County) ||
-                                                           item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) ||
-                                                           item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
+                                                             item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) ||
+                                                             item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                                         {
                                                             <text>,</text>
                                                         }
@@ -111,7 +115,7 @@
                                                     {
                                                         @item.County
                                                         @if (item.StateProvinceEnabled && !string.IsNullOrEmpty(item.StateProvinceName) ||
-                                                           item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
+                                                             item.ZipPostalCodeEnabled && !string.IsNullOrEmpty(item.ZipPostalCode))
                                                         {
                                                             <text>,</text>
                                                         }
@@ -144,7 +148,7 @@
                                             }
                                         </ul>
                                         <div class="select-button">
-                                            <button type="button" onclick="setLocation('@Url.RouteUrl("CheckoutSelectShippingAddress", new {addressid = item.Id})')" class="button-1 select-shipping-address-button">@T("Checkout.ShipToThisAddress")</button>
+                                            <button type="button" onclick="setLocation('@Url.RouteUrl("CheckoutSelectShippingAddress", new { addressid = item.Id })')" class="button-1 select-shipping-address-button">@T("Checkout.ShipToThisAddress")</button>
                                         </div>
                                     </div>
                                 }
@@ -157,7 +161,7 @@
                             </div>
                         </div>
                     }
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressMiddle, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutShippingAddressMiddle, additionalData = Model })
                     <div class="section new-shipping-address address-section-collapse">
                         <div class="title">
                             @if (Model.ExistingAddresses.Count > 0)
@@ -181,7 +185,7 @@
                             <button type="submit" name="nextstep" class="button-1 new-address-next-step-button">@T("Checkout.NextButton")</button>
                         </div>
                     </div>
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutShippingAddressBottom, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutShippingAddressBottom, additionalData = Model })
                 </div>
             }
         </form>
@@ -189,7 +193,7 @@
             <div class="title">
                 <strong>@T("Checkout.OrderSummary")</strong>
             </div>
-            @await Component.InvokeAsync("OrderSummary")
+            @await Component.InvokeAsync(typeof(OrderSummaryViewComponent))
         </div>
     </div>
 </div>

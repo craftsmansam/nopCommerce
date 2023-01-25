@@ -75,7 +75,6 @@ script {
          url("../fonts/venture-font.svg#venture-font") format("svg");
     font-weight: normal;
     font-style: normal;
-    font-display: swap;
 }
 
 [data-icon]:before {
@@ -190,23 +189,27 @@ script {
 
 
 body {
-  max-width: 100%;
-  background-color: #fbfbfb;
-  overflow-x: hidden; /* responsive navigation & filters scroll bug fix*/
-  font: normal 15px 'Fjalla One', sans-serif;
-  color: #2c2c2c;
-  letter-spacing: .2px;
-  text-transform: uppercase;
+    max-width: 100%;
+	background-color: #f0f0f0;
+	overflow-x: hidden; /* responsive navigation & filters scroll bug fix*/
+	font: normal 15px 'Fjalla One', sans-serif;
+    color: #2c2c2c;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+
 }
 a {
-  color: #2c2c2c;
-  cursor: pointer;
+	color: inherit;
+	cursor: pointer;
 }
 img {
 	max-width: 100%;
 }
 a img {
 	opacity: 0.99; /*firefox scale bug fix*/
+}
+strong {
+    font-weight: normal;
 }
 em {
     font-style: normal;
@@ -294,7 +297,7 @@ button[disabled]  {
 
 .master-wrapper-content {
 	position: relative;
-	z-index: 4; /* giving priority to header and header-menu */
+	z-index: 0; /* giving priority to header and header-menu */
     max-width: 90%;
     margin: 0 auto;
     padding: 80px 0 100px;
@@ -1883,7 +1886,6 @@ body:after {
 }
 .block .list .active > a {
     color: #2c2c2c;
-  font-weight: bold;
 }
 .block .list a,
 .block .list strong {
@@ -2536,6 +2538,7 @@ body:after {
 	margin: 0 0 20px;
     text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
 
 }
@@ -2924,6 +2927,10 @@ body:after {
 	background-image: url('../img/product-wishlist.svg');
 }
 
+.swiper-pagination-bullet-active {
+	background-color: #f3cc2e;
+}
+
 .home-page-category-grid,
 .manufacturer-grid {
 	margin: 0 0 80px;
@@ -3174,11 +3181,6 @@ body:after {
     margin: 0 0 30px;
     letter-spacing: 0;
 }
-.gallery .picture-thumbs:after {
-    content:'';
-    display: block;
-    clear: both;
-}
 .gallery .thumb-item {
     width: 18.2%;
     margin: 2% 0 0 2.25%;
@@ -3204,6 +3206,14 @@ body:after {
 	max-width: 100%;
 	max-height: 100%;
 	margin: auto;
+}
+.gallery .video-gallery {
+    margin-top: 30px;
+}
+.video-gallery .thumb-item {
+    width: 100%;
+    height: 315px;
+    margin: 0;
 }
 
 .product-reviews-overview {
@@ -3622,35 +3632,29 @@ td.ui-datepicker-week-end {
     top: 100%;
     width: 200px;
     left: 50%;
-    margin-left: -100px;
+    margin: 10px 0 0 -100px;
     z-index: 2;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+    background: #fff;
+    border: 5px solid #fff;
+    box-shadow: 0 0 14px rgba(0,0,0,0.09);
 }
 .attribute-squares li:hover .tooltip-container {
     display: block;
 }
-.attribute-squares .tooltip-header {
-    height: 10px;
-    position: relative;
-}
-.attribute-squares .tooltip-header:after {
+.attribute-squares .tooltip-container:before {
     content:'';
     width: 0;
     height: 0;
     position: absolute;
-    top: 0;
+    top: -15px;
     left: 0;
-    margin: auto;
     right: 0;
+    margin: auto;
     border-style: solid;
     border-width: 0 10px 10px 10px;
     border-color: transparent transparent #fff transparent;
-}
-.attribute-squares .tooltip-body {
-    background: #fff;
-    border: 5px solid #fff;
-    box-shadow: 0 0 14px rgba(0,0,0,0.09);
 }
 
 .overview .availability {
@@ -3874,6 +3878,7 @@ td.ui-datepicker-week-end {
 .overview .qty-label,
 .variant-overview .qty-label {
     font-size: 15px;
+    line-height: 50px;
     margin: 0 10px 10px 0;
     width: auto;
 }
@@ -3942,7 +3947,7 @@ td.ui-datepicker-week-end {
 .variant-overview .add-to-cart-button {
     padding: 15.5px 25px;
     width: 260px;
-    max-width: 45%;
+    max-width: 55%;
     border: none;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -5121,6 +5126,7 @@ td.ui-datepicker-week-end {
 .topic-block-body {
     text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
     max-width: 650px;
     margin: auto;
@@ -5132,15 +5138,17 @@ td.ui-datepicker-week-end {
 .topic-page .page-body {
 	text-transform: none;
     line-height: 25px;
+    color: #909090;
     font-family: 'Lato', sans-serif;
-    max-width: 1060px;
+    max-width: 900px;
     margin: auto;
+    text-align: center;
 }
 
 .home-page .topic-block {
-	margin: 20px auto;
+	margin: 80px auto;
     width: 90%;
-    max-width: 1060px;
+    max-width: 960px;
 }
 .home-page .topic-block-body {
     max-width: none;
@@ -6859,7 +6867,9 @@ td.ui-datepicker-week-end {
 .checkout-page .select-pickup-point {
 	text-align: center;
 }
-
+.checkout-page .select-pickup-point li {
+	display: inline-block;
+}
 .checkout-page .select-address select,
 .checkout-page .select-pickup-point select {
 	max-width: 100%;
@@ -7200,6 +7210,10 @@ td.ui-datepicker-week-end {
     text-transform: uppercase;
     color: #323232;
     background: #dddddd;
+}
+#opc-billing .button-1:not(.new-address-next-step-button),
+#opc-shipping .button-1:not(.new-address-next-step-button) {
+    display: none !important;
 }
 .opc .payment-method {
     margin: 0 auto 20px;

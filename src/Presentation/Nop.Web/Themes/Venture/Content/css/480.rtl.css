@@ -421,7 +421,7 @@
         max-width: 625px;
         margin: 0 auto 40px;
     }
-    .gallery:after {
+    .picture-gallery:after {
         content: '';
         display: block;
         clear: both;

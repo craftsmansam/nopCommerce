@@ -1,8 +1,9 @@
 ﻿@model CategoryModel
+
+@using Nop.Core.Domain.Catalog
 @using Nop.Core.Domain.Common
 @using Nop.Core.Domain.Seo
-@using Nop.Web.Components
-@using System.Text.RegularExpressions
+
 @inject Nop.Core.IWebHelper webHelper
 @inject SeoSettings seoSettings
 @inject CommonSettings commonSettings
@@ -20,7 +21,7 @@
 
     if (seoSettings.CanonicalUrlsEnabled)
     {
-        var categoryUrl = Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }, webHelper.GetCurrentRequestProtocol()).ToLowerInvariant();
+        var categoryUrl = Url.RouteUrl<Category>(new { SeName = Model.SeName }, webHelper.GetCurrentRequestProtocol()).ToLowerInvariant();
         NopHtml.AddCanonicalUrlParts(categoryUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
     }
 
@@ -47,12 +48,12 @@
                         {
                             <strong class="current-item" itemprop="name">@cat.Name</strong>
                             <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
-                                  id="@Url.RouteUrl("CategoryWithPath", new { Path = cat.SeName.GetPathFromSeName(), SeName = cat.SeName.GetSeNameWithoutPath() })">
+                                  id="@(Url.RouteUrl<Category>(new { SeName = cat.SeName }))">
                             </span>
                         }
                         else
                         {
-                            <a href="@Url.RouteUrl("CategoryWithPath", new { Path = cat.SeName.GetPathFromSeName(), SeName = cat.SeName.GetSeNameWithoutPath() })" title="@cat.Name" itemprop="item">
+                            <a href="@(Url.RouteUrl<Category>(new { SeName = cat.SeName }))" title="@cat.Name" itemprop="item">
                                 <span itemprop="name">@cat.Name</span>
                             </a>
                             <span class="delimiter">@breadcrumbDelimiter</span>
@@ -63,12 +64,12 @@
                 }
             </ul>
         </div>
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CategoryDetailsAfterBreadcrumb, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterBreadcrumb, additionalData = Model })
     }
 }
 
 @section CatalogFilters {
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFilters, additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFilters, additionalData = Model })
     @await Html.PartialAsync("_CatalogFilters", Model.CatalogProductsModel)
 }
 
@@ -80,31 +81,20 @@
                 <span>@Model.Name</span>
             </h1>
         </div>
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeSubcategories, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeSubcategories, additionalData = Model })
         @*subcategories*@
         @if (Model.SubCategories.Count > 0)
         {
             <div class="sub-category-toggle-select">@T("SevenSpikes.Themes.Venture.Common.SelectSubcategory")</div>
             <div class="sub-categories-wrapper">
-                <div class="item-grid">
-                    @foreach (var item in Model.SubCategories)
-                    {
-                        <div class="item-box">
-                            <div class="sub-category-item">
-                                <h2 class="title" style="min-height: 58px;">
-                                    <a href="@Url.RouteUrl("CategoryWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })" title="@item.PictureModel.Title">
-                                        @item.Name
-                                    </a>
-                                </h2>
-                                <div class="picture">
-                                    <a href="@Url.RouteUrl("CategoryWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })" title="@item.PictureModel.Title">
-                                        <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
+                @foreach (var item in Model.SubCategories)
+                {
+                    <div class="title">
+                        <a href="@(Url.RouteUrl<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                            @item.Name
+                        </a>
+                    </div>
+                }
             </div>
         }
     </div>
@@ -113,12 +103,11 @@
         @if (!String.IsNullOrWhiteSpace(Model.Description))
         {
             <div class="category-description">
-                @Html.Raw(await Component.ParseWidgetAndComponentsFromText(Model.Description))
+                @Html.Raw(Model.Description)
             </div>
         }
-
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CategoryDetailsTop, additionalData = Model })
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFeaturedProducts, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsTop, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFeaturedProducts, additionalData = Model })
         @*featured products*@
         @if (Model.FeaturedProducts.Count > 0)
         {

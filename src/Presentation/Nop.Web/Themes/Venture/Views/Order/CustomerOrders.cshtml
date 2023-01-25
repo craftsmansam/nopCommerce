@@ -10,7 +10,7 @@
 }
 @section left
 {
-    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Orders })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.Orders })
 }
 <div class="page account-page order-list-page">
     <div class="page-title">
@@ -132,7 +132,7 @@
         @if (Model.Orders.Count > 0)
         {
             <div class="order-list">
-                @foreach (var order in Model.Orders.OrderByDescending(x => x.CreatedOn))
+                @foreach (var order in Model.Orders)
                 {
                     <div class="section order-item">
                         <div class="title">
@@ -140,7 +140,7 @@
                         </div>
                         <ul class="info">
                             <li>@T("Account.CustomerOrders.OrderStatus"): <span class="order-status @order.OrderStatusEnum.ToString().ToLowerInvariant()">@order.OrderStatus</span></li>
-                            <li>@T("Account.CustomerOrders.OrderDate"): <span class="order-date">@(order.IsShopOrder ? order.CreatedOn.ToShortDateString() : order.CreatedOn.ToString())</span></li>
+                            <li>@T("Account.CustomerOrders.OrderDate"): <span class="order-date">@order.CreatedOn.ToString()</span></li>
                             <li>@T("Account.CustomerOrders.OrderTotal"): <span class="order-total">@order.OrderTotal</span></li>
                         </ul>
                         <div class="buttons">
@@ -148,10 +148,7 @@
                             {
                                 <button type="button" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')">@T("Account.CustomerOrders.ReturnItems")</button>
                             }
-                            @{
-                                var url = order.IsShopOrder ? Url.RouteUrl("ShopOrderDetails", new { shopOrderNumber = order.CustomOrderNumber }) : Url.RouteUrl("OrderDetails", new { orderId = order.Id });
-                            }
-                            <button type="button" class="button-2 order-details-button" onclick="setLocation('@url')">@T("Account.CustomerOrders.OrderDetails")</button>
+                            <button type="button" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderId = order.Id })')">@T("Account.CustomerOrders.OrderDetails")</button>
                         </div>
                     </div>
                 }

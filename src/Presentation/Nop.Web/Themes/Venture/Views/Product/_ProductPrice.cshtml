@@ -1,8 +1,10 @@
 ﻿@model ProductDetailsModel.ProductPriceModel
+
 @using Nop.Core
 @using Nop.Core.Domain.Tax
-@using Nop.Web.Framework.Mvc.Routing
+
 @inject IWorkContext workContext
+
 @if (!Model.CustomerEntersPrice)
 {
     <div class="prices">
@@ -10,9 +12,7 @@
         {
             @*call for price*@
             <div class="product-price call-for-price">
-                <span>
-                    @Html.Raw(T("Products.CallForPrice").ToString())
-                </span>
+                <span>@T("Products.CallForPrice")</span>
             </div>
         }
         else

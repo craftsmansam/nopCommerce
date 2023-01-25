@@ -1,7 +1,4 @@
-﻿@using Nop.Web.Framework.Mvc.Routing
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Nop.Web.Framework.TagHelpers.Shared
-@model CheckoutConfirmModel
+﻿@model CheckoutConfirmModel
 
 @{
     Layout = "_ColumnsOne";
@@ -13,12 +10,12 @@
     NopHtml.AppendPageCssClassParts("html-order-confirm-page");
 }
 <div class="page checkout-page order-confirm-page">
-    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Confirm })
+    @await Component.InvokeAsync(typeof(CheckoutProgressViewComponent), new { step = CheckoutProgressStep.Confirm })
     <div class="page-title">
         <h1>@T("Checkout.ConfirmYourOrder")</h1>
     </div>
     <div class="page-body checkout-data">
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutConfirmTop, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutConfirmTop, additionalData = Model })
         <div class="section confirm-order">
             <form asp-route="CheckoutConfirm" method="post" id="confirm-order-form">
                 <script asp-location="Footer">
@@ -74,7 +71,7 @@
 	                            }
 	                            else
 	                            {
-	                                <a class="read" id="read-terms" href="@Url.RouteTopicUrl("conditionsofuse"))">@T("Checkout.TermsOfService.Read")</a>
+	                                <a class="read" id="read-terms" href="@Url.RouteTopicUrl("conditionsofuse")">@T("Checkout.TermsOfService.Read")</a>
 	                            }
 							</label>
                         </div>
@@ -92,6 +89,10 @@
                                 0);
                             });
                     </script>
+                    if (Model.DisplayCaptcha)
+                    {
+                        <nop-captcha />
+                    }
                 }
                 @if (Model.Warnings.Count > 0)
                 {
@@ -106,9 +107,9 @@
                 }
             </form>
         </div>
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutConfirmBottom, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CheckoutConfirmBottom, additionalData = Model })
         <div class="section order-summary">
-            @await Component.InvokeAsync("OrderSummary", new { prepareAndDisplayOrderReviewData = true })
+            @await Component.InvokeAsync(typeof(OrderSummaryViewComponent), new { prepareAndDisplayOrderReviewData = true })
         </div>
     </div>
 </div>

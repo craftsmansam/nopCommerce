@@ -81,7 +81,7 @@ namespace Nop.Web.Framework.Mvc.Routing
             if (string.IsNullOrEmpty(slug))
                 return;
 
-            if (!urlRecord.IsActive || !string.IsNullOrEmpty(catalogPath))
+            if (!urlRecord.IsActive)
             {
                 //permanent redirect to new URL with active single slug
                 InternalRedirect(httpContext, values, $"/{slug}", true);
@@ -294,11 +294,14 @@ namespace Nop.Web.Framework.Mvc.Routing
             {
             //get values to transform for action selection
             var values = new RouteValueDictionary(routeValues);
-            if (values is null)
-                return values;
 
             if (!values.TryGetValue(NopRoutingDefaults.RouteValue.SeName, out var slug))
                 return values;
+
+            if (values.TryGetValue(NopRoutingDefaults.RouteValue.CatalogSeName, out var catalog))
+            {
+                slug = $"{catalog}/{slug}";
+            }
 
             //find record by the URL slug
             if (await _urlRecordService.GetBySlugAsync(slug.ToString()) is not UrlRecord urlRecord)

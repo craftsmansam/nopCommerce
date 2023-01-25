@@ -11,7 +11,7 @@ namespace Nop.Web.Components
 {
     public static class HtmlWidgetHelper
     {
-        public static async Task<string> ParseWidgetAndComponentsFromText(this IViewComponentHelper component, string text)
+        public static async Task<string> ParseWidgetAndComponentsFromTextAsync(this IViewComponentHelper component, string text)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -19,12 +19,12 @@ namespace Nop.Web.Components
             }
 
             var groupName = "widgetName";
-            var sb = await ParseIndividualComponent(text, $"<p>##(?<{groupName}>[a-zA-Z ]+)##</p>", groupName, 
+            var sb = await ParseIndividualComponentAsync(text, $"<p>##(?<{groupName}>[a-zA-Z ]+)##</p>", groupName, 
                                                     async widgetZone => await component.InvokeAsync("Widget", new {widgetZone}));
             
             text = sb.ToString();
             groupName = "componentName";
-            sb = await ParseIndividualComponent(text, $"<p>@@(?<{groupName}>[a-zA-Z_ ]+)@@</p>", groupName,
+            sb = await ParseIndividualComponentAsync(text, $"<p>@@(?<{groupName}>[a-zA-Z_ ]+)@@</p>", groupName,
                 async componentName =>
                 {
                     // e.g. CapacitiesChart_Angle
@@ -40,7 +40,7 @@ namespace Nop.Web.Components
             return sb.ToString();
         }
 
-        private static async Task<StringBuilder> ParseIndividualComponent(string text, string regexPattern, string regexGroupName, Func<string, Task<IHtmlContent>> invokeComponentFunc)
+        private static async Task<StringBuilder> ParseIndividualComponentAsync(string text, string regexPattern, string regexGroupName, Func<string, Task<IHtmlContent>> invokeComponentFunc)
         {
             var sb = new StringBuilder();
             var regex = new Regex(regexPattern);

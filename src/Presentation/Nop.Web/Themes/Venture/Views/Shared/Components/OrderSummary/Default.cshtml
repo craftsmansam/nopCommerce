@@ -1,10 +1,9 @@
 @model ShoppingCartModel
+
 @using Nop.Core
+@using Nop.Core.Domain.Catalog
 @using Nop.Core.Domain.Orders
 @using Nop.Core.Domain.Tax
-@using Nop.Web.Framework.Mvc.Routing
-@using Nop.Web.Framework.TagHelpers.Shared
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 
 @inject IWebHelper webHelper
 @inject IWorkContext workContext
@@ -12,7 +11,7 @@
 @inject IViewComponentSelector viewComponentSelector
 
 <div class="order-summary-content">
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryContentBefore, additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentBefore, additionalData = Model })
     @await Html.PartialAsync("_OrderReviewData", Model.OrderReviewData)
     @if (Model.Items.Count > 0)
     {
@@ -121,7 +120,7 @@
                                 @if (Model.ShowProductImages)
                                 {
                                     <td class="product-picture">
-                                        <a href="@Url.RouteUrl("ProductWithPath", new { Path = item.ProductSeName.GetPathFromSeName(), SeName = item.ProductSeName.GetSeNameWithoutPath() })">
+                                        <a href="@(Url.RouteUrl<Product>(new { SeName = item.ProductSeName }))">
                                             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                                             {
                                                 @await Component.InvokeAsync("LazyLoadImage", new(string Key, string Value)[] 
@@ -139,7 +138,7 @@
                                     </td>
                                 }
                                 <td class="product">
-                                    <a href="@Url.RouteUrl("ProductWithPath", new { Path = item.ProductSeName.GetPathFromSeName(), SeName = item.ProductSeName.GetSeNameWithoutPath() })" class="product-name">@item.ProductName</a>
+                                    <a href="@(Url.RouteUrl<Product>(new { SeName = item.ProductSeName }))" class="product-name">@item.ProductName</a>
                                     @if (!string.IsNullOrEmpty(item.AttributeInfo))
                                     {
                                         <div class="attributes">
@@ -160,7 +159,7 @@
                                     }
                                     @if (Model.IsEditable && item.AllowItemEditing)
                                     {
-                                        var editCartItemUrl = Url.RouteUrl("ProductWithPath", new { Path = item.ProductSeName.GetPathFromSeName(), SeName = item.ProductSeName.GetSeNameWithoutPath() }, webHelper.GetCurrentRequestProtocol());
+                                        var editCartItemUrl = Url.RouteUrl<Product>(new { SeName = item.ProductSeName }, webHelper.GetCurrentRequestProtocol());
                                         editCartItemUrl = webHelper.ModifyQueryString(editCartItemUrl, "updatecartitemid", item.Id.ToString());
                                         <div class="edit-item">
                                             <a href="@editCartItemUrl">@T("Common.Edit")</a>
@@ -185,11 +184,11 @@
                                         <span class="vendor-name">@item.VendorName</span>
                                     </td>
                                 }
-                                <td class="unit-price vertical-center">
+                                <td class="unit-price">
                                     <label class="td-title">@T("ShoppingCart.UnitPrice"):</label>
                                     <span class="product-unit-price">@item.UnitPrice</span>
                                 </td>
-                                <td class="quantity vertical-center">
+                                <td class="quantity">
                                     <label class="td-title" for="itemquantity@(item.Id)">@T("ShoppingCart.Quantity"):</label>
                                     @if (Model.IsEditable)
                                     {
@@ -212,7 +211,7 @@
                                         <span class="product-quantity">@item.Quantity</span>
                                     }
                                 </td>
-                                <td class="subtotal vertical-center">
+                                <td class="subtotal">
                                     <label class="td-title">@T("ShoppingCart.ItemTotal"):</label>
                                     <span class="product-subtotal">@item.SubTotal</span>
                                     @if (!string.IsNullOrEmpty(item.Discount))
@@ -247,19 +246,18 @@
                 <div class="common-buttons">
             	    <button type="submit" name="updatecart" id="updatecart" class="button-2 update-cart-button">@T("ShoppingCart.UpdateCart")</button>
                     <button type="button" class="button-2 clear-cart-button">@T("SevenSpikes.Themes.Venture.Common.ClearCart")</button>
-                    @await Component.InvokeAsync("ShoppingCartEstimateShipping")
+                    @await Component.InvokeAsync(typeof(ShoppingCartEstimateShippingViewComponent))
                     <button type="submit" name="continueshopping" class="button-2 continue-shopping-button">@T("ShoppingCart.ContinueShopping")</button>
                 </div>
             }
             <div class="cart-footer">
-
-                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryCartFooter, additionalData = Model })
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryCartFooter, additionalData = Model })
                 @if (Model.IsEditable)
                 {
-                    <div class="cart-collaterals" style="float: left;">
+                    <div class="cart-collaterals">
                         @{ 
                             var checkoutAttributes = await Html.PartialAsync("_CheckoutAttributes", Model);
-                            var selectedCheckoutAttributes = await Component.InvokeAsync("SelectedCheckoutAttributes");
+                            var selectedCheckoutAttributes = await Component.InvokeAsync(typeof(SelectedCheckoutAttributesViewComponent));
                         }
                         @if (!String.IsNullOrEmpty(await checkoutAttributes.RenderHtmlContentAsync()))
                         {
@@ -276,13 +274,13 @@
                         <div class="deals">
                             @await Html.PartialAsync("_DiscountBox", Model.DiscountBox)
                             @await Html.PartialAsync("_GiftCardBox", Model.GiftCardBox)
-                            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryContentDeals, additionalData = Model })
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentDeals, additionalData = Model })
                         </div>
                     </div>
                 }
                 <div class="totals">
-                	@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryTotals, additionalData = Model })
-                    @await Component.InvokeAsync("OrderTotals", new { isEditable = Model.IsEditable })
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryTotals, additionalData = Model })
+                    @await Component.InvokeAsync(typeof(OrderTotalsViewComponent), new { isEditable = Model.IsEditable })
                     @if (Model.IsEditable)
                     {
                         if (!string.IsNullOrEmpty(Model.MinOrderSubtotalWarning))
@@ -368,11 +366,11 @@
                         </div>
                     }
                 </div>
-                </div>
-                @if (Model.IsEditable)
-                {
-                    @await Component.InvokeAsync("CrossSellProducts")
-                }
+            </div>
+            @if (Model.IsEditable)
+            {
+                @await Component.InvokeAsync(typeof(CrossSellProductsViewComponent))
+            }
         </form>
     }
     else
@@ -381,5 +379,5 @@
             @T("ShoppingCart.CartIsEmpty")
         </div>
     }
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OrderSummaryContentAfter, additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentAfter, additionalData = Model })
 </div>

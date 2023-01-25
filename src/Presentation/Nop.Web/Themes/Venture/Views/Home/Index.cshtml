@@ -1,11 +1,12 @@
 ﻿@using Nop.Core
+@using Nop.Core.Infrastructure
 @using Nop.Services.Configuration
-@using Microsoft.AspNetCore.WebUtilities
 @using Nop.Services.Localization
+@using Microsoft.AspNetCore.WebUtilities
 
+@inject ILocalizationService localizationService
 @inject ISettingService settingService
 @inject IStoreContext storeContext
-@inject ILocalizationService localizationService
 
 @{
     Layout = "_ColumnsOne";
@@ -28,7 +29,6 @@
 
     //page class
     NopHtml.AppendPageCssClassParts("html-home-page");
-    NopHtml.AddMetaDescriptionParts("Learn how Albina bends steel for large structural projects as well as manufacturing projects requiring smaller repeat bends. Call 503-692-6010 for a quote!");
 
     var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
     var homePageProductBoxLayout = await settingService.GetSettingByKeyAsync("venturethemesettings.homepageitemboxlayout", "layout-1", storeId, true);
@@ -49,20 +49,20 @@
 }
 <div class="page home-page @homePageProductBoxLayoutClass">
     <div class="page-body">
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageTop })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
         @await Component.InvokeAsync("Widget", new { widgetZone = "venture_home_page_info_boxes" })
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
-        @await Component.InvokeAsync("HomepageCategories")
-        @await Component.InvokeAsync("TopicBlock", new { systemName = "HomepageText" })
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
-        @await Component.InvokeAsync("HomepageProducts")
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
-        @await Component.InvokeAsync("HomepageBestSellers")
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
-        @await Component.InvokeAsync("HomepageNews")
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
-        @await Component.InvokeAsync("HomepagePolls")
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HomepageBottom })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+        @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+        @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+        @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+        @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
+        @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
+        @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
         <div class="home-page-bottom-wrapper">
             @{
                 var carouselWidgetZone = await Component.InvokeAsync("Widget", new { widgetZone = "venture_home_page_bottom" });

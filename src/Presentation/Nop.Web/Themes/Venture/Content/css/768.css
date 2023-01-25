@@ -200,7 +200,7 @@
     font: normal 14px 'Fjalla One', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    padding: 12px 0;
+    padding: 12px 22px;
 }
 .sub-categories-wrapper .title a:hover {
     color: #2c2c2c;

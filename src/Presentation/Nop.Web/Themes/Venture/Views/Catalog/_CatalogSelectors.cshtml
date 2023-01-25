@@ -39,9 +39,9 @@
 
 <div class="product-selectors">
 
-    @*<div class="filters-button-wrapper">
+    <div class="filters-button-wrapper">
         <button class="filters-button">@T("SevenSpikes.Themes.Venture.Common.Filter")</button>
-    </div>*@
+    </div>
 
     @*view mode*@
     @if (Model.AllowProductViewModeChanging)
@@ -63,15 +63,15 @@
                 {
                     if (gridNuberOfItems == "items-3")
                     {
-                        <a title="@gridMode.Text"  data-viewmode="@gridMode.Value" class="viewmode-icon grid items-3 @if(gridMode.Selected && gridNuberOfItems == "items-3"){<text>selected</text>}">3 @T("SevenSpikes.Themes.Venture.Common.ItemsInGrid") @gridMode.Text</a>
+                        <a title="@gridMode.Text"  data-viewmode="@gridMode.Value" class="viewmode-icon grid items-3 @if(gridMode.Selected && gridNuberOfItems == "items-3"){<text>selected</text>}" tabindex="0" aria-role="button" href="#">3 @T("SevenSpikes.Themes.Venture.Common.ItemsInGrid") @gridMode.Text</a>
                     }
                     else
                     {
-                        <a title="@gridMode.Text"  data-viewmode="@gridMode.Value" class="viewmode-icon grid items-4 @if(gridMode.Selected && gridNuberOfItems == "items-4"){<text>selected</text>}">4 @T("SevenSpikes.Themes.Venture.Common.ItemsInGrid") @gridMode.Text</a>
+                        <a title="@gridMode.Text"  data-viewmode="@gridMode.Value" class="viewmode-icon grid items-4 @if(gridMode.Selected && gridNuberOfItems == "items-4"){<text>selected</text>}" tabindex="0" aria-role="button" href="#">4 @T("SevenSpikes.Themes.Venture.Common.ItemsInGrid") @gridMode.Text</a>
                     }
                 }
 
-                <a title="@listMode.Text" data-viewmode="@listMode.Value" class="viewmode-icon list @if(listMode.Selected){<text>selected</text>}">@listMode.Text</a>
+                <a title="@listMode.Text" data-viewmode="@listMode.Value" class="viewmode-icon list @if(listMode.Selected){<text>selected</text>}" tabindex="0" aria-role="button" href="#">@listMode.Text</a>
             }
         </div>
         <script asp-location="Footer">

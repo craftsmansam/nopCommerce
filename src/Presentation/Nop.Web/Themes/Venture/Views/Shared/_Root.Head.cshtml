@@ -1,29 +1,32 @@
 ﻿@using Nop.Core
 @using Nop.Core.Configuration
-@using Nop.Core.Events
+@using Nop.Core.Domain.Catalog
 @using Nop.Core.Domain.Common
 @using Nop.Core.Domain.Seo
-@using Nop.Services.Localization
+@using Nop.Core.Events
 @using Nop.Services.Configuration;
+@using Nop.Services.Localization
 @using Nop.Services.Security;
 
+@inject AppSettings appSettings
 @inject CommonSettings commonSettings
+@inject CatalogSettings catalogSettings
 @inject IEventPublisher eventPublisher
 @inject IPermissionService permissionService
-@inject IWorkContext workContext
-@inject IThemeContext themeContext
-@inject SeoSettings seoSettings
-@inject AppSettings appSettings
-@inject IStoreContext storeContext
 @inject ISettingService settingService
+@inject IStoreContext storeContext
+@inject IThemeContext themeContext
+@inject IWorkContext workContext
+@inject SeoSettings seoSettings
 
 @{
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/swiper/swiper-bundle.min.js");
+    }
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/public.countryselect.js");
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.js");
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/public.common.js");
-    
-    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/js/custom.js", "", true);
-
     //when jQuery migrate script logging is active you will see the log in the browser console
     if (commonSettings.JqueryMigrateScriptLoggingActive)
     {
@@ -50,6 +53,11 @@
     await eventPublisher.PublishAsync(new PageRenderingEvent(NopHtml));
 
     //variables
+
+    var title = await NopHtml.GenerateTitleAsync();
+    var description = await @NopHtml.GenerateMetaDescriptionAsync();
+    var keywords = await NopHtml.GenerateMetaKeywordsAsync();
+
     var storeId = (await storeContext.GetCurrentStoreAsync()).Id;
     var themeColor = await settingService.GetSettingByKeyAsync("venturethemesettings.themecolor", "dark-theme", storeId, true);
     var currentPageClass = (await (await Html.PartialAsync("_CurrentPageClass")).RenderHtmlContentAsync()).Trim();
@@ -58,54 +66,34 @@
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())" class="@NopHtml.GeneratePageCssClasses()">
 <head>
-    <style>
-        @@font-face {
-            font-family: 'Fjalla One';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
-            src: url(https://fonts.gstatic.com/s/fjallaone/v13/Yq6R-LCAWCX3-6Ky7FAFrOF6kg.woff2) format('woff2');
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-        }
-        @@font-face {
-            font-family: 'Lato';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
-            src: url(https://fonts.gstatic.com/s/lato/v23/S6uyw4BMUTPHjx4wXg.woff2) format('woff2');
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-        }
-    </style>
-
-    <title>@(await NopHtml.GenerateTitleAsync())</title>
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
-    <meta name="description" content="@(await NopHtml.GenerateMetaDescriptionAsync())"/>
-    <meta name="keywords" content="@(await NopHtml.GenerateMetaKeywordsAsync())"/>
-    <meta name="generator" content="nopCommerce"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0"/>
-    <!link rel="preload" as="font" href="@Url.Content($"~/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/fonts/venture-font.woff")" crossorigin/>
-    @*    <!link href="https://fonts.googleapis.com/css?family=Fjalla+One&amp;subset=latin-ext&display=swap" rel="stylesheet"/>
-    <!link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext&display=swap" rel="stylesheet"/>
-*@    
-    <link href="/Themes/Venture/Content/fonts/venture-font.woff" rel="preload" as="font" type="font/woff" crossorigin="anonymous">
+    <title>@title</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="@description" />
+    <meta name="keywords" content="@keywords" />
+    <meta name="generator" content="nopCommerce" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0" />
+    <!link rel="preload" as="font" href="@Url.Content($"~/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/fonts/venture-font.woff")" crossorigin />
+    <!link href="https://fonts.googleapis.com/css?family=Fjalla+One&amp;subset=latin-ext&display=swap" rel="stylesheet" />
+    <!link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext&display=swap" rel="stylesheet" />
     @NopHtml.GenerateHeadCustom()
     @*This is used so that themes can inject content into the header*@
     @await Html.PartialAsync("Head")
     @await Component.InvokeAsync("Widget", new { widgetZone = "head_html_tag_after_css_files_venture" })
     @NopHtml.GenerateCssFiles()
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeadHtmlTag })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeadHtmlTag })
     @NopHtml.GenerateCanonicalUrls()
-    @await Component.InvokeAsync("NewsRssHeaderLink")
-    @await Component.InvokeAsync("BlogRssHeaderLink")
+    @await Component.InvokeAsync(typeof(NewsRssHeaderLinkViewComponent))
+    @await Component.InvokeAsync(typeof(BlogRssHeaderLinkViewComponent))
     @*Insert favicon and app icons head code*@
-    @await Component.InvokeAsync("Favicon")
+    @await Component.InvokeAsync(typeof(FaviconViewComponent))
     @if (displayMiniProfiler)
     {
-        <mini-profiler/>
+        <mini-profiler />
     }
     @NopHtml.GenerateScripts(ResourceLocation.Head)
     @NopHtml.GenerateInlineScripts(ResourceLocation.Head)
-    <!--Powered by nopCommerce - https://www.nopCommerce.com-->
+    <!--Powered by nopCommerce - https://www.nopCommerce.com-->   
+    @Html.Raw(commonSettings.HeaderCustomHtml)
 </head>
 <body class="@currentPageClass @themeColor">
     <nop-antiforgery-token />
@@ -116,5 +104,6 @@
     <div class="scroll-back-button" id="goToTop"></div>
     @NopHtml.GenerateScripts(ResourceLocation.Footer)
     @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+    @Html.Raw(commonSettings.FooterCustomHtml)
 </body>
 </html>
