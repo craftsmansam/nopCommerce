@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Calculators;
-using Nop.Services.Calculators;
 using Nop.Web.Framework.Components;
 using Nop.Web.Models.Common;
 using System.Collections.Generic;
@@ -9,82 +8,90 @@ namespace Nop.Web.Components
 {
     public class BendingTolerancesTableViewComponent : NopViewComponent
     {
-        private readonly ITangentMaterialService _tangentMaterialService;
-        public BendingTolerancesTableViewComponent(ITangentMaterialService tangentMaterialService)
+        public IViewComponentResult Invoke(BendToleranceType id, bool showFooter)
         {
-          _tangentMaterialService = tangentMaterialService;
-        }
+            var viewModel = new BendingTolerancesTableModel
+            {
+                TableDescription = GetDescription(id), 
+                BendToleranceRows = GetBendToleranceRows(id), 
+                ShowFooter = showFooter, 
+                HotOrCold = id == BendToleranceType.HotStringerLessThan20 || id == BendToleranceType.HotStringerGreaterThan20 ? "Hot" : "Cold"
+            };                                                                                                                                             
 
-        public IViewComponentResult Invoke(int id, bool showFooter, string hotOrCold)
-        {
-            var viewModel = new BendingTolerancesTableModel();
-            viewModel.TableDescription = GetDescription(id);
-            viewModel.BTRows = GetBTRows(id);
-            viewModel.ShowFooter = showFooter;
-            viewModel.HotOrCold = hotOrCold;
             return View(viewModel);
         }
 
-        private List<BendingTolerancesRow> GetBTRows(int id)
+        private static List<BendingTolerancesRow> GetBendToleranceRows(BendToleranceType id)
         {
-            var BTRows = new List<BendingTolerancesRow>();
+            var btRows = new List<BendingTolerancesRow>();
             switch (id)
             {
-                case 1:
-                   BTRows = new List<BendingTolerancesRow>
+                case BendToleranceType.ColdStringerLessThan12:
+                   btRows = new List<BendingTolerancesRow>
 				    {
-					    new BendingTolerancesRow("Under 10 ft", "+/- \xB9/\x2082\"", "Within 3° overall", "+/- 1°", "+/- \xB9/\x2082\"", "+/- \xB9/\x2084\""),
-					    new BendingTolerancesRow("10 ft - 17 ft", "+/- \xB3/\x2084\"", "Within 3 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/- \xB9/\x2082\""),
-				    	new BendingTolerancesRow("17 ft - 24 ft", "+/- 1\"", "Within 4° overall", "+/- 1 \xB9/\x2082°", "+/- 1 \xB9/\x2082\"", "+/- 1\""),
-				    	new BendingTolerancesRow("Over 24 ft", "+/- 1\"", "Within 5° overall", "+/- 1 \xB9/\x2082°", "+/- 2\"", "+/- 1\"")
+					    new("Under 10 ft", "+/- \xB9/\x2082\"", "Within 3° overall", "+/- 1°", "+/- \xB9/\x2082\"", "+/- \xB9/\x2084\""),
+					    new("10 ft - 17 ft", "+/- \xB3/\x2084\"", "Within 3 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/- \xB9/\x2082\""),
+				    	new("17 ft - 24 ft", "+/- 1\"", "Within 4° overall", "+/- 1 \xB9/\x2082°", "+/- 1 \xB9/\x2082\"", "+/- 1\""),
+				    	new("Over 24 ft", "+/- 1\"", "Within 5° overall", "+/- 1 \xB9/\x2082°", "+/- 2\"", "+/- 1\"")
 				    };
                     break;
-                case 2:
-                   BTRows = new List<BendingTolerancesRow>
+                case BendToleranceType.ColdStringerGreaterThan12:
+                   btRows = new List<BendingTolerancesRow>
 				    {
-					    new BendingTolerancesRow("Under 10ft", "See Note 1", "Within 3° overall", "+/- 1°", "n/a", "n/a"),
-					    new BendingTolerancesRow("10 ft - 17 ft", "See Note 1", "Within 3 \xB9/\x2082° overall", "+/- 1°", "n/a", "n/a"),
-					    new BendingTolerancesRow("17 ft - 24 ft", "See Note 1", "Within 4° overall", "+/- 1 \xB9/\x2082°", "n/a", "n/a"),
-					    new BendingTolerancesRow("Over 24 ft", "See Note 1", "Within 5° overall", "+/- 1 \xB9/\x2082°", "n/a", "n/a")
+					    new("Under 10ft", "See Note 1", "Within 3° overall", "+/- 1°", "n/a", "n/a"),
+					    new("10 ft - 17 ft", "See Note 1", "Within 3 \xB9/\x2082° overall", "+/- 1°", "n/a", "n/a"),
+					    new("17 ft - 24 ft", "See Note 1", "Within 4° overall", "+/- 1 \xB9/\x2082°", "n/a", "n/a"),
+					    new("Over 24 ft", "See Note 1", "Within 5° overall", "+/- 1 \xB9/\x2082°", "n/a", "n/a")
 				    };
                     break;
-                case 3:
-                   BTRows = new List<BendingTolerancesRow>
+                case BendToleranceType.HotStringerLessThan20:
+                   btRows = new List<BendingTolerancesRow>
 				    {
-					 	new BendingTolerancesRow("Under 10ft", "+/- \xB9/\x2084\"", "Within 1 \xB9/\x2082° overall", "+/- \xB9/\x2082°", "+/- \xB9/\x2082\"", "+/- \xB9/\x2084\""),
-					    new BendingTolerancesRow("10 ft - 17 ft", "+/- \xB9/\x2082\"", "Within 2° overall", "+/- \xB3/\x2084°", "+/- \xB3/\x2084\"", "+/- \xB3/\x2088°\"" ),
-					    new BendingTolerancesRow("17 ft - 24 ft", "+/- \xB3/\x2084\"", "Within 2 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/- \xB3/\x2084\""),
-					    new BendingTolerancesRow("Over 24 ft", "+/- 1\"", "Within 3° overall", "+/- 1 \xB9/\x2082°", "+/- 1 \xB9/\x2082\"", "+/- 1\""),
+					 	new("Under 10ft", "+/- \xB9/\x2084\"", "Within 1 \xB9/\x2082° overall", "+/- \xB9/\x2082°", "+/- \xB9/\x2082\"", "+/- \xB9/\x2084\""),
+					    new("10 ft - 17 ft", "+/- \xB9/\x2082\"", "Within 2° overall", "+/- \xB3/\x2084°", "+/- \xB3/\x2084\"", "+/- \xB3/\x2088°\"" ),
+					    new("17 ft - 24 ft", "+/- \xB3/\x2084\"", "Within 2 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/- \xB3/\x2084\""),
+					    new("Over 24 ft", "+/- 1\"", "Within 3° overall", "+/- 1 \xB9/\x2082°", "+/- 1 \xB9/\x2082\"", "+/- 1\""),
 				    };
                     break;
-                case 4:
-                   BTRows = new List<BendingTolerancesRow>
+                case BendToleranceType.HotStringerGreaterThan20:
+                   btRows = new List<BendingTolerancesRow>
 				    {
-					 	new BendingTolerancesRow("Under 10 ft", "See note 1", "Within 1 \xB9/\x2082° overall", "+/-  \xB9/\x2082°", "+/-  \xB9/\x2082\"", "+/-  \xB9/\x2084\""),
-					    new BendingTolerancesRow("10 ft - 17 ft", "See note 1", "Within 2° overall", "+/- \xB3/\x2084°", "+/-  \xB3/\x2084\"", "+/-  \xB3/\x2088\""),
-					    new BendingTolerancesRow("17 ft - 24 ft", "See note 1", "Within 2 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/-  \xB3/\x2084\""),
-					    new BendingTolerancesRow("Over 24 ft", "See note 1", "Within 3° overall", "+/- 1 \xB9/\x2082°", "+/-  1 \xB9/\x2082\"", "+/- 1\"")
+					 	new("Under 10 ft", "See note 1", "Within 1 \xB9/\x2082° overall", "+/-  \xB9/\x2082°", "+/-  \xB9/\x2082\"", "+/-  \xB9/\x2084\""),
+					    new("10 ft - 17 ft", "See note 1", "Within 2° overall", "+/- \xB3/\x2084°", "+/-  \xB3/\x2084\"", "+/-  \xB3/\x2088\""),
+					    new("17 ft - 24 ft", "See note 1", "Within 2 \xB9/\x2082° overall", "+/- 1°", "+/- 1\"", "+/-  \xB3/\x2084\""),
+					    new("Over 24 ft", "See note 1", "Within 3° overall", "+/- 1 \xB9/\x2082°", "+/-  1 \xB9/\x2082\"", "+/- 1\"")
 				    };
+                    break;
+                case BendToleranceType.ColdHandrailLessThan12:
+                    btRows = new List<BendingTolerancesRow>
+                    {
+                        new("Under 10 ft", "+/- \xB9/\x2082\"", "NA", "+/-  2 \xB9/\x2082°", "+/-  1\"", "+/-  \xB9/\x2082\""),
+                        new("10 ft - 17 ft", "+/- 3/4\"", "NA", "+/- 3°", "+/-  2\"", "+/-  1\""),
+                        new("17 ft - 24 ft", "+/- 1\"", "NA", "+/- 4°", "+/- 3\"", "+/-  2\""),
+                    };
                     break;
             }
-            return BTRows;
+            return btRows;
         }
 
-        private string GetDescription(int id)
+        private static string GetDescription(BendToleranceType id)
         {
             var description = "";
             switch(id){
-                case 1:
+                case BendToleranceType.ColdStringerLessThan12:
                     description = "Plain view radius of 12'0\" or less.";
                     break;
-                case 2:
+                case BendToleranceType.ColdStringerGreaterThan12:
                     description = "Plain view radius greater than 12'0\"";
                     break;
-                case 3:
+                case BendToleranceType.HotStringerLessThan20:
                     description = "Plain view radius of 20'0\" or less.";
                     break;
-                case 4:
+                case BendToleranceType.HotStringerGreaterThan20:
                     description = "Plain view radius greater than 20'0\"";
+                    break;
+                case BendToleranceType.ColdHandrailLessThan12:
+                    description = "Plain view radius of 12'0\" or less";
                     break;
             }
             return description;

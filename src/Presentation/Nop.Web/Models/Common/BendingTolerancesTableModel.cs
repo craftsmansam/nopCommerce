@@ -4,9 +4,18 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Common
 {
-    public partial record BendingTolerancesTableModel : BaseNopModel
+    public enum BendToleranceType
     {
-        public List<BendingTolerancesRow> BTRows { get; set; } = new();
+        ColdStringerLessThan12,
+        ColdStringerGreaterThan12,
+        HotStringerLessThan20,
+        HotStringerGreaterThan20,
+        ColdHandrailLessThan12
+    }
+
+    public record BendingTolerancesTableModel : BaseNopModel
+    {
+        public List<BendingTolerancesRow> BendToleranceRows { get; set; } = new();
 
 		public bool ShowFooter { get; set; }
 
