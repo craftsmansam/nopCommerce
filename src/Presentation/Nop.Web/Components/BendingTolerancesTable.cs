@@ -70,6 +70,14 @@ namespace Nop.Web.Components
                         new("17 ft - 24 ft", "+/- 1\"", "NA", "+/- 4°", "+/- 3\"", "+/-  2\""),
                     };
                     break;
+                case BendToleranceType.ColdHandrailGreaterThan12:
+                    btRows = new List<BendingTolerancesRow>
+                    {
+                        new("Under 10 ft", "See Note 1", "NA", "+/-  2 \xB9/\x2082°", "NA", "NA"),
+                        new("10 ft - 17 ft", "See Note 1", "NA", "+/- 3°", "NA", "NA"),
+                        new("17 ft - 24 ft", "See Note 1", "NA", "+/- 4°", "NA", "NA"),
+                    };
+                    break;
             }
             return btRows;
         }
@@ -92,6 +100,9 @@ namespace Nop.Web.Components
                     break;
                 case BendToleranceType.ColdHandrailLessThan12:
                     description = "Plain view radius of 12'0\" or less";
+                    break;
+                case BendToleranceType.ColdHandrailGreaterThan12:
+                    description = "Plain view radius greater than 12'0\"";
                     break;
             }
             return description;

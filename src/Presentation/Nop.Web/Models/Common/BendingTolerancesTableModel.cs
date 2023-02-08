@@ -10,7 +10,8 @@ namespace Nop.Web.Models.Common
         ColdStringerGreaterThan12,
         HotStringerLessThan20,
         HotStringerGreaterThan20,
-        ColdHandrailLessThan12
+        ColdHandrailLessThan12,
+        ColdHandrailGreaterThan12
     }
 
     public record BendingTolerancesTableModel : BaseNopModel

@@ -35,3 +35,6 @@
 <br />
 <br />
 @await Component.InvokeAsync("BendingTolerancesTable", new { id = BendToleranceType.ColdHandrailLessThan12, showFooter = false })
+<br />
+<br />
+@await Component.InvokeAsync("BendingTolerancesTable", new { id = BendToleranceType.ColdHandrailGreaterThan12, showFooter = true })
