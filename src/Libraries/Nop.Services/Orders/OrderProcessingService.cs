@@ -3345,13 +3345,15 @@ namespace Nop.Services.Orders
             if (cart == null)
                 throw new ArgumentNullException(nameof(cart));
 
-            var result = true;
+            //var result = true;
 
-            //check whether order total equals zero
-            var shoppingCartTotalBase = (await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, useRewardPoints: useRewardPoints)).shoppingCartTotal;
-            if (shoppingCartTotalBase.HasValue && shoppingCartTotalBase.Value == decimal.Zero)
-                result = false;
-            return result;
+            ////check whether order total equals zero
+            //var shoppingCartTotalBase = (await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, useRewardPoints: useRewardPoints)).shoppingCartTotal;
+            //if (shoppingCartTotalBase.HasValue && shoppingCartTotalBase.Value == decimal.Zero)
+            //    result = false;
+            //return result;
+
+            return false;
         }
 
         /// <summary>

@@ -22,7 +22,7 @@
 
 @section left
 {
-    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.PictureVault })
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.PictureVault })
 }
 <div class="page account-page browse-vault-page">
     <div class="page-title">
