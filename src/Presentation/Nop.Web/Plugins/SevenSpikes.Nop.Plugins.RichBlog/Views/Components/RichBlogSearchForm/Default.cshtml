@@ -36,7 +36,7 @@
             popup: {
                 appendTo: $("#rich-blog-search-form")
             },
-            template: '<span class="rich-blog-search-item" data-url="${ data.Url }">${ data.Title }</span>',
+            template: '<span class="rich-blog-search-item" data-url="${ data.Url.replace("%2F", "/") }">${ data.Title }</span>',
             select: function (e) {
                 var advancedSearchItemId = this.dataItem(e.item.index()).Id;
 
