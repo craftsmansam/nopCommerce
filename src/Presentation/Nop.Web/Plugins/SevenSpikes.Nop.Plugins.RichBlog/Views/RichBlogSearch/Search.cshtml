@@ -1,4 +1,5 @@
-﻿@model RichBlogSearchModel
+﻿@using Nop.Web.Framework.Extensions
+@model RichBlogSearchModel
 
 @{
     Layout = "_ColumnsTwo";
@@ -25,8 +26,10 @@
             <ul class="blog-search-results">
                 @foreach (var searchResult in Model.Items)
                 {
+                    var url = Url.RouteUrl("BlogPostWithPath", new { SeName = searchResult.SEName.GetSeNameWithoutPath(), Path = searchResult.SEName.GetPathFromSeName() });
+
                     <li class="search-results-item">
-                        <a class="kb-search-link" href="@Url.RouteUrl("BlogPost", new { SeName = searchResult.SEName })" title="@searchResult.Title">@Html.Raw(searchResult.HighlightedTitle)</a>
+                        <a class="kb-search-link" href="@url" title="@searchResult.Title">@Html.Raw(searchResult.HighlightedTitle)</a>
                         <p>@Html.Raw(searchResult.HighlightedBody)</p>
                     </li>
                 }

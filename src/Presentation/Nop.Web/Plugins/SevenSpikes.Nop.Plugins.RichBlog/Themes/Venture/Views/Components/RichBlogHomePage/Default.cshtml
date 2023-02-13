@@ -13,7 +13,9 @@
                 <div class="post-primary">
                     @if (!string.IsNullOrWhiteSpace(post.HomePagePictureUrl))
                     {
-                        <a class="post-picture" href="@Url.RouteUrl("BlogPostWitPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">
+                        var url = Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() });
+
+                        <a class="post-picture" href="@url">
                             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                             {
                                 @await Component.InvokeAsync("LazyLoadImage", new (string Key, string Value)[]
