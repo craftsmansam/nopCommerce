@@ -85,9 +85,8 @@ namespace Nop.Web.Infrastructure
                 defaults: new { controller = "Quote", action = "CustomerQuotes" });
 
             //contact us
-            endpointRouteBuilder.MapControllerRoute(name: "ContactUs",
-                pattern: $"{lang}/contactus",
-                defaults: new { controller = "Common", action = "ContactUs" });
+            endpointRouteBuilder.MapControllerRoute("ContactUs", $"{pattern}about/contact",
+                new { controller = "Common", action = "ContactUs" });
 
             //product search
             endpointRouteBuilder.MapControllerRoute(name: "ProductSearch",
