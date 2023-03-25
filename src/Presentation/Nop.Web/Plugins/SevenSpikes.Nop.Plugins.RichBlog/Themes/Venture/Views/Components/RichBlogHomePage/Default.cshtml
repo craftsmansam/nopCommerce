@@ -38,7 +38,7 @@
                     <a class="read-more" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
                 </div>
                 <div class="post-details">
-                    <a class="post-title" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })">@post.Title</a>
+                    <a class="post-title" href="@Url.RouteUrl("BlogPostWithPath", new { Path = post.SeName.GetPathFromSeName(), SeName = post.SeName.GetSeNameWithoutPath() })" title="@post.Title">@post.Title</a>
                     <div class="post-description">
                         @Html.Raw(!String.IsNullOrEmpty(post.BodyOverview) ? post.BodyOverview : post.Body)
                     </div>
