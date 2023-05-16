@@ -1,5 +1,5 @@
 ﻿{
-  "FILES_ROOT": "/images/uploaded",
+  "FILES_ROOT": "",
   "SESSION_PATH_KEY": "",
   "THUMBS_VIEW_WIDTH": 140,
   "THUMBS_VIEW_HEIGHT": 120,
@@ -16,7 +16,7 @@
   "DATEFORMAT": "dd/MM/yyyy HH:mm",
   "OPEN_LAST_DIR": "yes",
   "INTEGRATION": "custom",
-  "RETURN_URL_PREFIX": "/images/uploaded/",
+  "RETURN_URL_PREFIX": "/",
   "DIRLIST": "/Admin/RoxyFileman/DirectoriesList",
   "CREATEDIR": "/Admin/RoxyFileman/CreateDirectory",
   "DELETEDIR": "/Admin/RoxyFileman/DeleteDirectory",
