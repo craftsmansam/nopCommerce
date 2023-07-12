@@ -1,4 +1,4 @@
-﻿@using Nop.Core
+@using Nop.Core
 @using Nop.Core.Infrastructure
 @using Nop.Services.Configuration
 @using Nop.Services.Localization
@@ -85,3 +85,10 @@
         </div>
     </div>
 </div>
+
+
+<div class="home-page-testimonial">  @*homepage_testimonial_slider*@
+@await Component.InvokeAsync("Testimonial","homepage_testimonial_slider")
+</div>  @*homepage_testimonial_slider*@
+
+
