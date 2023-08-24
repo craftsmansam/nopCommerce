@@ -209,7 +209,7 @@ a img {
 	opacity: 0.99; /*firefox scale bug fix*/
 }
 strong {
-    font-weight: normal;
+    font-weight: bold;
 }
 em {
     font-style: normal;
