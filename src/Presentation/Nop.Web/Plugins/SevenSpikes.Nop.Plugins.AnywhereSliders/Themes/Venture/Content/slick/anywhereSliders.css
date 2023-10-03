@@ -53,7 +53,7 @@ div .first-slide {
     margin: auto;
 }
 .anywhere-slider .slick-prev {
-	left: -50px;
+	left: -750px;
 }
 .slider-wrapper:hover .slick-prev {
     left: 0;
@@ -62,7 +62,7 @@ div .first-slide {
     content: "r";
 }
 .anywhere-slider .slick-next {
-    right: -50px;
+    right: -750px;
 }
 .slider-wrapper:hover .slick-next {
     right: 0;
