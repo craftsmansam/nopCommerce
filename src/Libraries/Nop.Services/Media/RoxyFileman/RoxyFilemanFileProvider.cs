@@ -319,7 +319,7 @@ namespace Nop.Services.Media.RoxyFileman
 
                 //no need user to configure
                 INTEGRATION = "custom",
-                RETURN_URL_PREFIX = $"{pathBase}/",
+                RETURN_URL_PREFIX = $"{pathBase}/images/uploaded/",
                 DIRLIST = $"{pathBase}/Admin/RoxyFileman/DirectoriesList",
                 CREATEDIR = $"{pathBase}/Admin/RoxyFileman/CreateDirectory",
                 DELETEDIR = $"{pathBase}/Admin/RoxyFileman/DeleteDirectory",
@@ -612,12 +612,12 @@ namespace Nop.Services.Media.RoxyFileman
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task SaveFileAsync(string directoryPath, string fileName, string contentType, Stream fileStream)
         {
-            var uniqueFileName = GetUniqueFileName(directoryPath, Path.GetFileName(fileName));
-            var destinationFile = Path.Combine(directoryPath, uniqueFileName);
+            //var uniqueFileName = GetUniqueFileName(directoryPath, Path.GetFileName(fileName));
+            var destinationFile = Path.Combine(directoryPath, fileName);
 
             await using var stream = new FileStream(GetFullPath(destinationFile), FileMode.Create);
 
-            if (GetFileType(Path.GetExtension(uniqueFileName)) == "image")
+            if (GetFileType(Path.GetExtension(fileName)) == "image")
             {
                 using var memoryStream = new MemoryStream();
                 await fileStream.CopyToAsync(memoryStream);
