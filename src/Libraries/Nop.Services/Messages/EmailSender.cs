@@ -214,7 +214,16 @@ namespace Nop.Services.Messages
         public virtual void SendErrorEmail(Exception exception, EmailAccount emailAccount, HttpRequest contextRequest, IIdentity userIdentity)
         {
             var username = userIdentity?.IsAuthenticated ?? false ? userIdentity.Name : "anonymous";
-            var body = $"Albina Public Website\n\nFull Error (including inner exception & stack trace):\n{exception}\r\n\r\nURL Path: {contextRequest?.Path}\r\nURL Parameters: {contextRequest?.QueryString}\r\nUser: {username}";
+            var body = @$"Albina Public Website
+
+Full Error (including inner exception & stack trace):
+{exception}
+
+URL Path: {contextRequest?.Path}
+URL Parameters: {contextRequest?.QueryString}
+URL Method: {contextRequest?.Method}
+Form: {contextRequest?.Form}
+User: {username}";
             var mm = new CraftsmanMailMessage(_albinaConfig.EmailTest)
             {
                 From = new MailAddress(_albinaConfig.ErrorFromAddress)
