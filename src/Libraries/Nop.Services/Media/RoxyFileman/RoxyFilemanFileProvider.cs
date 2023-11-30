@@ -319,7 +319,7 @@ namespace Nop.Services.Media.RoxyFileman
 
                 //no need user to configure
                 INTEGRATION = "custom",
-                RETURN_URL_PREFIX = $"{pathBase}/images/uploaded/",
+                RETURN_URL_PREFIX = $"{pathBase}/",
                 DIRLIST = $"{pathBase}/Admin/RoxyFileman/DirectoriesList",
                 CREATEDIR = $"{pathBase}/Admin/RoxyFileman/CreateDirectory",
                 DELETEDIR = $"{pathBase}/Admin/RoxyFileman/DeleteDirectory",
