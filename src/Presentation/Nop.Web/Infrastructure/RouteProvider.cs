@@ -743,6 +743,9 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("ShowInvoice", $"{lang}/secure/show-invoice",
                 new {controller = "AlbinaInvoice", action = "ShowInvoice"});
 
+            endpointRouteBuilder.MapControllerRoute("AlbinaUnsubscribe", $"{lang}/unsubscribe/{{unsubscribeType}}/{{thingToUnsubscribe}}",
+                new {controller = "AlbinaUnsubscribe", action = "Unsubscribe"});
+
             //Albina Browse Picture Vault
             endpointRouteBuilder.MapControllerRoute("BrowsePictureVault", $"{lang}/secure/browse-picture-vault",
                 new {controller = "PictureVault", action = "BrowsePictureVault"});

@@ -12,6 +12,7 @@ using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Affiliates;
 using Nop.Services.AlbinaInvoice;
+using Nop.Services.AlbinaUnsubscribe;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Authentication.MultiFactor;
@@ -238,6 +239,7 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<ITangentMaterialService, TangentMaterialService>();
             services.AddScoped<IPictureVaultService, PictureVaultService>();
             services.AddScoped<IAlbinaInvoiceService, AlbinaInvoiceService>();
+            services.AddScoped<IUnsubscribeService, AlbinaUnsubscribeService>();
 
             //plugin managers
             services.AddScoped(typeof(IPluginManager<>), typeof(PluginManager<>));

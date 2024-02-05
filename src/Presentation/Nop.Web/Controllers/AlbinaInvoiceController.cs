@@ -7,9 +7,7 @@ using Craftsman.DesignByContract;
 using Craftsman.IO;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
-using Nop.Core.Domain.Media;
 using Nop.Services.AlbinaInvoice;
-using Nop.Services.Configuration;
 using Nop.Services.Security;
 using Nop.Web.Models.AlbinaInvoice;
 

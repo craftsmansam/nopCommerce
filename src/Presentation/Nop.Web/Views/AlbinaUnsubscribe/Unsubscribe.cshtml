@@ -1,0 +1,16 @@
+﻿@model string
+@{
+    var title = "Unsubscribe";
+
+    //title
+    NopHtml.AddTitleParts(title);
+}
+
+<div class="page">
+    <div class="page-title">
+        <h3>@title</h3>
+    </div>
+    <div class="page-body">
+        @Model has been successfully unsubscribed.
+    </div>
+</div>
