@@ -17,14 +17,14 @@ namespace Nop.Web.Controllers
             _unsubscribeService = unsubscribeService;
         }
 
-        public async Task<IActionResult> UnsubscribeAsync(string unsubscribeType, string thingToUnsubscribe)
+        public async Task<IActionResult> UnsubscribeAsync(string unsubscribeType, string thingToUnsubscribe, int? bulkEmailID = null)
         {
             unsubscribeType = unsubscribeType.ToLower();
             if (unsubscribeType == "customer")
             {
                 if (int.TryParse(thingToUnsubscribe, out var customerSalesContactID))
                 {
-                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(unsubscribeType, customerSalesContactID);
+                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(unsubscribeType, customerSalesContactID, bulkEmailID);
                     var emailAddress = emailAddressList.Single();
                     return View("Unsubscribe", emailAddress);
                 }
@@ -33,7 +33,7 @@ namespace Nop.Web.Controllers
             {
                 if (int.TryParse(thingToUnsubscribe, out var vendorContactID))
                 {
-                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(unsubscribeType, vendorContactID);
+                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(unsubscribeType, vendorContactID, bulkEmailID);
                     var emailAddress = emailAddressList.Single();
                     return View("Unsubscribe", emailAddress);
                 }
@@ -42,7 +42,7 @@ namespace Nop.Web.Controllers
             {
                 if (EmailHelper.IsValidEmail(thingToUnsubscribe))
                 {
-                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(unsubscribeType, thingToUnsubscribe);
+                    var emailAddressList = await _unsubscribeService.FlagAsDoNotEmailAsync(thingToUnsubscribe, bulkEmailID);
                     var emailAddress = emailAddressList.Single();
                     return View("Unsubscribe", emailAddress);
                 }
