@@ -4,14 +4,14 @@ N;LANGUAGE=en-us:Lesch;KC
 FN:KC Lesch
 ORG:Albina Co., Inc.
 TITLE:Estimating / QA Manager
-TEL;WORK;VOICE:503-692-6010, #106
+TEL;WORK;VOICE:(503) 692-6010 , #109
 TEL;HOME;VOICE:(503) 625-0432
 TEL;CELL;VOICE:503-961-3041
 X-MS-OL-DEFAULT-POSTAL-ADDRESS:0
 EMAIL;PREF;INTERNET:klesch@albinaco.com
 EMAIL;INTERNET:klesch@albinapipebending.com
 X-MS-CARDPICTURE;TYPE=JPEG;ENCODING=BASE64:
- /9j/4AAQSkZJRgABAQEAwADAAAD/2wBDAAcFBQYFBAcGBQYIBwcIChELCgkJChUPEAwRGBUa
+ /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAcFBQYFBAcGBQYIBwcIChELCgkJChUPEAwRGBUa
  GRgVGBcbHichGx0lHRcYIi4iJSgpKywrGiAvMy8qMicqKyr/2wBDAQcICAoJChQLCxQqHBgc
  KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKir/wAAR
  CACEAB8DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAA
@@ -23,12 +23,12 @@ X-MS-CARDPICTURE;TYPE=JPEG;ENCODING=BASE64:
  NOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
  hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk
  5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD37zMsQKGkVB6moR3NNNAEisZH56elJO2A
- AKdEO9RyfPNj0oAU9BTT2pxOTSDlqAJl+VP1qGMZYk1LKdsf6VEOIvc0AFPiGWphqaIYGaAG
- XB5AFMl4VRSt883tmmSnL0AP71KPljyfSolGTzUrjeuB09aAIo+pJpvls7Z6VJhY14+aonkZ
- qALC7T91ajlJzjP4VIg+WovvyfjQAScIBURHpU0mN3zdfQVGXI+7wPagCy3yJ+FRqSx6/TFO
- nPQU1eEzQBG5yxph606mnrQBPKcuaH4jpuNzj3okPSgBlNPWnU09aALCheopHTJ4NCcDJ9c1
- Gf60ABQimlSOop24+tHmH0FAEp4j/Coj0oooASmnrRRQB//Z
+ AKdEO9RyfPNj0oAU9BTT2pxOTSDlqAJl+VP1qGMZYk1LKdsf6VEvEfuaACnxDLUw1NEMDNAD
+ Lg8gCmS8KopW+eb2zTJTl6AH96lHyx5PpUSjJ5qVxvXA6etAEUfUk03y2ds9Kkwsa8fNUTyM
+ 1AFhdp+6tRyk5xn8KkQfLUX35PxoAJOEAqIj0qaTG75uvoKjLkfd4HtQBZb5E/Co1JY9fpin
+ TnoKavCZoAjc5Y0w9adTT1oAnlOXND8R03G5x70SHpQAymnrTqaetAFhQvUUjpk8GhOBk+ua
+ jP8AWgAKEU0qR1FO3H1o8w+goAl/5Z/hUR6UUUAJTT1oooA//9k=
 
 X-MS-OL-DESIGN;CHARSET=utf-8:<card xmlns="http://schemas.microsoft.com/office/outlook/12/electronicbusinesscards" ver="1.0" layout="left" bgcolor="ffffff"><img xmlns="" align="fit" area="16" use="cardpicture"/><fld xmlns="" prop="name" align="left" dir="ltr" style="b" color="000000" size="10"/><fld xmlns="" prop="org" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="title" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="telwork" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Work</label></fld><fld xmlns="" prop="telcell" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Mobile</label></fld><fld xmlns="" prop="telhome" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Home</label></fld><fld xmlns="" prop="email" align="left" dir="ltr" color="d48d2a" size="8"/><fld xmlns="" prop="email2" align="left" dir="ltr" color="d48d2a" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/></card>
-REV:20210226T222505Z
+REV:20240307T182519Z
 END:VCARD
