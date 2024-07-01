@@ -171,7 +171,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //set default values for the new model
             if (blogPost == null)
             {
-                model.AllowComments = true;
+                model.AllowComments = false;
                 model.IncludeInSitemap = true;
             }
 
