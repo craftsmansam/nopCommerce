@@ -4,9 +4,28 @@ PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
 N:Schilling;Justin;;;
 FN:Justin Schilling
 ORG:Albina Co.\, Inc.;
-TITLE:Foreman
+TITLE:Quality Control Technician
+TEL;WORK;VOICE:(503) 692-6010 , #114
 EMAIL;type=INTERNET;type=WORK;type=pref:jschilling@albinaco.com
-CATEGORIES:Albina
-UID:0e16334a-8bc4-4d31-bce2-30ebfa7136c3
-X-ABUID:8E6A609E-F578-45CB-B888-9028B4B29B92:ABPerson
+X-MS-CARDPICTURE;TYPE=JPEG;ENCODING=BASE64:
+ /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAcFBQYFBAcGBQYIBwcIChELCgkJChUPEAwRGBUa
+ GRgVGBcbHichGx0lHRcYIi4iJSgpKywrGiAvMy8qMicqKyr/2wBDAQcICAoJChQLCxQqHBgc
+ KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKir/wAAR
+ CACEAB8DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAA
+ AgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkK
+ FhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWG
+ h4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl
+ 5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREA
+ AgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYk
+ NOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
+ hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk
+ 5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD37zMsQKGkVB6moR3NNNAEisZH56elJO2A
+ AKdEO9RyfPNj0oAU9BTT2pxOTSDlqAJl+VP1qGMZYk1LKdsf6VEvEfuaACnxDLUw1NEMDNAD
+ Lg8gCmS8KopW+eb2zTJTl6AH96lHyx5PpUSjJ5qVxvXA6etAEUfUk03y2ds9Kkwsa8fNUTyM
+ 1AFhdp+6tRyk5xn8KkQfLUX35PxoAJOEAqIj0qaTG75uvoKjLkfd4HtQBZb5E/Co1JY9fpin
+ TnoKavCZoAjc5Y0w9adTT1oAnlOXND8R03G5x70SHpQAymnrTqaetAFhQvUUjpk8GhOBk+ua
+ jP8AWgAKEU0qR1FO3H1o8w+goAl/5Z/hUR6UUUAJTT1oooA//9k=
+
+X-MS-OL-DESIGN;CHARSET=utf-8:<card xmlns="http://schemas.microsoft.com/office/outlook/12/electronicbusinesscards" ver="1.0" layout="left" bgcolor="ffffff"><img xmlns="" align="fit" area="16" use="cardpicture"/><fld xmlns="" prop="name" align="left" dir="ltr" style="b" color="000000" size="10"/><fld xmlns="" prop="org" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="title" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="telwork" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Work</label></fld><fld xmlns="" prop="telcell" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Mobile</label></fld><fld xmlns="" prop="email" align="left" dir="ltr" color="d48d2a" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/></card>
+REV:20240723T182309Z
 END:VCARD
