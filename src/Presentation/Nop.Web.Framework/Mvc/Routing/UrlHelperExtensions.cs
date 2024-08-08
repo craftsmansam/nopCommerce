@@ -24,7 +24,12 @@ namespace Nop.Web.Framework.Mvc.Routing
             where TEntity : BaseEntity, ISlugSupported
         {
             var nopUrlHelper = EngineContext.Current.Resolve<INopUrlHelper>();
-            return nopUrlHelper.RouteGenericUrlAsync<TEntity>(values, protocol, host, fragment).Result;
+            var routeUrl = nopUrlHelper.RouteGenericUrlAsync<TEntity>(values, protocol, host, fragment).Result;
+            if (routeUrl != null && routeUrl.Contains("%2F"))
+            {
+                routeUrl = routeUrl.Replace("%2F", "/");
+            }
+            return routeUrl;
         }
 
         /// <summary>

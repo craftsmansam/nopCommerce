@@ -4,22 +4,17 @@
     {
         public static string GetSeNameWithoutPath(this string seNameWithOptionalPath)
         {
-            if (seNameWithOptionalPath.Contains("/"))
-            {
-                return seNameWithOptionalPath.Split('/')[1];
-            }
-
-            return seNameWithOptionalPath;
+            return GetChunkFromSeName(seNameWithOptionalPath, 1);
         }
 
         public static string GetPathFromSeName(this string seNameWithPath)
         {
-            if (seNameWithPath.Contains("/"))
-            {
-                return seNameWithPath.Split('/')[0];
-            }
+            return GetChunkFromSeName(seNameWithPath, 0);
+        }
 
-            return seNameWithPath;
+        private static string GetChunkFromSeName(string seNameWithPath, int index)
+        {
+            return seNameWithPath.Contains("/") ? seNameWithPath.Split('/')[index] : seNameWithPath;
         }
     }
 }
