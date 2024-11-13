@@ -1,0 +1,31 @@
+BEGIN:VCARD
+VERSION:2.1
+N:Beibers;Josh
+FN:Josh Beibers
+ORG:Albina Co., Inc.
+TITLE:Traffic Manager /  Purchasing
+TEL;WORK;VOICE:(503) 692-6010 , #115
+X-MS-OL-DEFAULT-POSTAL-ADDRESS:0
+EMAIL;PREF;INTERNET:jbeibers@albinaco.com
+X-MS-CARDPICTURE;TYPE=JPEG;ENCODING=BASE64:
+ /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAcFBQYFBAcGBQYIBwcIChELCgkJChUPEAwRGBUa
+ GRgVGBcbHichGx0lHRcYIi4iJSgpKywrGiAvMy8qMicqKyr/2wBDAQcICAoJChQLCxQqHBgc
+ KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKir/wAAR
+ CACEAB8DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAA
+ AgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkK
+ FhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWG
+ h4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl
+ 5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREA
+ AgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYk
+ NOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
+ hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk
+ 5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD37zMsQP8A9dDSKg9TUI7mmmgCRXMj89PS
+ knbAAFOiHeo5Pnmx6UAKeAKae1OJyaQcmgCZflSoYxliTUsp2x4/Coh8see5oADT4hlqYami
+ GBmgBlweQBTJeFC0rfPN7Zpkpy9AD+9TD5Y8nrioVGTUrguuB07mgCKPqSab5bO2elSYWNf7
+ 1RPIzUAWF2n7q1HKTnGePSpEHy/Wosb5PxoAJOEAqIj0qaTGfm/IVGXxwvA9qALLfJH68VGp
+ LHr+VPnPQUxeEz+NAEbnLGmHrTqaetAE8xy9D8R4puNzj3okOcUAMpp606mnrQBYULyRSOmT
+ waE4GT65qMn+dAAUIppU9xTtx9aPMPoKAJT/AKv8KiPSiigBKaetFFAH/9k=
+
+X-MS-OL-DESIGN;CHARSET=utf-8:<card xmlns="http://schemas.microsoft.com/office/outlook/12/electronicbusinesscards" ver="1.0" layout="left" bgcolor="ffffff"><img xmlns="" align="fit" area="16" use="cardpicture"/><fld xmlns="" prop="name" align="left" dir="ltr" style="b" color="000000" size="10"/><fld xmlns="" prop="org" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="title" align="left" dir="ltr" color="000000" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="telwork" align="left" dir="ltr" color="d48d2a" size="8"><label align="right" color="626262">Work</label></fld><fld xmlns="" prop="email" align="left" dir="ltr" color="d48d2a" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/><fld xmlns="" prop="blank" size="8"/></card>
+REV:20240307T182353Z
+END:VCARD
