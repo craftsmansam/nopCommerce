@@ -721,6 +721,10 @@ namespace Nop.Web.Infrastructure
                 lang + "shoporderdetails/{shopOrderNumber:min(0)}",
                 new { controller = "Order", action = "ShopOrderDetails" });
 
+            // bulk email
+            endpointRouteBuilder.MapControllerRoute("BulkEmailRedirectClick", $"{lang}/bulk-email/redirect-click/{{redirectGuid}}",
+                new { controller = "BulkEmail", action = "RedirectClick"});
+
             //Albina Bending calculators
             endpointRouteBuilder.MapControllerRoute("BendingCalculators", $"{lang}/calculators/bending-calculators",
                 new { controller = "Calculators", action = "BendingCalculators"});

@@ -17,6 +17,7 @@ using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Authentication.MultiFactor;
 using Nop.Services.Blogs;
+using Nop.Services.BulkEmail;
 using Nop.Services.Caching;
 using Nop.Services.Calculators;
 using Nop.Services.Catalog;
@@ -237,6 +238,7 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<INopUrlHelper, NopUrlHelper>();
             services.AddScoped<ITangentMaterialService, TangentMaterialService>();
+            services.AddScoped<IBulkEmailService, BulkEmailService>();
             services.AddScoped<IPictureVaultService, PictureVaultService>();
             services.AddScoped<IAlbinaInvoiceService, AlbinaInvoiceService>();
             services.AddScoped<IUnsubscribeService, AlbinaUnsubscribeService>();
