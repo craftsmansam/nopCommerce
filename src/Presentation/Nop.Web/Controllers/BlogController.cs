@@ -139,7 +139,7 @@ namespace Nop.Web.Controllers
             foreach (var blogPost in blogPosts)
             {
                 var seName = await _urlRecordService.GetSeNameAsync(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false);
-                var blogPostUrl = Url.RouteUrl("BlogPostWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() }, _webHelper.GetCurrentRequestProtocol());
+                var blogPostUrl = await _nopUrlHelper.RouteGenericUrlAsync<BlogPost>(new { SeName = seName }, _webHelper.GetCurrentRequestProtocol());
                 items.Add(new RssItem(blogPost.Title, blogPost.Body, new Uri(blogPostUrl), $"urn:store:{store.Id}:blog:post:{blogPost.Id}", blogPost.CreatedOnUtc));
             }
             feed.Items = items;

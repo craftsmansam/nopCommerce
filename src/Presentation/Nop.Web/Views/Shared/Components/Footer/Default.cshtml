@@ -41,7 +41,7 @@ var testimonialpluginmodel = _settingService.GetSettingByKeyAsync("testimonialse
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
                 {
-                    <li><a href="@(Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() }))">@topic.Name</a></li>
+                    <li><a href="@(Url.RouteUrl<Topic>(new { SeName = topic.SeName }))">@topic.Name</a></li>
                 }
                 @if (Model.DisplayContactUsFooterItem)
                 {
@@ -84,7 +84,7 @@ var testimonialpluginmodel = _settingService.GetSettingByKeyAsync("testimonialse
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn2).ToList())
                 {
-                    <li><a href="@(Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() }))">@topic.Name</a></li>
+                    <li><a href="@(Url.RouteUrl<Topic>(new { SeName = topic.SeName }))">@topic.Name</a></li>
                 }
                 @if (Model.AllowCustomersToCheckGiftCardBalance)
                 {
@@ -123,7 +123,7 @@ var testimonialpluginmodel = _settingService.GetSettingByKeyAsync("testimonialse
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn3).ToList())
                 {
-                    <li><a href="@(Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() }))">@topic.Name</a></li>
+                    <li><a href="@(Url.RouteUrl<Topic>(new {SeName = topic.SeName }))">@topic.Name</a></li>
                 }
             </ul>
         </div>

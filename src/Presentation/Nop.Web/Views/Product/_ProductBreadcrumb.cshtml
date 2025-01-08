@@ -25,7 +25,7 @@
                 @foreach (var category in Model.CategoryBreadcrumb)
                 {
                     <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                        <a href="@(Url.RouteUrl("CategoryWithPath", new { Path = category.SeName.GetPathFromSeName(), SeName = category.SeName.GetSeNameWithoutPath() }))" itemprop="item">
+                        <a href="@(Url.RouteUrl<Category>(new {SeName = category.SeName }))" itemprop="item">
                             <span itemprop="name">@category.Name</span>
                         </a>
                         <span class="delimiter">@breadcrumbDelimiter</span>
@@ -36,7 +36,7 @@
                 
                 <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     <strong class="current-item" itemprop="name">@Model.ProductName</strong>
-                    <span itemprop="item" itemscope itemtype="http://schema.org/Thing" id="@(Url.RouteUrl("ProductWithPath", new { Path = Model.ProductSeName.GetPathFromSeName(), SeName = Model.ProductSeName.GetSeNameWithoutPath() }))">
+                    <span itemprop="item" itemscope itemtype="http://schema.org/Thing" id="@(Url.RouteUrl<Product>(new { SeName = Model.ProductSeName }))">
                     </span>
                     <meta itemprop="position" content="@position" />
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBreadcrumbAfter, additionalData = Model })

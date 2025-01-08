@@ -72,9 +72,9 @@
                 public static string Topic => "TopicDetails";
 
                 /// <summary>
-                /// Gets the generic topic route name
+                /// Gets the generic topic route name for Venture Theme
                 /// </summary>
-                public static string TopicWithPath => "TopicWithPath";
+                public static string TopicForVentureTheme => "Topic";
 
                 /// <summary>
                 /// Gets the generic product tag route name

@@ -62,7 +62,7 @@
                         <div class="review-info">
                             <span class="user">
                                 <label>@T("Account.CustomerProductReviews.ProductReviewFor"):</label>
-                                <a href="@(Url.RouteUrl("ProductWithPath", new { Path = review.ProductSeName.GetPathFromSeName(), SeName = review.ProductSeName.GetSeNameWithoutPath() }))">@review.ProductName</a>
+                                <a href="@(Url.RouteUrl<Product>(new {SeName = review.ProductSeName}))">@review.ProductName</a>
 
                             </span>
                             <span class="separator">|</span>
