@@ -158,10 +158,8 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.SeName = await _urlRecordService.GetSeNameAsync(topic, 0, true, false);
                 }
 
-                var seName = await _urlRecordService.GetSeNameAsync(topic);
-                var sePath = seName.GetPathFromSeName();
-                seName = seName.GetSeNameWithoutPath();
-                model.Url = await _nopUrlHelper.RouteGenericUrlAsync<Topic>(new { Path = sePath, SeName = seName }, _webHelper.GetCurrentRequestProtocol());
+
+                model.Url = await _nopUrlHelper.RouteGenericUrlAsync<Topic>(new { SeName = await _urlRecordService.GetSeNameAsync(topic) }, _webHelper.GetCurrentRequestProtocol());
 
                 
                 model.Url = await _nopUrlHelper.RouteGenericUrlAsync<Topic>(new { SeName = await _urlRecordService.GetSeNameAsync(topic) }, _webHelper.GetCurrentRequestProtocol());

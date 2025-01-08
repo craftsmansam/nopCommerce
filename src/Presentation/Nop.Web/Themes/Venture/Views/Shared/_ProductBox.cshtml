@@ -70,7 +70,7 @@
                 <div class="swiper-wrapper">
                     @foreach (var picture in Model.PictureModels)
                     {
-                        <a class="swiper-slide" href="@(Url.RouteUrl("ProductWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }))" title="@picture.Title">
+                        <a class="swiper-slide" href="@(Url.RouteUrl("Product", new {SeName = Model.SeName}))" title="@picture.Title">
                             @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                             {
                                 @await Component.InvokeAsync("LazyLoadImage", new (string Key, string Value)[]
@@ -101,7 +101,7 @@
         else
         {
             var picture = Model.PictureModels.FirstOrDefault();
-            <a href="@(Url.RouteUrl("ProductWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }))" title="@picture?.Title">
+            <a href="@(Url.RouteUrl("Product", new { SeName = Model.SeName }))" title="@picture?.Title">
                 @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                 {
                     @await Component.InvokeAsync("LazyLoadImage", new (string Key, string Value)[]
@@ -120,7 +120,7 @@
     </div>
     <div class="details">
         <h2 class="product-title">
-            <a href="@(Url.RouteUrl("ProductWithPath", new {Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }))">@Model.Name</a>
+            <a href="@(Url.RouteUrl("Product", new {SeName = Model.SeName}))">@Model.Name</a>
         </h2>
         @if (catalogSettings.ShowSkuOnCatalogPages && !string.IsNullOrEmpty(Model.Sku))
         {

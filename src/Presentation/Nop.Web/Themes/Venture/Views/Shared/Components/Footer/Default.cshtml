@@ -97,7 +97,7 @@ var _pluginFinder = EngineContext.Current.Resolve<IPluginService>();
                 }
                 @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
                 {
-                    <li><a href="@(Url.RouteUrl("TopicWithPath", new { SeName = topic.SeName.GetSeNameWithoutPath(), Path = topic.SeName.GetPathFromSeName() }))">@topic.Name</a></li>
+                    <li><a href="@(Url.RouteUrl<Topic>(new {SeName = topic.SeName}))">@topic.Name</a></li>
                 }
             </ul>
         </div>

@@ -53,11 +53,11 @@
                             <span class="year">@item.CreatedOn.Year</span>
                         </span>
                         <div class="buttons">
-                            <a href="@(Url.RouteUrl("BlogPostWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }))" class="read-more">@T("Blog.MoreInfo")</a>
+							<a href="@Url.RouteUrl("BlogPost",new { SeName = item.SeName})" class="read-more">@T("Blog.MoreInfo")</a>
                         </div>
                     </div>
                     <div class="post-body">
-                        <a class="post-title" href="@(Url.RouteUrl("BlogPostWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }))">@item.Title</a>
+						<a class="post-title" href="@Url.RouteUrl("BlogPost",new { SeName = item.SeName})">@item.Title</a>
                         <div class="post-text">
                             @Html.Raw(!string.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
                         </div>
@@ -83,7 +83,7 @@
                         }
                         @if (item.AllowComments)
                         {
-                            <a href="@(Url.RouteUrl(routeName: "BlogPostWithPath", values: new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }, fragment: "comments", protocol: null, host: null))" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
+                            <a href="@(Url.RouteUrl(routeName: "BlogPost", values: new {SeName = item.SeName}, fragment: "comments", protocol: null, host: null))" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
                         }
                     </div>
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BlogListPageInsidePost, additionalData = item })

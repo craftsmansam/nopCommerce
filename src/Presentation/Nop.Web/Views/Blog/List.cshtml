@@ -46,7 +46,7 @@
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BlogListPageBeforePost, additionalData = item })
                 <div class="post">
                     <div class="post-head">
-                        <a class="post-title" href="@(Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }))">@item.Title</a>
+						<a class="post-title" href="@Url.RouteUrl("BlogPost",new { SeName = item.SeName})">@item.Title</a>
                         <span class="post-date">@item.CreatedOn.ToString("D")</span>
                     </div>
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BlogListPageBeforePostBody, additionalData = item })
@@ -75,9 +75,9 @@
                         <div class="buttons">
                             @if (item.AllowComments)
                             {
-                                <a href="@(Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }, null, null, fragment: "comments"))" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
+                                <a href="@(Url.RouteUrl("BlogPost", new {SeName = item.SeName}, null, null, fragment: "comments"))" class="read-comments">@string.Format(T("Blog.CommentsLink").Text, item.NumberOfComments)</a>
                             }
-                            <a href="@(Url.RouteUrl("BlogPostWithPath", new {Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() }))" class="read-more">@T("Blog.MoreInfo")</a>
+                            <a href="@(Url.RouteUrl("BlogPost", new {SeName = item.SeName}))" class="read-more">@T("Blog.MoreInfo")</a>
                         </div>
                     </div>
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BlogListPageInsidePost, additionalData = item })
