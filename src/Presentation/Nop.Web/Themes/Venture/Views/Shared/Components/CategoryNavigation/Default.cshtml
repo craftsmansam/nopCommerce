@@ -37,7 +37,7 @@
                 hasSublistClass = "width-sublist";
             }
             @{
-                var url = Url.RouteUrl("Category", new { lineModel.Category.SeName });
+                var url = Url.RouteUrl("Category", new { SeName = lineModel.Category.SeName });
             }
             <a href="@url" class="@hasSublistClass">
                 @lineModel.Category.Name
