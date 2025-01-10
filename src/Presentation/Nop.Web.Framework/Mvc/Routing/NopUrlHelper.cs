@@ -142,7 +142,7 @@ namespace Nop.Web.Framework.Mvc.Routing
                 var entityType when entityType == typeof(BlogPost)
                     => urlHelper.RouteUrl(NopRoutingDefaults.RouteName.Generic.BlogPost, values, protocol, host, fragment),
                 var entityType when entityType == typeof(Topic)
-                    => urlHelper.RouteUrl(NopRoutingDefaults.RouteName.Generic.TopicWithPath, values, protocol, host, fragment),
+                    => urlHelper.RouteUrl(NopRoutingDefaults.RouteName.Generic.Topic, values, protocol, host, fragment),
                 var entityType when entityType == typeof(ProductTag)
                     => urlHelper.RouteUrl(NopRoutingDefaults.RouteName.Generic.ProductTag, values, protocol, host, fragment),
                 var entityType => urlHelper.RouteUrl(entityType.Name, values, protocol, host, fragment)

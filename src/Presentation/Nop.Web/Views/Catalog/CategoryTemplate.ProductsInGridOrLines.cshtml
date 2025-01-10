@@ -21,7 +21,7 @@
 
     if (seoSettings.CanonicalUrlsEnabled)
     {
-        var categoryUrl = Url.RouteUrl("CategoryWithPath", new { Path = Model.SeName.GetPathFromSeName(), SeName = Model.SeName.GetSeNameWithoutPath() }, webHelper.GetCurrentRequestProtocol()).ToLowerInvariant();
+        var categoryUrl = Url.RouteUrl<Category>( new { SeName = Model.SeName }, webHelper.GetCurrentRequestProtocol()).ToLowerInvariant();
         NopHtml.AddCanonicalUrlParts(categoryUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
     }
 
@@ -46,12 +46,12 @@
                         @if (isLastCategory)
                         {
                             <strong class="current-item" itemprop="name">@cat.Name</strong>
-                            <span itemprop="item" itemscope itemtype="http://schema.org/Thing" id="@Url.RouteUrl("CategoryWithPath", new { Path = cat.SeName.GetPathFromSeName(), SeName = cat.SeName.GetSeNameWithoutPath() })">
+                            <span itemprop="item" itemscope itemtype="http://schema.org/Thing" id="@Url.RouteUrl("Category",new {SeName = cat.SeName})">
                             </span>
                         }
                         else
                         {
-                            <a href="@Url.RouteUrl("CategoryWithPath", new { Path = cat.SeName.GetPathFromSeName(), SeName = cat.SeName.GetSeNameWithoutPath() })" title="@cat.Name" itemprop="item">
+                            <a href="@Url.RouteUrl("Category", new {SeName = cat.SeName })" title="@cat.Name" itemprop="item">
                                 <span itemprop="name">@cat.Name</span>
                             </a>
                             <span class="delimiter">@breadcrumbDelimiter</span>
@@ -95,12 +95,12 @@
                         <div class="item-box">
                             <div class="sub-category-item">
                                 <h2 class="title">
-                                    <a href="@Url.RouteUrl("CategoryWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })" title="@item.PictureModel.Title">
+                                    <a href="@Url.RouteUrl("Category", new {SeName = item.SeName})" title="@item.PictureModel.Title">
                                         @item.Name
                                     </a>
                                 </h2>
                                 <div class="picture">
-                                    <a href="@Url.RouteUrl("CategoryWithPath", new { Path = item.SeName.GetPathFromSeName(), SeName = item.SeName.GetSeNameWithoutPath() })" title="@item.PictureModel.Title">
+                                    <a href="@Url.RouteUrl("Category",new {SeName = item.SeName })" title="@item.PictureModel.Title">
                                         <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" />
                                     </a>
                                 </div>

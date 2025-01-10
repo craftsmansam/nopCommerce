@@ -531,7 +531,7 @@ namespace Nop.Web.Controllers
                 });
 
             var seName = await _urlRecordService.GetSeNameAsync(product);
-            var redirectUrl = Url.RouteUrl("ProductWithPath", new { Path = seName.GetPathFromSeName(), SeName = seName.GetSeNameWithoutPath() });
+            var redirectUrl = Url.RouteUrl<Product>(new {SeName = seName });
 
             //we can add only simple products
             if (product.ProductType != ProductType.SimpleProduct)

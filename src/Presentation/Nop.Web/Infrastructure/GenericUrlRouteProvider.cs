@@ -56,20 +56,6 @@ namespace Nop.Web.Infrastructure
 
             var genericPattern = $"{lang}/{{{NopRoutingDefaults.RouteValue.SeName}}}";
             endpointRouteBuilder.MapDynamicControllerRoute<SlugRouteTransformer>(genericPattern);
-
-            //define this routes to use in UI views (in case if you want to customize some of them later)
-            endpointRouteBuilder.MapControllerRoute("ProductWithPath", "{Path}/" + pattern, 
-                new { controller = "Product", action = "ProductDetails" });
-
-            endpointRouteBuilder.MapControllerRoute("CategoryWithPath", "{Path}/" + pattern, 
-                new { controller = "Catalog", action = "Category" });
-
-            endpointRouteBuilder.MapControllerRoute("BlogPostWithPath", "{Path}/" + pattern, 
-                new { controller = "Blog", action = "BlogPost" });
-
-            endpointRouteBuilder.MapControllerRoute("TopicWithPath", "{Path}/" + pattern, 
-                new { controller = "Topic", action = "TopicDetails" });
-
                 
             //routes for not found slugs
             if (!string.IsNullOrEmpty(lang))
@@ -125,7 +111,7 @@ namespace Nop.Web.Infrastructure
                 pattern: genericPattern,
                 defaults: new { controller = "Topic", action = "TopicDetails" });
 
-            endpointRouteBuilder.MapControllerRoute(name: "Topic",
+            endpointRouteBuilder.MapControllerRoute(name: NopRoutingDefaults.RouteName.Generic.TopicForVentureTheme,
                 pattern: genericPattern,
                 defaults: new { controller = "Topic", action = "TopicDetails" });
 

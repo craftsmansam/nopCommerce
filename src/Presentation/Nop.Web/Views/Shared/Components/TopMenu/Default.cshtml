@@ -68,7 +68,7 @@
     }
     @foreach (var topic in Model.Topics)
     {
-        <li><a href="@(Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() }))">@topic.Name</a></li>
+        <li><a href="@(Url.RouteUrl<Topic>(new { SeName = topic.SeName }))">@topic.Name</a></li>
     }
     @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
     {
@@ -122,7 +122,7 @@
         }
         @foreach (var topic in Model.Topics)
         {
-            <li><a href="@(Url.RouteUrl("TopicWithPath", new { Path = topic.SeName.GetPathFromSeName(), SeName = topic.SeName.GetSeNameWithoutPath() }))">@topic.Name</a></li>
+            <li><a href="@(Url.RouteUrl<Topic>(new {  SeName = topic.SeName }))">@topic.Name</a></li>
         }
         @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
         {

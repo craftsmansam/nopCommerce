@@ -298,6 +298,11 @@ namespace Nop.Web.Framework.Mvc.Routing
             if (!values.TryGetValue(NopRoutingDefaults.RouteValue.SeName, out var slug))
                 return values;
 
+            if (slug is string s && s.Contains("%2F"))
+            {
+                slug = s.Replace("%2F", "/");
+            }
+
             if (values.TryGetValue(NopRoutingDefaults.RouteValue.CatalogSeName, out var catalog))
             {
                 slug = $"{catalog}/{slug}";

@@ -36,9 +36,7 @@
         hasSublistClass = "width-sublist";
     }
     @{
-        var url = Model.Category.SeName.Contains("/") ?
-            Url.RouteUrl("CategoryWithPath", new { Path = Model.Category.SeName.GetPathFromSeName(), SeName = Model.Category.SeName.GetSeNameWithoutPath() }) :
-            Url.RouteUrl("Category", new { Model.Category.SeName });
+        var url = Url.RouteUrl("Category", new { SeName = Model.Category.SeName });
     }
     <a href="@url" class="@hasSublistClass">
         @Model.Category.Name

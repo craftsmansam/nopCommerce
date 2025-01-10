@@ -196,7 +196,7 @@
                                         </td>
                                     }
                                     <td class="name">
-                                        <em><a href="@Url.RouteUrl("ProductWithPath", new { Path = item.ProductSeName.GetPathFromSeName(), SeName = item.ProductSeName.GetSeNameWithoutPath() })">@item.ProductName</a></em>
+										<em><a href="@Url.RouteUrl("ProductDetails", new {SeName = item.ProductSeName })">@item.ProductName</a></em>
                                         @if (!string.IsNullOrEmpty(item.AttributeInfo))
                                         {
                                             <div class="attributes">
