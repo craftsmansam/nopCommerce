@@ -158,10 +158,6 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.SeName = await _urlRecordService.GetSeNameAsync(topic, 0, true, false);
                 }
 
-
-                model.Url = await _nopUrlHelper.RouteGenericUrlAsync<Topic>(new { SeName = await _urlRecordService.GetSeNameAsync(topic) }, _webHelper.GetCurrentRequestProtocol());
-
-                
                 model.Url = await _nopUrlHelper.RouteGenericUrlAsync<Topic>(new { SeName = await _urlRecordService.GetSeNameAsync(topic) }, _webHelper.GetCurrentRequestProtocol());
 
                 //define localized model configuration action
