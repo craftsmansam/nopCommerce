@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Mvc.ModelBinding;
 
-namespace Nop.Web.Models.Common
+namespace Nop.Web.Models.Common;
+
+public partial record ContactUsModel : BaseNopModel
 {
-    public partial record ContactUsModel : BaseNopModel
-    {
         [DataType(DataType.EmailAddress)]
         [NopResourceDisplayName("ContactUs.Email")]
         public string Email { get; set; }
@@ -27,5 +27,4 @@ namespace Nop.Web.Models.Common
         public string Result { get; set; }
 
         public bool DisplayCaptcha { get; set; }
-    }
 }

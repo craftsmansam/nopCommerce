@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
@@ -11,6 +7,7 @@ using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
+using Nop.Services.Attributes;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
@@ -19,37 +16,37 @@ using Nop.Services.Payments;
 using Nop.Services.Shipping;
 using Nop.Services.Tax;
 
-namespace Nop.Services.Orders
+namespace Nop.Services.Orders;
+
+/// <summary>
+/// Order service
+/// </summary>
+public partial class OrderTotalCalculationService : IOrderTotalCalculationService
 {
-    /// <summary>
-    /// Order service
-    /// </summary>
-    public partial class OrderTotalCalculationService : IOrderTotalCalculationService
-    {
         #region Fields
 
-        private readonly CatalogSettings _catalogSettings;
-        private readonly IAddressService _addressService;
-        private readonly ICheckoutAttributeParser _checkoutAttributeParser;
-        private readonly ICustomerService _customerService;
-        private readonly IDiscountService _discountService;
-        private readonly IGenericAttributeService _genericAttributeService;
-        private readonly IGiftCardService _giftCardService;
-        private readonly IOrderService _orderService;
-        private readonly IPaymentService _paymentService;
-        private readonly IPriceCalculationService _priceCalculationService;
-        private readonly IProductService _productService;
-        private readonly IRewardPointService _rewardPointService;
-        private readonly IShippingPluginManager _shippingPluginManager;
-        private readonly IShippingService _shippingService;
-        private readonly IShoppingCartService _shoppingCartService;
-        private readonly IStoreContext _storeContext;
-        private readonly ITaxService _taxService;
-        private readonly IWorkContext _workContext;
-        private readonly RewardPointsSettings _rewardPointsSettings;
-        private readonly ShippingSettings _shippingSettings;
-        private readonly ShoppingCartSettings _shoppingCartSettings;
-        private readonly TaxSettings _taxSettings;
+    protected readonly CatalogSettings _catalogSettings;
+    protected readonly IAddressService _addressService;
+    protected readonly IAttributeParser<CheckoutAttribute, CheckoutAttributeValue> _checkoutAttributeParser;
+    protected readonly ICustomerService _customerService;
+    protected readonly IDiscountService _discountService;
+    protected readonly IGenericAttributeService _genericAttributeService;
+    protected readonly IGiftCardService _giftCardService;
+    protected readonly IOrderService _orderService;
+    protected readonly IPaymentService _paymentService;
+    protected readonly IPriceCalculationService _priceCalculationService;
+    protected readonly IProductService _productService;
+    protected readonly IRewardPointService _rewardPointService;
+    protected readonly IShippingPluginManager _shippingPluginManager;
+    protected readonly IShippingService _shippingService;
+    protected readonly IShoppingCartService _shoppingCartService;
+    protected readonly IStoreContext _storeContext;
+    protected readonly ITaxService _taxService;
+    protected readonly IWorkContext _workContext;
+    protected readonly RewardPointsSettings _rewardPointsSettings;
+    protected readonly ShippingSettings _shippingSettings;
+    protected readonly ShoppingCartSettings _shoppingCartSettings;
+    protected readonly TaxSettings _taxSettings;
 
         #endregion
 
@@ -57,7 +54,7 @@ namespace Nop.Services.Orders
 
         public OrderTotalCalculationService(CatalogSettings catalogSettings,
             IAddressService addressService,
-            ICheckoutAttributeParser checkoutAttributeParser,
+        IAttributeParser<CheckoutAttribute, CheckoutAttributeValue> checkoutAttributeParser,
             ICustomerService customerService,
             IDiscountService discountService,
             IGenericAttributeService genericAttributeService,
@@ -118,24 +115,26 @@ namespace Nop.Services.Orders
         protected virtual async Task<(decimal orderDiscount, List<Discount> appliedDiscounts)> GetOrderSubtotalDiscountAsync(Customer customer,
             decimal orderSubTotal)
         {
-            var appliedDiscounts = new List<Discount>();
             var discountAmount = decimal.Zero;
             if (_catalogSettings.IgnoreDiscounts)
-                return (discountAmount, appliedDiscounts);
+            return (discountAmount, new List<Discount>());
 
             var allDiscounts = await _discountService.GetAllDiscountsAsync(DiscountType.AssignedToOrderSubTotal);
             var allowedDiscounts = new List<Discount>();
-            if (allDiscounts != null)
+        if (allDiscounts?.Any() == true)
             {
+            var couponCodesToValidate = await _customerService.ParseAppliedDiscountCouponCodesAsync(customer);
                 foreach (var discount in allDiscounts)
+            {
                     if (!_discountService.ContainsDiscount(allowedDiscounts, discount) &&
-                        (await _discountService.ValidateDiscountAsync(discount, customer)).IsValid)
+                    (await _discountService.ValidateDiscountAsync(discount, customer, couponCodesToValidate)).IsValid)
                     {
                         allowedDiscounts.Add(discount);
                     }
             }
+        }
 
-            appliedDiscounts = _discountService.GetPreferredDiscount(allowedDiscounts, orderSubTotal, out discountAmount);
+        var appliedDiscounts = _discountService.GetPreferredDiscount(allowedDiscounts, orderSubTotal, out discountAmount);
 
             if (discountAmount < decimal.Zero)
                 discountAmount = decimal.Zero;
@@ -161,11 +160,13 @@ namespace Nop.Services.Orders
 
             var allDiscounts = await _discountService.GetAllDiscountsAsync(DiscountType.AssignedToShipping);
             var allowedDiscounts = new List<Discount>();
-            if (allDiscounts != null)
+        if (allDiscounts?.Any() == true)
+        {
+            var couponCodesToValidate = await _customerService.ParseAppliedDiscountCouponCodesAsync(customer);
+
                 foreach (var discount in allDiscounts)
                     if (!_discountService.ContainsDiscount(allowedDiscounts, discount) &&
-                        (await _discountService.ValidateDiscountAsync(discount, customer)).IsValid)
-                    {
+                    (await _discountService.ValidateDiscountAsync(discount, customer, couponCodesToValidate)).IsValid)
                         allowedDiscounts.Add(discount);
                     }
 
@@ -191,22 +192,26 @@ namespace Nop.Services.Orders
         /// </returns>
         protected virtual async Task<(decimal orderDiscount, List<Discount> appliedDiscounts)> GetOrderTotalDiscountAsync(Customer customer, decimal orderTotal)
         {
-            var appliedDiscounts = new List<Discount>();
             var discountAmount = decimal.Zero;
             if (_catalogSettings.IgnoreDiscounts)
-                return (discountAmount, appliedDiscounts);
+            return (discountAmount, new List<Discount>());
 
             var allDiscounts = await _discountService.GetAllDiscountsAsync(DiscountType.AssignedToOrderTotal);
             var allowedDiscounts = new List<Discount>();
-            if (allDiscounts != null)
+        if (allDiscounts?.Any() == true)
+        {
+            var couponCodesToValidate = await _customerService.ParseAppliedDiscountCouponCodesAsync(customer);
                 foreach (var discount in allDiscounts)
+            {
                     if (!_discountService.ContainsDiscount(allowedDiscounts, discount) &&
-                        (await _discountService.ValidateDiscountAsync(discount, customer)).IsValid)
+                    (await _discountService.ValidateDiscountAsync(discount, customer, couponCodesToValidate)).IsValid)
                     {
                         allowedDiscounts.Add(discount);
                     }
+            }
+        }
 
-            appliedDiscounts = _discountService.GetPreferredDiscount(allowedDiscounts, orderTotal, out discountAmount);
+        var appliedDiscounts = _discountService.GetPreferredDiscount(allowedDiscounts, orderTotal, out discountAmount);
 
             if (discountAmount < decimal.Zero)
                 discountAmount = decimal.Zero;
@@ -318,10 +323,10 @@ namespace Nop.Services.Orders
                 if (kvp.Key <= decimal.Zero || kvp.Value <= decimal.Zero)
                     continue;
 
-                if (!taxRates.ContainsKey(kvp.Key))
+            if (!taxRates.TryGetValue(kvp.Key, out var value))
                     taxRates.Add(kvp.Key, kvp.Value);
                 else
-                    taxRates[kvp.Key] = taxRates[kvp.Key] + kvp.Value;
+                taxRates[kvp.Key] = value + kvp.Value;
             }
 
             //shipping taxes
@@ -334,10 +339,10 @@ namespace Nop.Services.Orders
 
                 if (shippingTaxRate > decimal.Zero && shippingTax > decimal.Zero)
                 {
-                    if (!taxRates.ContainsKey(shippingTaxRate))
+                if (!taxRates.TryGetValue(shippingTaxRate, out var value))
                         taxRates.Add(shippingTaxRate, shippingTax);
                     else
-                        taxRates[shippingTaxRate] = taxRates[shippingTaxRate] + shippingTax;
+                    taxRates[shippingTaxRate] = value + shippingTax;
                 }
             }
 
@@ -354,10 +359,10 @@ namespace Nop.Services.Orders
                     var paymentTaxRate = Math.Round(100 * paymentMethodAdditionalFeeTax / updatedOrder.PaymentMethodAdditionalFeeExclTax, 3);
                     if (paymentTaxRate > decimal.Zero && paymentMethodAdditionalFeeTax > decimal.Zero)
                     {
-                        if (!taxRates.ContainsKey(paymentTaxRate))
+                    if (!taxRates.TryGetValue(paymentTaxRate, out var value))
                             taxRates.Add(paymentTaxRate, paymentMethodAdditionalFeeTax);
                         else
-                            taxRates[paymentTaxRate] = taxRates[paymentTaxRate] + paymentMethodAdditionalFeeTax;
+                        taxRates[paymentTaxRate] = value + paymentMethodAdditionalFeeTax;
                     }
                 }
             }
@@ -605,10 +610,10 @@ namespace Nop.Services.Orders
                 if (taxRate <= decimal.Zero || itemTaxValue <= decimal.Zero)
                     continue;
 
-                if (!subTotalTaxRates.ContainsKey(taxRate))
+            if (!subTotalTaxRates.TryGetValue(taxRate, out var value))
                     subTotalTaxRates.Add(taxRate, itemTaxValue);
                 else
-                    subTotalTaxRates[taxRate] = subTotalTaxRates[taxRate] + itemTaxValue;
+                subTotalTaxRates[taxRate] = value + itemTaxValue;
             }
 
             if (subTotalExclTax < decimal.Zero)
@@ -864,7 +869,7 @@ namespace Nop.Services.Orders
             {
                 var store = await _storeContext.GetCurrentStoreAsync();
                 var checkoutAttributesXml = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CheckoutAttributes, store.Id);
-                var attributeValues = _checkoutAttributeParser.ParseCheckoutAttributeValues(checkoutAttributesXml);
+            var attributeValues = _checkoutAttributeParser.ParseAttributeValues(checkoutAttributesXml);
                 if (attributeValues != null)
                 {
                     await foreach (var (attribute, values) in attributeValues)
@@ -908,6 +913,7 @@ namespace Nop.Services.Orders
             (discountAmountExclTax, appliedDiscounts) = await GetOrderSubtotalDiscountAsync(customer, subTotalWithoutDiscountExclTax);
             if (subTotalWithoutDiscountExclTax < discountAmountExclTax)
                 discountAmountExclTax = subTotalWithoutDiscountExclTax;
+        discountAmountInclTax = discountAmountExclTax;
 
             //subtotal with discount (excl tax)
             subTotalWithDiscountExclTax = subTotalWithoutDiscountExclTax - discountAmountExclTax;
@@ -927,7 +933,7 @@ namespace Nop.Services.Orders
                 if (subTotalWithoutDiscountExclTax > decimal.Zero)
                 {
                     var discountTax = taxRates[taxRate] * (discountAmountExclTax / subTotalWithoutDiscountExclTax);
-                    discountAmountInclTax = discountAmountExclTax + discountTax;
+                discountAmountInclTax += discountTax;
                     taxValue = taxRates[taxRate] - discountTax;
                     if (_shoppingCartSettings.RoundPricesDuringCalculation)
                         taxValue = await _priceCalculationService.RoundPriceAsync(taxValue);
@@ -1285,8 +1291,7 @@ namespace Nop.Services.Orders
         /// </returns>
         public virtual async Task<(decimal taxTotal, SortedDictionary<decimal, decimal> taxRates)> GetTaxTotalAsync(IList<ShoppingCartItem> cart, bool usePaymentMethodAdditionalFee = true)
         {
-            if (cart == null)
-                throw new ArgumentNullException(nameof(cart));
+        ArgumentNullException.ThrowIfNull(cart);
 
             var taxTotalResult = await _taxService.GetTaxTotalAsync(cart, usePaymentMethodAdditionalFee);
             var taxRates = taxTotalResult?.TaxRates ?? new SortedDictionary<decimal, decimal>();
@@ -1386,7 +1391,7 @@ namespace Nop.Services.Orders
             if (!shoppingCartShipping.HasValue)
             {
                 //we have errors
-                return (null, discountAmount, appliedDiscounts, appliedGiftCards,redeemedRewardPoints, redeemedRewardPointsAmount);
+            return (null, discountAmount, appliedDiscounts, appliedGiftCards, redeemedRewardPoints, redeemedRewardPointsAmount);
             }
 
             var orderTotal = resultTemp;
@@ -1500,5 +1505,4 @@ namespace Nop.Services.Orders
         }
 
         #endregion
-    }
 }

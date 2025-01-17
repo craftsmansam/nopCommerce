@@ -14,27 +14,21 @@ input.instant-search-busy {
 	right: 0 !important;
 	left: auto !important;
 }
-.instant-search-item .img-block img {
-	left: 0;
-	right: 0;
+.instantSearch .k-no-data {
+    text-align: right;
 }
-@media all and (min-width: 481px) {
-	.instant-search-item .detail {
-		text-align: right;
-		padding: 0 12px 0 0;
-	}
+.instant-search-item .detail {
+	text-align: right;
+	padding: 0 12px 0 0;
 }
+
 @media all and (min-width: 1201px) {
+
 	.store-search-box form.open {
 		padding: 0 51px 0 0;
 	}
 	.store-search-box form.open .search-box-button {
 		right: 0;
 		left: auto;
-	}
-	.store-search-box form.open input.search-box-text {
-		right: 51px;
-		left: auto;
-        text-align: right;
 	}
 }

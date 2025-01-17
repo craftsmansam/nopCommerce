@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
+using System.Threading.RateLimiting;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using FluentValidation;
@@ -25,7 +24,6 @@ using Nop.Data;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Common;
-using Nop.Services.Security;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Mvc.ModelBinding.Binders;
 using Nop.Web.Framework.Mvc.Routing;
@@ -33,19 +31,18 @@ using Nop.Web.Framework.Security.Captcha;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.Validators;
 using Nop.Web.Framework.WebOptimizer;
-using StackExchange.Profiling.Storage;
-using WebMarkupMin.AspNetCore7;
+using WebMarkupMin.AspNetCore8;
 using WebMarkupMin.Core;
 using WebMarkupMin.NUglify;
 
-namespace Nop.Web.Framework.Infrastructure.Extensions
+namespace Nop.Web.Framework.Infrastructure.Extensions;
+
+/// <summary>
+/// Represents extensions of IServiceCollection
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Represents extensions of IServiceCollection
-    /// </summary>
-    public static class ServiceCollectionExtensions
-    {
-        /// <summary>
         /// Configure base application settings
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
@@ -113,6 +110,24 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
             //create engine and configure service provider
             var engine = EngineContext.Create();
+
+        builder.Services.AddRateLimiter(options =>
+        {
+            var settings = Singleton<AppSettings>.Instance.Get<CommonConfig>();
+
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+                    factory: partition => new FixedWindowRateLimiterOptions
+                    {
+                        AutoReplenishment = true,
+                        PermitLimit = settings.PermitLimit,
+                        QueueLimit = settings.QueueCount,
+                        Window = TimeSpan.FromMinutes(1)
+                    }));
+
+            options.RejectionStatusCode = settings.RejectionStatusCode;
+        });
 
             engine.ConfigureServices(services, builder.Configuration);
         }
@@ -201,6 +216,15 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     services.AddStackExchangeRedisCache(options =>
                     {
                         options.Configuration = distributedCacheConfig.ConnectionString;
+                    options.InstanceName = distributedCacheConfig.InstanceName ?? string.Empty;
+                });
+                break;
+
+            case DistributedCacheType.RedisSynchronizedMemory:
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = distributedCacheConfig.ConnectionString;
+                    options.InstanceName = distributedCacheConfig.InstanceName ?? string.Empty;
                     });
                     break;
             }
@@ -320,9 +344,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             //set some options
             mvcBuilder.AddMvcOptions(options =>
             {
-                //we'll use this until https://github.com/dotnet/aspnetcore/issues/6566 is solved 
-                options.ModelBinderProviders.Insert(0, new InvariantNumberModelBinderProvider());
-                options.ModelBinderProviders.Insert(1, new CustomPropertiesModelBinderProvider());
+            options.ModelBinderProviders.Insert(1, new NopModelBinderProvider());
                 //add custom display metadata provider 
                 options.ModelMetadataDetailsProviders.Add(new NopMetadataProvider());
 
@@ -355,30 +377,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             //we use custom redirect executor as a workaround to allow using non-ASCII characters in redirect URLs
             services.AddScoped<IActionResultExecutor<RedirectResult>, NopRedirectResultExecutor>();
-        }
-
-        /// <summary>
-        /// Add and configure MiniProfiler service
-        /// </summary>
-        /// <param name="services">Collection of service descriptors</param>
-        public static void AddNopMiniProfiler(this IServiceCollection services)
-        {
-            //whether database is already installed
-            if (!DataSettingsManager.IsDatabaseInstalled())
-                return;
-
-            var appSettings = Singleton<AppSettings>.Instance;
-            if (appSettings.Get<CommonConfig>().MiniProfilerEnabled)
-            {
-                services.AddMiniProfiler(miniProfilerOptions =>
-                {
-                    //use memory cache provider for storing each result
-                    ((MemoryCacheStorage)miniProfilerOptions.Storage).CacheDuration = TimeSpan.FromMinutes(appSettings.Get<CacheConfig>().DefaultCacheTime);
-
-                    //determine who can access the MiniProfiler results
-                    miniProfilerOptions.ResultsAuthorize = request => EngineContext.Current.Resolve<IPermissionService>().AuthorizeAsync(StandardPermissionProvider.AccessProfiling).Result;
-                });
-            }
         }
 
         /// <summary>
@@ -422,23 +420,29 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         public static void AddNopWebOptimizer(this IServiceCollection services)
         {
             var appSettings = Singleton<AppSettings>.Instance;
-            var cssBundling = appSettings.Get<WebOptimizerConfig>().EnableCssBundling;
-            var jsBundling = appSettings.Get<WebOptimizerConfig>().EnableJavaScriptBundling;
+        var woConfig = appSettings.Get<WebOptimizerConfig>();
+
+        if (!woConfig.EnableCssBundling && !woConfig.EnableJavaScriptBundling)
+        {
+            services.AddScoped<INopAssetHelper, NopDefaultAssetHelper>();
+            return;
+        }
 
             //add minification & bundling
             var cssSettings = new CssBundlingSettings
             {
                 FingerprintUrls = false,
-                Minify = cssBundling
+            Minify = woConfig.EnableCssBundling
             };
 
             var codeSettings = new CodeBundlingSettings
             {
-                Minify = jsBundling,
+            Minify = woConfig.EnableJavaScriptBundling,
                 AdjustRelativePaths = false //disable this feature because it breaks function names that have "Url(" at the end
             };
 
             services.AddWebOptimizer(null, cssSettings, codeSettings);
+        services.AddScoped<INopAssetHelper, NopAssetHelper>();
         }
 
         /// <summary>
@@ -459,5 +463,4 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             //client to request reCAPTCHA service
             services.AddHttpClient<CaptchaHttpClient>().WithProxy();
         }
-    }
 }

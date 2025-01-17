@@ -75,7 +75,7 @@
             }
         </div>
         <script asp-location="Footer">
-            $(document).ready(function () {
+            $(function() {
                 $(CatalogProducts).on('before', function (e) {
                     var $viewModeEl = $('[data-viewmode].selected');
                     console.log($viewModeEl);
@@ -98,7 +98,7 @@
     @if (Model.AllowCustomersToSelectPageSize)
     {
         <div class="product-page-size">
-            <select id="products-pagesize" name="products-pagesize" onchange="setLocation(this.value);" aria_label = "@T("Catalog.OrderBy.Label")">
+            <select id="products-pagesize" name="products-pagesize" aria_label="@T("Catalog.OrderBy.Label")">
                 @for (int i = 0; i < Model.PageSizeOptions.Count; i++)
                 {
                     SelectListItem currentOption = Model.PageSizeOptions[i];
@@ -107,6 +107,19 @@
                     <!option value="@currentOption.Value" @Html.Raw(isSelected)>@currentOption.Text @T("Catalog.PageSize.PerPage")</!option>
                 }
             </select>
+            <script asp-location="Footer">
+                $(function() {
+                    var $pageSizeEl = $('#products-pagesize');
+                    $pageSizeEl.on('change', function () {
+                        CatalogProducts.getProducts();
+                    });
+
+                    $(CatalogProducts).on('before', function (e) {
+                        e.payload.urlBuilder
+                            .addParameter('pagesize', $pageSizeEl.val());
+                    });
+                });
+            </script>
         </div>
     }
     @*sorting*@
@@ -116,7 +129,7 @@
             @Html.DropDownList("products-orderby", Model.AvailableSortOptions, new { aria_label = T("Catalog.OrderBy.Label") })
         </div>
         <script asp-location="Footer">
-            $(document).ready(function () {
+            $(function() {
                 var $orderByEl = $('#products-orderby');
                 $orderByEl.on('change', function () {
                     CatalogProducts.getProducts();

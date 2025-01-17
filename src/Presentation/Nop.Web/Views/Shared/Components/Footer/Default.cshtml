@@ -161,7 +161,7 @@ var testimonialpluginmodel = _settingService.GetSettingByKeyAsync("testimonialse
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
 </div>
 <script asp-location="Footer">
-    $(document).ready(function () {
+    $(function() {
         $('.footer-block .title').on('click', function () {
             var e = window, a = 'inner';
             if (!('innerWidth' in window)) {
@@ -176,7 +176,7 @@ var testimonialpluginmodel = _settingService.GetSettingByKeyAsync("testimonialse
     });
 </script>
 <script asp-location="Footer">
-    $(document).ready(function () {
+    $(function() {
         $('.block .title').on('click', function () {
             var e = window, a = 'inner';
             if (!('innerWidth' in window)) {

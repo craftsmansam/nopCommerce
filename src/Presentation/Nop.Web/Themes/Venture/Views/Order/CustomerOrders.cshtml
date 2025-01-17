@@ -17,6 +17,7 @@
         <h1>@T("Account.MyAccount") - @T("Account.CustomerOrders")</h1>
     </div>
     <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CustomerOrdersTop, additionalData = Model })
         @if (Model.RecurringOrders.Count > 0)
         {
             <div class="section recurring-payments">
@@ -128,11 +129,10 @@
                 </div>
             }
         }
-        
         @if (Model.Orders.Count > 0)
         {
             <div class="order-list">
-                @foreach (var order in Model.Orders.OrderByDescending(x => x.CreatedOn))
+                @foreach (var order in Model.Orders)
                 {
                     <div class="section order-item">
                         <div class="title">
@@ -163,5 +163,6 @@
                 @T("Account.CustomerOrders.NoOrders")
             </div>
         }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CustomerOrdersBottom, additionalData = Model })
     </div>
 </div>

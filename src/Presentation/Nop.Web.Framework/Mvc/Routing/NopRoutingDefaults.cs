@@ -1,10 +1,10 @@
-﻿namespace Nop.Web.Framework.Mvc.Routing
+﻿namespace Nop.Web.Framework.Mvc.Routing;
+
+/// <summary>
+/// Represents default values related to routing
+/// </summary>
+public static partial class NopRoutingDefaults
 {
-    /// <summary>
-    /// Represents default values related to routing
-    /// </summary>
-    public static partial class NopRoutingDefaults
-    {
         #region Route names
 
         public static partial class RouteName
@@ -171,5 +171,4 @@
         /// Gets language parameter transformer
         /// </summary>
         public static string LanguageParameterTransformer => "lang";
-    }
 }

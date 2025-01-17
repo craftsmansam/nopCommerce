@@ -1,24 +1,31 @@
 ﻿@model Nop.Web.Models.Catalog.ProductReviewsModel
 
 @inject Nop.Services.Html.IHtmlFormatter htmlFormatter
+@inject CaptchaSettings captchaSettings
 
-<div id="updateTargetId" class="product-reviews-page">
-    @if (Model.AddProductReview.SuccessfullyAdded)
+@{
+    var publicKey = captchaSettings.ReCaptchaPublicKey ?? string.Empty;
+}
+
+<div id="updateTargetId" class="product-reviews">
+    @await Component.InvokeAsync("Widget", new { widgetZone = "productreviews_page_top", additionalData = Model })
+    @if (Model.AddProductReview.CustomProperties.ContainsKey("IsReviewAdded") && Model.AddProductReview.CustomProperties["IsReviewAdded"] == "yes")
     {
-        <div class="submitReviewResult">
-            @Model.AddProductReview.Result
+        <div class="result submitReviewResult">
+            @Model.AddProductReview.CustomProperties["AddNewReviewResult"]
         </div>
     }
     else if (!Model.AddProductReview.CanAddNewReview)
     {
-        <div class="result review-already-added">
+        <div class="result submitReviewResult">
             @T("Reviews.AlreadyAddedProductReviews")
         </div>
     }
     else
     {
         <div class="write-review" id="review-form">
-            <div class="title">
+            <a name="addreview"></a>
+            <div class="trigger">
                 <strong class="write-review-title">@T("Reviews.Write")</strong>
                 <strong class="close-review-form">@T("SevenSpikes.Themes.Venture.Common.HideReviewForm")</strong>
             </div>
@@ -105,12 +112,15 @@
                             </div>
                         }
                     }
-                    
                     @if (Model.AddProductReview.DisplayCaptcha)
                     {
-                        <nop-captcha />
+                        if (captchaSettings.CaptchaType == CaptchaType.ReCaptchaV3)
+                        {
+                            <input type="hidden" id="reviews-captcha-v3-enabled" value="true" />
+                            <input type="hidden" id="captcha-public-key" value="@publicKey" />
+                        }
+                        <nop-captcha action-name="ProductReviews" />
                     }
-                    
                 </div>
                 <div class="buttons">
                     @if (Model.AddProductReview.CanCurrentCustomerLeaveReview)
@@ -119,7 +129,7 @@
                     }
                     else
                     {
-                        <button type="button" id="add-review" disabled="disabled" name="add-review" class="button-1 write-product-review-button">@T("Reviews.SubmitButton")</button>
+                        <button type="button" disabled="disabled" id="add-review" name="add-review" class="button-1 write-product-review-button">@T("Reviews.SubmitButton")</button>
                     }
                 </div>
             </div>
@@ -128,11 +138,10 @@
     @if (Model.Items.Count > 0)
     {
         <div class="product-review-list">
-            @*
-            <div class="title">
+            <a name="productreviews"></a>
+            @*<div class="title">
                 <strong>@T("Reviews.ExistingReviews")</strong>
-            </div>
-            *@
+            </div>*@
             @foreach (var review in Model.Items)
             {
                 int ratingPercent = review.Rating * 20;
@@ -145,6 +154,7 @@
                         <div class="product-review-box">
                             <div class="rating">
                                 <div style="width: @(ratingPercent)%">
+                                    @review.Rating
                                 </div>
                             </div>
 
@@ -163,6 +173,7 @@
                             <div class="product-review-box">
                                 <div class="rating">
                                     <div style="width: @(ratingExtPercent)%">
+                                        @reviewType.Rating
                                     </div>
                                 </div>
                             </div>
@@ -217,4 +228,5 @@
             }
         </div>
     }
+    @await Component.InvokeAsync("Widget", new { widgetZone = "productreviews_page_bottom", additionalData = Model })
 </div>

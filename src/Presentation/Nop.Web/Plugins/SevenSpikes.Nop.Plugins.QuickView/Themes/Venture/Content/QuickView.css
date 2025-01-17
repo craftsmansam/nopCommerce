@@ -135,6 +135,7 @@
 
 
 .quickView {
+    flex-flow: column;
     position: absolute;
 	left: 50% !important;
     z-index: 1070;
@@ -151,23 +152,25 @@
 	margin-top: 0 !important;
 	font-size: 0;
 }
-.quickView .k-window-titlebar .k-window-title {
+.quickView .k-window-titlebar > span {
 	display: none;
 }
-.quickView .k-window-titlebar .k-window-actions {
+.quickView .k-window-titlebar-actions {
 	position: absolute;
 	top: 15px;
 	right: 15px;
 	z-index: 1;
 }
-.quickView .k-window-titlebar .k-window-actions a {
+.quickView .k-window-titlebar .k-button {
 	display: block;
+    position: relative;
 	width: 25px;
 	height: 25px;
+    border: none;
+    background: none;
 	font-size: 0;
-    position: relative;
 }
-.quickView .k-window-titlebar .k-window-actions a:before {
+.quickView .k-window-titlebar .k-button:before {
     font-family: "venture-font";
     text-transform: none;
     content: "u";
@@ -184,8 +187,11 @@
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.quickView .k-window-titlebar .k-window-actions a:hover:before {
+.quickView .k-window-titlebar .k-button:hover:before {
     color: #2c2c2c;
+}
+.quickView .k-window-titlebar .k-icon {
+	display: none;
 }
 
 .quickView .product-essential {

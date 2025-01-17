@@ -68,18 +68,14 @@
 }
 .colorOptions .color {
 	right: 0;
-	left: auto;;
+	left: auto;
 }
 .colorOptions .checked .color {
 	right: 3px;
 	left: auto;
 }
-.ajaxFilters .k-window-actions {
+.ajaxFilters .k-window-titlebar-actions {
 	left: 8px;
-	right: auto;
-}
-.ajaxFilters .k-window-actions .k-icon {
-	left: 0;
 	right: auto;
 }
 

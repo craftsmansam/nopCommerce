@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -16,30 +10,30 @@ using Nop.Services.Configuration;
 using Nop.Services.Logging;
 using Nop.Services.Seo;
 using SkiaSharp;
-using Svg;
 using Svg.Skia;
 
-namespace Nop.Services.Media
+namespace Nop.Services.Media;
+
+/// <summary>
+/// Picture service
+/// </summary>
+public partial class PictureService : IPictureService
 {
-    /// <summary>
-    /// Picture service
-    /// </summary>
-    public partial class PictureService : IPictureService
-    {
         #region Fields
 
-        private readonly IDownloadService _downloadService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger _logger;
-        private readonly INopFileProvider _fileProvider;
-        private readonly IProductAttributeParser _productAttributeParser;
-        private readonly IRepository<Picture> _pictureRepository;
-        private readonly IRepository<PictureBinary> _pictureBinaryRepository;
-        private readonly IRepository<ProductPicture> _productPictureRepository;
-        private readonly ISettingService _settingService;
-        private readonly IUrlRecordService _urlRecordService;
-        private readonly IWebHelper _webHelper;
-        private readonly MediaSettings _mediaSettings;
+    protected readonly IDownloadService _downloadService;
+    protected readonly IHttpContextAccessor _httpContextAccessor;
+    protected readonly ILogger _logger;
+    protected readonly INopFileProvider _fileProvider;
+    protected readonly IProductAttributeParser _productAttributeParser;
+    protected readonly IProductAttributeService _productAttributeService;
+    protected readonly IRepository<Picture> _pictureRepository;
+    protected readonly IRepository<PictureBinary> _pictureBinaryRepository;
+    protected readonly IRepository<ProductPicture> _productPictureRepository;
+    protected readonly ISettingService _settingService;
+    protected readonly IUrlRecordService _urlRecordService;
+    protected readonly IWebHelper _webHelper;
+    protected readonly MediaSettings _mediaSettings;
 
         #endregion
 
@@ -50,6 +44,7 @@ namespace Nop.Services.Media
             ILogger logger,
             INopFileProvider fileProvider,
             IProductAttributeParser productAttributeParser,
+        IProductAttributeService productAttributeService,
             IRepository<Picture> pictureRepository,
             IRepository<PictureBinary> pictureBinaryRepository,
             IRepository<ProductPicture> productPictureRepository,
@@ -63,6 +58,7 @@ namespace Nop.Services.Media
             _logger = logger;
             _fileProvider = fileProvider;
             _productAttributeParser = productAttributeParser;
+        _productAttributeService = productAttributeService;
             _pictureRepository = pictureRepository;
             _pictureBinaryRepository = pictureBinaryRepository;
             _productPictureRepository = productPictureRepository;
@@ -115,8 +111,7 @@ namespace Nop.Services.Media
         /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task DeletePictureOnFileSystemAsync(Picture picture)
         {
-            if (picture == null)
-                throw new ArgumentNullException(nameof(picture));
+        ArgumentNullException.ThrowIfNull(picture);
 
             var lastPart = await GetFileExtensionFromMimeTypeAsync(picture.MimeType);
             var fileName = $"{picture.Id:0000000}_0.{lastPart}";
@@ -238,8 +233,7 @@ namespace Nop.Services.Media
         /// </returns>
         protected virtual async Task<byte[]> LoadPictureBinaryAsync(Picture picture, bool fromDb)
         {
-            if (picture == null)
-                throw new ArgumentNullException(nameof(picture));
+        ArgumentNullException.ThrowIfNull(picture);
 
             var result = fromDb
                 ? (await GetPictureBinaryByPictureIdAsync(picture.Id))?.BinaryData ?? Array.Empty<byte>()
@@ -291,8 +285,7 @@ namespace Nop.Services.Media
         /// </returns>
         protected virtual async Task<PictureBinary> UpdatePictureBinaryAsync(Picture picture, byte[] binaryData)
         {
-            if (picture == null)
-                throw new ArgumentNullException(nameof(picture));
+        ArgumentNullException.ThrowIfNull(picture);
 
             var pictureBinary = await GetPictureBinaryByPictureIdAsync(picture.Id);
 
@@ -370,8 +363,7 @@ namespace Nop.Services.Media
         /// <returns>Image as array of byte[]</returns>
         protected virtual byte[] ImageResize(SKBitmap image, SKEncodedImageFormat format, int targetSize)
         {
-            if (image == null)
-                throw new ArgumentNullException("Image is null");
+        ArgumentNullException.ThrowIfNull(image);
 
             float width, height;
             if (image.Height > image.Width)
@@ -406,6 +398,19 @@ namespace Nop.Services.Media
             }
 
         }
+
+    /// <summary>
+    /// Gets pictures
+    /// </summary>
+    /// <param name="pictureIds">Picture identifiers</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the list of pictures
+    /// </returns>
+    protected virtual async Task<IList<Picture>> GetPicturesByIdsAsync(int[] pictureIds)
+    {
+        return await _pictureRepository.GetByIdsAsync(pictureIds, cache => default);
+    }
 
         #endregion
 
@@ -605,6 +610,7 @@ namespace Nop.Services.Media
                     ? $"{picture.Id:0000000}_{seoFileName}.{lastPart}"
                     : $"{picture.Id:0000000}.{lastPart}";
 
+        //there is no need to resize the svg image as the browser will take care of it
             if (targetSize == 0 || picture.MimeType == MimeTypes.ImageSvg)
             {
                 var thumbFilePath = await GetThumbLocalPathAsync(thumbFileName);
@@ -630,9 +636,6 @@ namespace Nop.Services.Media
             }
             else
             {
-                //There is no need to resize the svg image as the browser will take care of it
-                if (picture.MimeType != MimeTypes.ImageSvg)
-                {
                     thumbFileName = !string.IsNullOrEmpty(seoFileName)
                     ? $"{picture.Id:0000000}_{seoFileName}_{targetSize}.{lastPart}"
                     : $"{picture.Id:0000000}_{targetSize}.{lastPart}";
@@ -652,7 +655,6 @@ namespace Nop.Services.Media
                     try
                     {
                         if (pictureBinary != null)
-                        {
                             try
                             {
                                 using var image = SKBitmap.Decode(pictureBinary);
@@ -662,7 +664,7 @@ namespace Nop.Services.Media
                             }
                             catch
                             {
-                            }
+                        // ignored
                         }
                     }
                     finally
@@ -670,7 +672,6 @@ namespace Nop.Services.Media
                         mutex.ReleaseMutex();
                     }
                 }
-            }
 
             return (await GetThumbUrlAsync(thumbFileName, storeLocation), picture);
         }
@@ -701,15 +702,15 @@ namespace Nop.Services.Media
         /// <summary>
         /// Convert image from SVG format to PNG
         /// </summary>
-        /// <param name="filePath">SVG file path</param>
+    /// <param name="stream">Stream for SVG file</param>
         /// <returns>A task that represents the asynchronous operation
         /// The task result contains the byte array</returns>
-        public virtual Task<byte[]> ConvertSvgToPngAsync(string filePath)
+    public virtual Task<byte[]> ConvertSvgToPngAsync(Stream stream)
         {
             try
             {
                 using var svg = new SKSvg();
-                svg.Load(filePath);
+            svg.Load(stream);
 
                 using var bitmap = new SKBitmap((int)svg.Picture.CullRect.Width, (int)svg.Picture.CullRect.Height);
                 var canvas = new SKCanvas(bitmap);
@@ -758,8 +759,7 @@ namespace Nop.Services.Media
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task DeletePictureAsync(Picture picture)
         {
-            if (picture == null)
-                throw new ArgumentNullException(nameof(picture));
+        ArgumentNullException.ThrowIfNull(picture);
 
             //delete thumbs
             await DeletePictureThumbsAsync(picture);
@@ -919,7 +919,10 @@ namespace Nop.Services.Media
             if (contentType == MimeTypes.ImageSvg && !_mediaSettings.AllowSVGUploads)
                 return null;
 
-            var picture = await InsertPictureAsync(await _downloadService.GetDownloadBitsAsync(formFile), contentType, _fileProvider.GetFileNameWithoutExtension(fileName));
+        var picture = await InsertPictureAsync(await _downloadService.GetDownloadBitsAsync(formFile),
+            contentType,
+            _fileProvider.GetFileNameWithoutExtension(fileName),
+            validateBinary: contentType != MimeTypes.ImageSvg);
 
             if (string.IsNullOrEmpty(virtualPath))
                 return picture;
@@ -1034,9 +1037,7 @@ namespace Nop.Services.Media
         /// </returns>
         public virtual async Task<Picture> SetSeoFilenameAsync(int pictureId, string seoFilename)
         {
-            var picture = await GetPictureByIdAsync(pictureId);
-            if (picture == null)
-                throw new ArgumentException("No picture found with the specified id");
+        var picture = await GetPictureByIdAsync(pictureId) ?? throw new ArgumentException("No picture found with the specified id");
 
             //update if it has been changed
             if (seoFilename != picture.SeoFilename)
@@ -1097,21 +1098,27 @@ namespace Nop.Services.Media
         /// </returns>
         public virtual async Task<Picture> GetProductPictureAsync(Product product, string attributesXml)
         {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
+        ArgumentNullException.ThrowIfNull(product);
 
             //first, try to get product attribute combination picture
             var combination = await _productAttributeParser.FindProductAttributeCombinationAsync(product, attributesXml);
-            var combinationPicture = await GetPictureByIdAsync(combination?.PictureId ?? 0);
-            if (combinationPicture != null)
-                return combinationPicture;
+        if (combination != null)
+        {
+            var combinationPicture = (await _productAttributeService.GetProductAttributeCombinationPicturesAsync(combination.Id)).FirstOrDefault();
+            if (await GetPictureByIdAsync(combinationPicture?.PictureId ?? 0) is Picture picture)
+                return picture;
+        }
 
             //then, let's see whether we have attribute values with pictures
-            var attributePicture = await (await _productAttributeParser.ParseProductAttributeValuesAsync(attributesXml))
-                .SelectAwait(async attributeValue => await GetPictureByIdAsync(attributeValue?.PictureId ?? 0))
-                .FirstOrDefaultAsync(picture => picture != null);
+        var values = await _productAttributeParser.ParseProductAttributeValuesAsync(attributesXml);
+        foreach (var attributeValue in values)
+        {
+            var valuePictures = await _productAttributeService.GetProductAttributeValuePicturesAsync(attributeValue.Id);
+            var attributePicture = (await GetPicturesByIdsAsync(valuePictures.Select(vp => vp.PictureId).ToArray())).FirstOrDefault();
+
             if (attributePicture != null)
                 return attributePicture;
+        }
 
             //now let's load the default product picture
             var productPicture = (await GetPicturesByProductIdAsync(product.Id, 1)).FirstOrDefault();
@@ -1250,5 +1257,4 @@ namespace Nop.Services.Media
         }
 
         #endregion
-    }
 }

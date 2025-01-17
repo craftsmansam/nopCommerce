@@ -1,5 +1,7 @@
 ﻿@model CategoryNavigationModel
 
+@using Nop.Core.Domain.Catalog
+
 @functions {
     bool BreadCrumbContainsCurrentCategoryId(CategorySimpleModel category)
     {
@@ -36,10 +38,7 @@
             {
                 hasSublistClass = "width-sublist";
             }
-            @{
-                var url = Url.RouteUrl("Category", new { SeName = lineModel.Category.SeName });
-            }
-            <a href="@url" class="@hasSublistClass">
+            <a href="@(Url.RouteUrl<Category>(new { SeName = lineModel.Category.SeName }))" class="@hasSublistClass">
                 @lineModel.Category.Name
                 @if (lineModel.Category.NumberOfProducts.HasValue)
                 {

@@ -473,9 +473,9 @@
     height: 100%;
     background: #000;
     opacity: 0.5;
-    /*filter: alpha(opacity=50);*/
 }
 .ajaxFilters.k-window {
+    flex-flow: column;
 	position: absolute;
 	z-index: 1090;
 	height: auto !important;
@@ -492,19 +492,16 @@
     text-transform: uppercase;
     border-bottom: 1px dashed #ccc;
 }
-.ajaxFilters .k-window-titlebar span {
+.ajaxFilters .k-window-titlebar > span {
 	font-size: 15px;
 	color: #333;
 }
-.ajaxFilters .k-window-actions {
+.ajaxFilters .k-window-titlebar-actions {
 	position: absolute;
 	top: 8px;
 	right: 8px;
 }
-.ajaxFilters .k-window-actions a {
-	display: block;
-}
-.ajaxFilters .k-window-actions .k-icon {
+.ajaxFilters .k-window-titlebar .k-button {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -516,7 +513,7 @@
     background: none;
 	font-size: 0;
 }
-.ajaxFilters .k-window-actions .k-icon:after {
+.ajaxFilters .k-window-titlebar .k-button:after {
     font-family: "venture-font";
     text-transform: none;
     content: "u";
@@ -530,6 +527,9 @@
     bottom: 0;
     margin: auto;
     color: #909090;
+}
+.ajaxFilters .k-window-titlebar .k-icon {
+	display: none;
 }
 .ajaxFilters .k-window-content {
 	min-height: inherit !important;

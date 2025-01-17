@@ -26,11 +26,17 @@
   <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.SerialNumber.Hint">
     <Value>Serial number.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.UseWebImages">
+   <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.UseAVIFImages">
+    <Value>Enable AVIF Images</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.UseAVIFImages.Hint">
+    <Value>Enable/Disable AVIF images.</Value>
+  </LocaleResource>
+	<LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.UseWebImages">
     <Value>Enable WebP Images</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.UseWebImages.Hint">
-    <Value>Enable/Disable plugin.</Value>
+    <Value>Enable/Disable WebP images.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.LossyCompression">
     <Value>Enable lossy compression</Value>
@@ -83,4 +89,10 @@
   <LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.RestartNopcommerce">
     <Value>Don't forget to restart your nopcommerce when you changed settings.</Value>
   </LocaleResource>
+	<LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.Download">
+		<Value>Download the lastest Magick.NET libraries.</Value>
+	</LocaleResource>
+	<LocaleResource Name="Admin.FoxNetSoft.Plugin.Misc.WebPImages.Download.Error">
+		<Value>Error. Please disable the plugin on this page. The plugin can't download the lastest Magick.NET libraries because they are locked by nopcommerce.</Value>
+	</LocaleResource>
 </Language>

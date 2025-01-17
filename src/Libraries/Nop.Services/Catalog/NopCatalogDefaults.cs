@@ -1,13 +1,13 @@
 ﻿using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
 
-namespace Nop.Services.Catalog
+namespace Nop.Services.Catalog;
+
+/// <summary>
+/// Represents default values related to catalog services
+/// </summary>
+public static partial class NopCatalogDefaults
 {
-    /// <summary>
-    /// Represents default values related to catalog services
-    /// </summary>
-    public static partial class NopCatalogDefaults
-    {
         #region Common
 
         /// <summary>
@@ -84,6 +84,25 @@ namespace Nop.Services.Catalog
         /// <summary>
         /// Gets a key for caching
         /// </summary>
+    /// <remarks>
+    /// {0} : current store ID
+    /// {1} : show hidden records?
+    /// </remarks>
+    public static CacheKey ChildCategoryIdLookupCacheKey => new("Nop.childcategoryidlookup.bystore.{0}-{1}", ChildCategoryIdLookupPrefix, ChildCategoryIdLookupByStorePrefix);
+
+    /// <summary>
+    /// Gets a key pattern to clear cache
+    /// </summary>
+    public static string ChildCategoryIdLookupPrefix => "Nop.childcategoryidlookup.";
+
+    /// <summary>
+    /// Gets a key pattern to clear cache
+    /// </summary>
+    public static string ChildCategoryIdLookupByStorePrefix => "Nop.childcategoryidlookup.bystore.{0}";
+
+    /// <summary>
+    /// Gets a key for caching
+    /// </summary>
         public static CacheKey CategoriesHomepageCacheKey => new("Nop.category.homepage.", CategoriesHomepagePrefix);
 
         /// <summary>
@@ -108,8 +127,9 @@ namespace Nop.Services.Catalog
         /// {1} : roles of the current user
         /// {2} : current store ID
         /// {3} : language ID
+    /// {4} : show hidden records?
         /// </remarks>
-        public static CacheKey CategoryBreadcrumbCacheKey => new("Nop.category.breadcrumb.{0}-{1}-{2}-{3}", CategoryBreadcrumbPrefix);
+    public static CacheKey CategoryBreadcrumbCacheKey => new("Nop.category.breadcrumb.{0}-{1}-{2}-{3}-{4}", CategoryBreadcrumbPrefix);
 
         /// <summary>
         /// Gets a key pattern to clear cache
@@ -135,7 +155,7 @@ namespace Nop.Services.Catalog
         /// {2} : roles of the current user
         /// {3} : store ID
         /// </remarks>
-        public static CacheKey ProductCategoriesByProductCacheKey => new("Nop.productcategory.byproduct.{0}-{1}-{2}-{3}", ProductCategoriesByProductPrefix);
+    public static CacheKey ProductCategoriesByProductCacheKey => new("Nop.productcategory.byproduct.{0}-{1}-{2}-{3}", ProductCategoriesByProductPrefix, ProductCategoriesByProductWithoutIdPrefix);
 
         /// <summary>
         /// Gets a key pattern to clear cache
@@ -143,6 +163,11 @@ namespace Nop.Services.Catalog
         public static string ProductCategoriesByProductPrefix => "Nop.productcategory.byproduct.{0}";
 
         /// <summary>
+    /// Gets a key pattern to clear cache
+    /// </summary>
+    public static string ProductCategoriesByProductWithoutIdPrefix => "Nop.productcategory.byproduct.";
+    
+    /// <summary>
         /// Key for caching
         /// </summary>
         /// <remarks>
@@ -170,7 +195,12 @@ namespace Nop.Services.Catalog
         /// {2} : roles of the current user
         /// {3} : store ID
         /// </remarks>
-        public static CacheKey ProductManufacturersByProductCacheKey => new("Nop.productmanufacturer.byproduct.{0}-{1}-{2}-{3}", ProductManufacturersByProductPrefix);
+    public static CacheKey ProductManufacturersByProductCacheKey => new("Nop.productmanufacturer.byproduct.{0}-{1}-{2}-{3}", ProductManufacturersPrefix, ProductManufacturersByProductPrefix);
+
+    /// <summary>
+    /// Gets a key pattern to clear cache
+    /// </summary>
+    public static string ProductManufacturersPrefix => "Nop.productmanufacturer.";
 
         /// <summary>
         /// Gets a key pattern to clear cache
@@ -341,6 +371,22 @@ namespace Nop.Services.Catalog
         /// </remarks>
         public static CacheKey PredefinedProductAttributeValuesByAttributeCacheKey => new("Nop.predefinedproductattributevalue.byattribute.{0}");
 
+    /// <summary>
+    /// Gets a key for caching
+    /// </summary>
+    /// <remarks>
+    /// {0} : combination ID
+    /// </remarks>
+    public static CacheKey ProductAttributeCombinationPicturesByCombinationCacheKey => new("Nop.productattributecombinationpicture.bycombination.{0}");
+
+    /// <summary>
+    /// Gets a key for caching
+    /// </summary>
+    /// <remarks>
+    /// {0} : value ID
+    /// </remarks>
+    public static CacheKey ProductAttributeValuePicturesByValueCacheKey => new("Nop.productattributevaluepicture.byvalue.{0}");
+
         #endregion
 
         #region Product tags
@@ -457,5 +503,4 @@ namespace Nop.Services.Catalog
         #endregion
 
         #endregion
-    }
 }

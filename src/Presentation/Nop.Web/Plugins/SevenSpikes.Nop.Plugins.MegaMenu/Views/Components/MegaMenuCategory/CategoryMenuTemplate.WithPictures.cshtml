@@ -31,7 +31,7 @@
                         <a href="@Url.RouteUrl("Category", new {item.CategoryModel.SeName})" title="@item.CategoryModel.Name"><span>@item.CategoryModel.Name</span></a>
                     </div>
                     <div class="picture">
-                                <a href="@Url.RouteUrl("CategoryWithPath", new {Path = item.CategoryModel.SeName.GetPathFromSeName(), SeName = item.CategoryModel.SeName.GetSeNameWithoutPath() })" title="@item.CategoryModel.PictureModel.Title">
+                        <a href="@Url.RouteUrl("Category", new {item.CategoryModel.SeName})" title="@item.CategoryModel.PictureModel.Title">
                             <img class="lazy" alt="@item.CategoryModel.PictureModel.AlternateText" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-original="@item.CategoryModel.PictureModel.ImageUrl" />
                         </a>
                     </div>
@@ -42,14 +42,14 @@
                         @foreach (var subCategory in item.SubCategories)
                         {
                             <li class="subcategory-item">
-                                            <a href="@Url.RouteUrl("CategoryWithPath", new { Path = subCategory.CategoryModel.GetPathFromSeName(), SeName = subCategory.CategoryModel.SeName.GetSeNameWithoutPath()})" title="@subCategory.CategoryModel.Name"><span>@subCategory.CategoryModel.Name</span></a>
+                                <a href="@Url.RouteUrl("Category", new {subCategory.CategoryModel.SeName})" title="@subCategory.CategoryModel.Name"><span>@subCategory.CategoryModel.Name</span></a>
                             </li>
                         }
 
                         @if (item.ShouldShowViewAllLink)
                         {
                             <li class="subcategory-item all">
-                                            <a class="view-all" href="@Url.RouteUrl("CategoryWithPath", new {Path = item.CategoryModel.GetPathFromSeName(), SeName = item.CategoryModel.SeName.GetSeNameWithoutPath()})" title="@T("SevenSpikes.MegaMenu.ViewAllCategories")">
+                                <a class="view-all" href="@Url.RouteUrl("Category", new {item.CategoryModel.SeName})" title="@T("SevenSpikes.MegaMenu.ViewAllCategories")">
                                     <span>@T("SevenSpikes.MegaMenu.ViewAllCategories")</span>
                                 </a>
                             </li>

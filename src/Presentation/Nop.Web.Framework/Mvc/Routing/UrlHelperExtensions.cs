@@ -3,14 +3,14 @@ using Nop.Core;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Infrastructure;
 
-namespace Nop.Web.Framework.Mvc.Routing
+namespace Nop.Web.Framework.Mvc.Routing;
+
+/// <summary>
+/// Represents url helper extension methods
+/// </summary>
+public static class UrlHelperExtensions
 {
     /// <summary>
-    /// Represents url helper extension methods
-    /// </summary>
-    public static class UrlHelperExtensions
-    {
-        /// <summary>
         /// Generate a generic URL for the specified entity type and route values
         /// </summary>
         /// <typeparam name="TEntity">Entity type that supports slug</typeparam>
@@ -46,5 +46,4 @@ namespace Nop.Web.Framework.Mvc.Routing
             var nopUrlHelper = EngineContext.Current.Resolve<INopUrlHelper>();
             return nopUrlHelper.RouteTopicUrlAsync(systemName, protocol, host, fragment).Result;
         }
-    }
 }

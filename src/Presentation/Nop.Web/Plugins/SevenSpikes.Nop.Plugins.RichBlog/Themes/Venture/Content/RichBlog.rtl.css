@@ -83,7 +83,9 @@
 		margin: 0 0 0 -17px;
 	}
 }
+
 @media all and (min-width: 1201px) {
+
 	.rich-blog-homepage .blog-post {
 		margin: 0 20px 23px 0;
 		float: right;
@@ -94,6 +96,10 @@
 	}
 	.blog-search-box form {
 		padding: 20px 0 20px 50px;
+	}
+	.blog-search-box .search-box-button {
+		right: auto;
+		left: 0;
 	}
 	.blog-instant-search {
 		right: 0 !important;

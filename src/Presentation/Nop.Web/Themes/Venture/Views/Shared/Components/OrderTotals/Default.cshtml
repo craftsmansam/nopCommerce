@@ -39,7 +39,7 @@
                         {
                             if (!string.IsNullOrEmpty(Model.Shipping))
                             {
-                            <span class="value-summary">TBD</span>
+                            <span class="value-summary">@Model.Shipping</span>
                             }
                             else
                             {
@@ -85,7 +85,7 @@
                         <label>@T("ShoppingCart.Totals.Tax"):</label>
                     </td>
                     <td class="cart-total-right">
-                        <span class="value-summary">TBD</span>
+                        <span class="value-summary">@Model.Tax</span>
                     </td>
                 </tr>
             }

@@ -1,16 +1,15 @@
-﻿using System.Threading.Tasks;
-using Nop.Core.Domain.Orders;
+﻿using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Web.Models.Order;
 
-namespace Nop.Web.Factories
+namespace Nop.Web.Factories;
+
+/// <summary>
+/// Represents the interface of the order model factory
+/// </summary>
+public partial interface IOrderModelFactory
 {
     /// <summary>
-    /// Represents the interface of the order model factory
-    /// </summary>
-    public partial interface IOrderModelFactory
-    {
-        /// <summary>
         /// Prepare the customer order list model
         /// </summary>
         /// <returns>
@@ -48,5 +47,4 @@ namespace Nop.Web.Factories
         /// The task result contains the customer reward points model
         /// </returns>
         Task<CustomerRewardPointsModel> PrepareCustomerRewardPointsAsync(int? page);
-    }
 }

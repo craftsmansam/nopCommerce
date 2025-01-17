@@ -22,7 +22,7 @@
     text-align: center;
 }
 .home-page-filter-selectors {
-    margin: 0 0 20px;
+    margin: 0 0 18px;
 	overflow: hidden;
 }
 .home-page-filter-selector {
@@ -31,11 +31,14 @@
 .home-page-filter-selector:first-child {
     margin: 0;
 }
-.home-page-filter-selector .k-dropdown {
-    display: inline-block;
-    width: 70%;
+.home-page-filter-selector .k-dropdownlist {
+    cursor: pointer;
 }
-.home-page-filter-selector span.k-dropdown-wrap {
+.home-page-filter-selector .k-disabled {
+    opacity: .5;
+    cursor: default;
+}
+.home-page-filter-selector .k-input-inner {
     position: relative;
     text-align: left;
     display: block;
@@ -46,13 +49,8 @@
     background: #fff;
     border: 1px solid #ddd;
     padding: 12px 36px 12px 12px;
-    cursor: pointer;
 }
-.home-page-filter-selector span.k-dropdown-wrap.k-state-disabled {
-    opacity: .5;
-    cursor: default;
-}
-.home-page-filter-selector span.k-dropdown-wrap:after {
+.home-page-filter-selector .k-input-inner:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -61,7 +59,7 @@
 	width: 24px;
 	background: url(images/filters-select-icon.png) no-repeat center;
 }
-.home-page-filter-selector .k-select {
+.home-page-filter-selector .k-button {
 	display: none;
 }
 
@@ -128,15 +126,14 @@
 
 @media all and (min-width: 481px) {
 	
-    .home-page-filter-selectors:after {
-        content: '';
-        display: block;
-        clear: both;
-    }
-	.home-page-filter-selector .k-dropdown {
-		width: 100%;
+    .home-page-filter-selectors {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px 2%;
 	}
-
+    .home-page-filter-selector {
+        margin: unset;
+    }
 }
 
 @media all and (min-width: 481px) and (max-width: 768px) {
@@ -145,32 +142,6 @@
 		max-width: 600px;
 		margin: -20px auto 50px;
 	}
-	.home-page-filter-selectors {
-		margin: 0 0 10px;
-	}
-    .home-page-filter-selector {
-        float: left;
-        width: 49%;
-        margin: 0 0 2% 2%;
-    }
-	.home-page-filter-selector:nth-child(2n+1) {
-		margin-bottom: 2%;
-		margin-left: 0;
-	}
-
-}
-
-@media all and (min-width: 769px) {
-
-    .home-page-filter-selector {
-        float: left;
-        width: 24.25%;
-        margin: 0 0 0 1%;
-    }
-	.home-page-filter-selector:first-child {
-		margin-left: 0;
-	}    
-
 }
 
 @media all and (min-width: 1001px) {
@@ -184,24 +155,19 @@
         clear: both;
     }
     .home-page-filter-selectors {
+        grid-template-columns: repeat(4,1fr);
         float: left;
-        width: 730px;
+        width: 760px;
         margin: 2px 0 0;
     }
     .home-page-filter-button {
         float: right;
     }
-
 }
 
 @media all and (min-width: 1367px) {
 
     .home-page-filter-selectors {
-        width: 940px;
+        width: 980px;
     }
-    .home-page-filter-selector {
-        width: 23.5%;
-        margin: 0 0 0 2%;
-    }
-
 }

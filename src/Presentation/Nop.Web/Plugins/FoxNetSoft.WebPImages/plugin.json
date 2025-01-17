@@ -1,11 +1,11 @@
 ﻿{
   "Group": "Misc",
-  "FriendlyName": "WebP images",
+  "FriendlyName": "WebP/AVIF images",
   "SystemName": "FoxNetSoft.WebPImages",
-  "Version": "2.01",
-  "SupportedVersions": [ "4.60" ],
+  "Version": "2.04",
+  "SupportedVersions": [ "4.70" ],
   "Author": "FoxNetSoft",
   "DisplayOrder": 1,
   "FileName": "FoxNetSoft.Plugin.Misc.WebPImages.dll",
-  "Description": "This plugin adds support WebP images in nopcommerce"
+  "Description": "This plugin adds support WebP/AVIF images in nopcommerce"
 }

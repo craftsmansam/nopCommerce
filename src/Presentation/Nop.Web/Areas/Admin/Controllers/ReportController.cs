@@ -1,17 +1,16 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Services.Security;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Models.Reports;
 
-namespace Nop.Web.Areas.Admin.Controllers
+namespace Nop.Web.Areas.Admin.Controllers;
+
+public partial class ReportController : BaseAdminController
 {
-    public partial class ReportController : BaseAdminController
-    {
         #region Fields
 
-        private readonly IPermissionService _permissionService;
-        private readonly IReportModelFactory _reportModelFactory;
+    protected readonly IPermissionService _permissionService;
+    protected readonly IReportModelFactory _reportModelFactory;
 
         #endregion
 
@@ -31,13 +30,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Sales summary
 
-        public virtual async Task<IActionResult> SalesSummary()
+    public virtual async Task<IActionResult> SalesSummary(List<int> orderStatuses = null, List<int> paymentStatuses = null)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
 
             //prepare model
-            var model = await _reportModelFactory.PrepareSalesSummarySearchModelAsync(new SalesSummarySearchModel());
+        var model = await _reportModelFactory.PrepareSalesSummarySearchModelAsync(new SalesSummarySearchModel
+        {
+            OrderStatusIds = orderStatuses,
+            PaymentStatusIds = paymentStatuses
+        });
 
             return View(model);
         }
@@ -251,5 +254,4 @@ namespace Nop.Web.Areas.Admin.Controllers
         #endregion
 
         #endregion
-    }
 }

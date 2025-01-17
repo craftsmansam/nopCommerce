@@ -77,7 +77,7 @@
                         }
                     },
                     {
-                        opener: '.write-review .title',
+                        opener: '.write-review .trigger',
                         content: '.write-review-collapse',
                         activeClassOpener: 'open',
                         animation: {
@@ -188,7 +188,7 @@
                                     }
                                 },
                                 {
-                                    opener: '.write-review .title',
+                                    opener: '.write-review .trigger',
                                     content: '.write-review-collapse',
                                     activeClassOpener: 'open',
                                     animation: {
@@ -323,7 +323,7 @@
                                     }
                                 },
                                 {
-                                    opener: '.write-review .title',
+                                    opener: '.write-review .trigger',
                                     content: '.write-review-collapse',
                                     activeClassOpener: 'open',
                                     animation: {
@@ -458,7 +458,7 @@
                                     }
                                 },
                                 {
-                                    opener: '.write-review .title',
+                                    opener: '.write-review .trigger',
                                     content: '.write-review-collapse',
                                     activeClassOpener: 'open',
                                     animation: {
@@ -489,6 +489,7 @@
         handleAddNewAddressExpand();
         handleNewCommetnExpand();
         handleWriteReviewExpand();
+        handleProductCollaterals();
         handleGridViewModes();
         handleAjaxFiltersPriceRangeHandels();
         handleHomePageVideoPlayer();
@@ -503,7 +504,7 @@
         $(".footer-map-holder .footer-map-wrapper").hide();
     });
 
-    $(document).on("quickTabsRefreshedTab", function () {
+    $(document).on("quickTabsRefreshedTab quickTabsLoadedTab", function () {
         handleWriteReviewExpand();
     });
 
@@ -568,16 +569,30 @@
 
     function handleWriteReviewExpand() {
 
-        if ($(".write-review .field-validation-error").length > 0) {
+        if ($(".write-review .message-error, .write-review .field-validation-error").length > 0) {
             $(".write-review-collapse").slideDown('slow', function () {
 
-                $('html, body').animate({
+                /*$('html, body').animate({
                     scrollTop: $(".write-review-collapse").offset().top
-                }, 0);
+                }, 0);*/
+
+                // this is no longer safe on Product Details pages, because reviews can have error messages by default, not on form submit
+                // in that case the page will scroll down for no reason. same problem may be present on other pages too
             });
 
-            $(".write-review title").addClass("open");
+            $(".write-review .trigger").addClass("open");
         }
+    }
+
+    function handleProductCollaterals() {
+
+        var targetElements = $('.product-page-bottom, .product-collateral');
+  
+        targetElements.each(function () {
+           if (!$(this).height() > 0) {
+               $(this).hide();
+            } 
+        });
     }
 
     function handleGridViewModes() {

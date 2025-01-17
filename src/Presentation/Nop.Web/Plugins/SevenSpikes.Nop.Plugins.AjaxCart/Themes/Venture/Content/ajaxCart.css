@@ -150,6 +150,7 @@
 
 
 .ajaxCart {
+    flex-flow: column;
     position: absolute;
 	left: 50% !important;
     z-index: 1070;
@@ -160,6 +161,12 @@
     height: auto !important;
 	padding: 0 !important;
 }
+.ajaxCart .k-window-title {
+	font-size: 19px;
+    color: #2c2c2c;
+    padding: 18px 35px;
+    display: inline-block;
+}
 .ajaxCart .k-window-titlebar {
 	position: relative;
 	height: 60px; /*theme specific, depending on window title size*/
@@ -169,25 +176,20 @@
     box-shadow: 0 0 14px rgba(0,0,0,.3);
     text-align: center;
 }
-.ajaxCart .k-window-titlebar .k-window-title {
-	font-size: 19px;
-    color: #2c2c2c;
-    padding: 18px 35px;
-    display: inline-block;
-}
-.ajaxCart .k-window-titlebar .k-window-actions {
+.ajaxCart .k-window-titlebar-actions {
 	position: absolute;
 	top: 15px;
 	right: 15px;
 	z-index: 1;
 }
-.ajaxCart .k-window-titlebar .k-window-actions a {
+.ajaxCart .k-window-titlebar .k-button {
 	display: block;
 	width: 25px;
 	height: 25px;
+    border: none;
 	font-size: 0;
 }
-.ajaxCart .k-window-titlebar .k-window-actions a:before {
+.ajaxCart .k-window-titlebar .k-button:before {
     font-family: "venture-font";
     text-transform: none;
     content: "u";
@@ -204,8 +206,11 @@
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
 }
-.ajaxCart .k-window-titlebar .k-window-actions a:hover:before {
+.ajaxCart .k-window-titlebar .k-button:hover:before {
     color: #2c2c2c;
+}
+.ajaxCart .k-window-titlebar .k-icon {
+	display: none;
 }
 
 .productAddedToCartWindow,

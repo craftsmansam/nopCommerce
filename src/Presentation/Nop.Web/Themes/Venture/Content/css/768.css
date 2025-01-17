@@ -395,6 +395,7 @@
 }
 .product-review-item .product-review-box .rating {
     float: right;
+    margin: 0;
 }
 .product-review-item .review-info {
     position: absolute;

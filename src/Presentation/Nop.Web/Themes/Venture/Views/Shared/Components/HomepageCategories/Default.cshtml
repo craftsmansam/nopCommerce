@@ -13,12 +13,12 @@
                 <div class="item-box">
                     <div class="category-item">
                         <h2 class="title">
-                            <a href="@(Url.RouteUrl("Category", new {SeName = item.SeName}))" title="@item.PictureModel.Title">
+                            <a href="@(Url.RouteUrl<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
                                 @item.Name
                             </a>
                         </h2>
                         <div class="picture">
-                            <a href="@(Url.RouteUrl("Category", new {SeName = item.SeName}))" title="@item.PictureModel.Title">
+                            <a href="@(Url.RouteUrl<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
                                 @if (viewComponentSelector.SelectComponent("LazyLoadImage") != null)
                                 {
                                     @await Component.InvokeAsync("LazyLoadImage", new(string Key, string Value)[]

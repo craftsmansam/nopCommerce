@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -25,34 +21,34 @@ using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Models.Catalog;
 
-namespace Nop.Web.Controllers
+namespace Nop.Web.Controllers;
+
+[AutoValidateAntiforgeryToken]
+public partial class CatalogController : BasePublicController
 {
-    [AutoValidateAntiforgeryToken]
-    public partial class CatalogController : BasePublicController
-    {
         #region Fields
 
-        private readonly CatalogSettings _catalogSettings;
-        private readonly IAclService _aclService;
-        private readonly ICatalogModelFactory _catalogModelFactory;
-        private readonly ICategoryService _categoryService;
-        private readonly ICustomerActivityService _customerActivityService;
-        private readonly IGenericAttributeService _genericAttributeService;
-        private readonly ILocalizationService _localizationService;
-        private readonly IManufacturerService _manufacturerService;
-        private readonly INopUrlHelper _nopUrlHelper;
-        private readonly IPermissionService _permissionService;
-        private readonly IProductModelFactory _productModelFactory;
-        private readonly IProductService _productService;
-        private readonly IProductTagService _productTagService;
-        private readonly IStoreContext _storeContext;
-        private readonly IStoreMappingService _storeMappingService;
-        private readonly IUrlRecordService _urlRecordService;
-        private readonly IVendorService _vendorService;
-        private readonly IWebHelper _webHelper;
-        private readonly IWorkContext _workContext;
-        private readonly MediaSettings _mediaSettings;
-        private readonly VendorSettings _vendorSettings;
+    protected readonly CatalogSettings _catalogSettings;
+    protected readonly IAclService _aclService;
+    protected readonly ICatalogModelFactory _catalogModelFactory;
+    protected readonly ICategoryService _categoryService;
+    protected readonly ICustomerActivityService _customerActivityService;
+    protected readonly IGenericAttributeService _genericAttributeService;
+    protected readonly ILocalizationService _localizationService;
+    protected readonly IManufacturerService _manufacturerService;
+    protected readonly INopUrlHelper _nopUrlHelper;
+    protected readonly IPermissionService _permissionService;
+    protected readonly IProductModelFactory _productModelFactory;
+    protected readonly IProductService _productService;
+    protected readonly IProductTagService _productTagService;
+    protected readonly IStoreContext _storeContext;
+    protected readonly IStoreMappingService _storeMappingService;
+    protected readonly IUrlRecordService _urlRecordService;
+    protected readonly IVendorService _vendorService;
+    protected readonly IWebHelper _webHelper;
+    protected readonly IWorkContext _workContext;
+    protected readonly MediaSettings _mediaSettings;
+    protected readonly VendorSettings _vendorSettings;
 
         #endregion
 
@@ -124,7 +120,7 @@ namespace Nop.Web.Controllers
 
             //display "edit" (manage) link
             if (await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCategories))
-                DisplayEditLink(Url.Action("Edit", "Category", new { id = category.Id, area = AreaNames.Admin }));
+            DisplayEditLink(Url.Action("Edit", "Category", new { id = category.Id, area = AreaNames.ADMIN }));
 
             //activity log
             await _customerActivityService.InsertActivityAsync("PublicStore.ViewCategory",
@@ -189,7 +185,7 @@ namespace Nop.Web.Controllers
 
             //display "edit" (manage) link
             if (await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
-                DisplayEditLink(Url.Action("Edit", "Manufacturer", new { id = manufacturer.Id, area = AreaNames.Admin }));
+            DisplayEditLink(Url.Action("Edit", "Manufacturer", new { id = manufacturer.Id, area = AreaNames.ADMIN }));
 
             //activity log
             await _customerActivityService.InsertActivityAsync("PublicStore.ViewManufacturer",
@@ -246,7 +242,7 @@ namespace Nop.Web.Controllers
 
             //display "edit" (manage) link
             if (await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageVendors))
-                DisplayEditLink(Url.Action("Edit", "Vendor", new { id = vendor.Id, area = AreaNames.Admin }));
+            DisplayEditLink(Url.Action("Edit", "Vendor", new { id = vendor.Id, area = AreaNames.ADMIN }));
 
             //model
             var model = await _catalogModelFactory.PrepareVendorModelAsync(vendor, command);
@@ -456,7 +452,7 @@ namespace Nop.Web.Controllers
 
         #region Utilities
 
-        private async Task<bool> CheckCategoryAvailabilityAsync(Category category)
+    protected virtual async Task<bool> CheckCategoryAvailabilityAsync(Category category)
         {
             if (category is null)
                 return false;
@@ -482,11 +478,14 @@ namespace Nop.Web.Controllers
             return isAvailable;
         }
 
-        private async Task<bool> CheckManufacturerAvailabilityAsync(Manufacturer manufacturer)
+    protected virtual async Task<bool> CheckManufacturerAvailabilityAsync(Manufacturer manufacturer)
         {
+        if (manufacturer == null)
+            return false;
+
             var isAvailable = true;
 
-            if (manufacturer == null || manufacturer.Deleted)
+        if (manufacturer.Deleted)
                 isAvailable = false;
 
             var notAvailable =
@@ -505,7 +504,7 @@ namespace Nop.Web.Controllers
             return isAvailable;
         }
 
-        private Task<bool> CheckVendorAvailabilityAsync(Vendor vendor)
+    protected virtual Task<bool> CheckVendorAvailabilityAsync(Vendor vendor)
         {
             var isAvailable = true;
 
@@ -516,5 +515,4 @@ namespace Nop.Web.Controllers
         }
 
         #endregion
-    }
 }

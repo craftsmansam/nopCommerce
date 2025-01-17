@@ -1,10 +1,9 @@
-﻿using System;
-using Nop.Web.Framework.UI.Paging;
+﻿using Nop.Web.Framework.UI.Paging;
 
-namespace Nop.Web.Models.Blogs
+namespace Nop.Web.Models.Blogs;
+
+public partial record BlogPagingFilteringModel : BasePageableModel
 {
-    public partial record BlogPagingFilteringModel : BasePageableModel
-    {
         #region Methods
 
         public virtual DateTime? GetParsedMonth()
@@ -12,7 +11,7 @@ namespace Nop.Web.Models.Blogs
             DateTime? result = null;
             if (!string.IsNullOrEmpty(Month))
             {
-                var tempDate = Month.Split(new [] { '-' });
+            var tempDate = Month.Split(['-']);
                 if (tempDate.Length == 2)
                 {
                     result = new DateTime(Convert.ToInt32(tempDate[0]), Convert.ToInt32(tempDate[1].Replace(">", string.Empty)), 1);
@@ -43,5 +42,4 @@ namespace Nop.Web.Models.Blogs
         public string Tag { get; set; }
         
         #endregion
-    }
 }

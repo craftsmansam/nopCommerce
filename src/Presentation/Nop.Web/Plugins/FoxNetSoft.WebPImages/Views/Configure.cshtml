@@ -59,6 +59,15 @@
                 </p>
                 <div class="form-group row">
                     <div class="col-md-3">
+                        <nop-label asp-for="UseAVIFImages" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseAVIFImages" />
+                        <span asp-validation-for="UseAVIFImages"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
                         <nop-label asp-for="UseWebImages" />
                     </div>
                     <div class="col-md-9">
@@ -122,10 +131,10 @@
                         <nop-editor asp-for="showDebugInfo" />
                         <span asp-validation-for="showDebugInfo"></span>
                         <div id="pnlclearlogfile">
-                            <a href="@Url.Action("ClearLogFile")" class="k-button">@T("Admin.FoxNetSoft.Plugin.Misc.WebPImages.ClearLogFile")</a>
+                            <a href="@Url.Action("ClearLogFile")" class="btn btn-primary">@T("Admin.FoxNetSoft.Plugin.Misc.WebPImages.ClearLogFile")</a>
                         </div>
                         <div id="pnlgetlogfile">
-                            <a href="@Url.Action("GetLogFile")" class="k-button">@T("Admin.FoxNetSoft.Plugin.Misc.WebPImages.GetLogFile")</a>
+                            <a href="@Url.Action("GetLogFile")" class="btn btn-primary">@T("Admin.FoxNetSoft.Plugin.Misc.WebPImages.GetLogFile")</a>
                         </div>
                     </div>
                 </div>
@@ -156,6 +165,10 @@
                     Installation and configuring plug-in at our site <a href="https://www.foxnetsoft.com/documentation-webpimages" target="blank">https://www.foxnetsoft.com/documentation-webpimages</a>
                     <br />
                     <a href="https://www.foxnetsoft.com" target="blank">www.foxnetsoft.com</a>
+                    <br />
+                    <div id="pnldownloaddatabases">
+                        <a href="@Url.Action("DownloadLibraries")" class="k-button">@T("Admin.FoxNetSoft.Plugin.Misc.WebPImages.Download")</a>
+                    </div>
                 </p>
             </div>
         </div>

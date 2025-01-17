@@ -2,13 +2,15 @@
 
 @using Nop.Core
 @using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Media
 @using Nop.Core.Domain.Orders
 @using Nop.Core.Domain.Tax
 
+@inject IViewComponentSelector viewComponentSelector
 @inject IWebHelper webHelper
 @inject IWorkContext workContext
+@inject MediaSettings mediaSettings
 @inject OrderSettings orderSettings
-@inject IViewComponentSelector viewComponentSelector
 
 <div class="order-summary-content">
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentBefore, additionalData = Model })
@@ -106,7 +108,7 @@
                                         else
                                         {
                                             <input type="checkbox" name="removefromcart" id="removefromcart@(item.Id)" value="@(item.Id)" aria-label="@T("ShoppingCart.Remove")" />
-                                            <button type="button" name="updatecart" class="remove-btn" onclick="$('#removefromcart@(item.Id)').attr('checked', true); $('#updatecart').click();"></button>
+                                            <button type="button" name="updatecart" class="remove-btn" onclick="$('#removefromcart@(item.Id)').attr('checked', true); $('#updatecart').trigger('click');"></button>
                                         }
                                     </td>
                                 }
@@ -132,7 +134,7 @@
                                             }
                                             else
                                             {
-                                                <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title" />
+                                                <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title" width="@mediaSettings.DefaultImageQuality" />
                                             }
                                         </a>
                                     </td>
@@ -194,7 +196,7 @@
                                     {
                                         if (item.AllowedQuantities.Count > 0)
                                         {
-                                            <select name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" class="qty-dropdown">
+                                            <select name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" class="qty-dropdown" onchange="$('#updatecart').trigger('click');">
                                                 @foreach (var qty in item.AllowedQuantities)
                                                 {
                                                     <option selected="@qty.Selected" value="@qty.Value">@qty.Value</option>
@@ -203,7 +205,11 @@
                                         }
                                         else
                                         {
-                                            <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="text" value="@(item.Quantity)" class="qty-input" aria-label="@T("ShoppingCart.Quantity")" />
+                                            <div class="add-to-cart-qty-wrapper">
+                                                <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="text" value="@(item.Quantity)" class="qty-input" aria-label="@T("ShoppingCart.Quantity")" onchange="$('#updatecart').trigger('click');" />
+                                                <span class="plus" id="quantity-up-@(item.Id)">+</span>
+                                                <span class="minus" id="quantity-down-@(item.Id)">-</span>
+                                            </div>
                                         }
                                     }
                                     else
@@ -244,7 +250,7 @@
             @if (Model.IsEditable)
             {
                 <div class="common-buttons">
-            	    <button type="submit" name="updatecart" id="updatecart" class="button-2 update-cart-button">@T("ShoppingCart.UpdateCart")</button>
+            	    <button type="submit" name="updatecart" id="updatecart" class="button-2 update-cart-button" style="display: none;">@T("ShoppingCart.UpdateCart")</button>
                     <button type="button" class="button-2 clear-cart-button">@T("SevenSpikes.Themes.Venture.Common.ClearCart")</button>
                     @await Component.InvokeAsync(typeof(ShoppingCartEstimateShippingViewComponent))
                     <button type="submit" name="continueshopping" class="button-2 continue-shopping-button">@T("ShoppingCart.ContinueShopping")</button>
@@ -304,7 +310,7 @@
 	                                {
 	                                    <a class="read" id="read-terms">@T("Checkout.TermsOfService.Read")</a>
 	                                    <script asp-location="Footer">
-	                                            $(document).ready(function() {
+	                                            $(function() {
 	                                                $('#read-terms').on('click',
 	                                                    function(e) {
 	                                                        e.preventDefault();
@@ -326,7 +332,7 @@
                             @if (string.IsNullOrEmpty(Model.MinOrderSubtotalWarning) && !Model.HideCheckoutButton)
                             {
                                 <script asp-location="Footer">
-                                    $(document).ready(function () {
+                                    $(function() {
                                         $('#checkout').on('click', function () {
                                             //terms of service
                                             var termOfServiceOk = true;

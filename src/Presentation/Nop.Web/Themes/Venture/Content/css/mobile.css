@@ -291,7 +291,7 @@
 	background: #232323;
 }
 .light-theme .header-menu > ul li {
-    background: #ffffff;
+    background: #e5e5e5;
 }
 .header-menu > ul li:after {
 	content: "";

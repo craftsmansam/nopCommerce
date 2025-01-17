@@ -1,11 +1,11 @@
-namespace Nop.Core.Domain.Shipping
+namespace Nop.Core.Domain.Shipping;
+
+/// <summary>
+/// Represents the shipping status enumeration
+/// </summary>
+public enum ShippingStatus
 {
     /// <summary>
-    /// Represents the shipping status enumeration
-    /// </summary>
-    public enum ShippingStatus
-    {
-        /// <summary>
         /// Shipping not required
         /// </summary>
         ShippingNotRequired = 10,
@@ -34,5 +34,4 @@ namespace Nop.Core.Domain.Shipping
         /// Delivered
         /// </summary>
         Delivered = 40
-    }
 }

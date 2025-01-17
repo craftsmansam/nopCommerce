@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core;
@@ -21,6 +16,7 @@ using Nop.Core.Domain.Tax;
 using Nop.Core.Events;
 using Nop.Core.Http;
 using Nop.Core.Http.Extensions;
+using Nop.Services.Attributes;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Authentication.MultiFactor;
@@ -38,67 +34,68 @@ using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Security;
 using Nop.Services.Tax;
-using Nop.Web.Extensions;
 using Nop.Web.Factories;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Validators;
 using Nop.Web.Models.Customer;
+using ILogger = Nop.Services.Logging.ILogger;
 
-namespace Nop.Web.Controllers
+namespace Nop.Web.Controllers;
+
+[AutoValidateAntiforgeryToken]
+public partial class CustomerController : BasePublicController
 {
-    [AutoValidateAntiforgeryToken]
-    public partial class CustomerController : BasePublicController
-    {
         #region Fields
 
-        private readonly AddressSettings _addressSettings;
-        private readonly CaptchaSettings _captchaSettings;
-        private readonly CustomerSettings _customerSettings;
-        private readonly DateTimeSettings _dateTimeSettings;
-        private readonly ForumSettings _forumSettings;
-        private readonly GdprSettings _gdprSettings;
-        private readonly HtmlEncoder _htmlEncoder;
-        private readonly IAddressAttributeParser _addressAttributeParser;
-        private readonly IAddressModelFactory _addressModelFactory;
-        private readonly IAddressService _addressService;
-        private readonly IAuthenticationService _authenticationService;
-        private readonly ICountryService _countryService;
-        private readonly ICurrencyService _currencyService;
-        private readonly ICustomerActivityService _customerActivityService;
-        private readonly ICustomerAttributeParser _customerAttributeParser;
-        private readonly ICustomerAttributeService _customerAttributeService;
-        private readonly ICustomerModelFactory _customerModelFactory;
-        private readonly ICustomerRegistrationService _customerRegistrationService;
-        private readonly ICustomerService _customerService;
-        private readonly IDownloadService _downloadService;
-        private readonly IEventPublisher _eventPublisher;
-        private readonly IExportManager _exportManager;
-        private readonly IExternalAuthenticationService _externalAuthenticationService;
-        private readonly IGdprService _gdprService;
-        private readonly IGenericAttributeService _genericAttributeService;
-        private readonly IGiftCardService _giftCardService;
-        private readonly ILocalizationService _localizationService;
-        private readonly ILogger _logger;
-        private readonly IMultiFactorAuthenticationPluginManager _multiFactorAuthenticationPluginManager;
-        private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
-        private readonly INotificationService _notificationService;
-        private readonly IOrderService _orderService;
-        private readonly IPermissionService _permissionService;
-        private readonly IPictureService _pictureService;
-        private readonly IPriceFormatter _priceFormatter;
-        private readonly IProductService _productService;
-        private readonly IStateProvinceService _stateProvinceService;
-        private readonly IStoreContext _storeContext;
-        private readonly ITaxService _taxService;
-        private readonly IWorkContext _workContext;
-        private readonly IWorkflowMessageService _workflowMessageService;
-        private readonly LocalizationSettings _localizationSettings;
-        private readonly MediaSettings _mediaSettings;
-        private readonly MultiFactorAuthenticationSettings _multiFactorAuthenticationSettings;
-        private readonly StoreInformationSettings _storeInformationSettings;
-        private readonly TaxSettings _taxSettings;
+    protected readonly AddressSettings _addressSettings;
+    protected readonly CaptchaSettings _captchaSettings;
+    protected readonly CustomerSettings _customerSettings;
+    protected readonly DateTimeSettings _dateTimeSettings;
+    protected readonly ForumSettings _forumSettings;
+    protected readonly GdprSettings _gdprSettings;
+    protected readonly HtmlEncoder _htmlEncoder;
+    protected readonly IAddressModelFactory _addressModelFactory;
+    protected readonly IAddressService _addressService;
+    protected readonly IAttributeParser<AddressAttribute, AddressAttributeValue> _addressAttributeParser;
+    protected readonly IAttributeParser<CustomerAttribute, CustomerAttributeValue> _customerAttributeParser;
+    protected readonly IAttributeService<CustomerAttribute, CustomerAttributeValue> _customerAttributeService;
+    protected readonly IAuthenticationService _authenticationService;
+    protected readonly ICountryService _countryService;
+    protected readonly ICurrencyService _currencyService;
+    protected readonly ICustomerActivityService _customerActivityService;
+    protected readonly ICustomerModelFactory _customerModelFactory;
+    protected readonly ICustomerRegistrationService _customerRegistrationService;
+    protected readonly ICustomerService _customerService;
+    protected readonly IDownloadService _downloadService;
+    protected readonly IEventPublisher _eventPublisher;
+    protected readonly IExportManager _exportManager;
+    protected readonly IExternalAuthenticationService _externalAuthenticationService;
+    protected readonly IGdprService _gdprService;
+    protected readonly IGenericAttributeService _genericAttributeService;
+    protected readonly IGiftCardService _giftCardService;
+    protected readonly ILocalizationService _localizationService;
+    protected readonly ILogger _logger;
+    protected readonly IMultiFactorAuthenticationPluginManager _multiFactorAuthenticationPluginManager;
+    protected readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
+    protected readonly INotificationService _notificationService;
+    protected readonly IOrderService _orderService;
+    protected readonly IPermissionService _permissionService;
+    protected readonly IPictureService _pictureService;
+    protected readonly IPriceFormatter _priceFormatter;
+    protected readonly IProductService _productService;
+    protected readonly IStateProvinceService _stateProvinceService;
+    protected readonly IStoreContext _storeContext;
+    protected readonly ITaxService _taxService;
+    protected readonly IWorkContext _workContext;
+    protected readonly IWorkflowMessageService _workflowMessageService;
+    protected readonly LocalizationSettings _localizationSettings;
+    protected readonly MediaSettings _mediaSettings;
+    protected readonly MultiFactorAuthenticationSettings _multiFactorAuthenticationSettings;
+    protected readonly StoreInformationSettings _storeInformationSettings;
+    protected readonly TaxSettings _taxSettings;
+    private static readonly char[] _separator = [','];
 
         #endregion
 
@@ -111,15 +108,15 @@ namespace Nop.Web.Controllers
             ForumSettings forumSettings,
             GdprSettings gdprSettings,
             HtmlEncoder htmlEncoder,
-            IAddressAttributeParser addressAttributeParser,
             IAddressModelFactory addressModelFactory,
             IAddressService addressService,
+        IAttributeParser<AddressAttribute, AddressAttributeValue> addressAttributeParser,
+        IAttributeParser<CustomerAttribute, CustomerAttributeValue> customerAttributeParser,
+        IAttributeService<CustomerAttribute, CustomerAttributeValue> customerAttributeService,
             IAuthenticationService authenticationService,
             ICountryService countryService,
             ICurrencyService currencyService,
             ICustomerActivityService customerActivityService,
-            ICustomerAttributeParser customerAttributeParser,
-            ICustomerAttributeService customerAttributeService,
             ICustomerModelFactory customerModelFactory,
             ICustomerRegistrationService customerRegistrationService,
             ICustomerService customerService,
@@ -158,15 +155,15 @@ namespace Nop.Web.Controllers
             _forumSettings = forumSettings;
             _gdprSettings = gdprSettings;
             _htmlEncoder = htmlEncoder;
-            _addressAttributeParser = addressAttributeParser;
             _addressModelFactory = addressModelFactory;
             _addressService = addressService;
+        _addressAttributeParser = addressAttributeParser;
+        _customerAttributeParser = customerAttributeParser;
+        _customerAttributeService = customerAttributeService;
             _authenticationService = authenticationService;
             _countryService = countryService;
             _currencyService = currencyService;
             _customerActivityService = customerActivityService;
-            _customerAttributeParser = customerAttributeParser;
-            _customerAttributeService = customerAttributeService;
             _customerModelFactory = customerModelFactory;
             _customerRegistrationService = customerRegistrationService;
             _customerService = customerService;
@@ -218,8 +215,7 @@ namespace Nop.Web.Controllers
 
         protected virtual async Task<string> ParseSelectedProviderAsync(IFormCollection form)
         {
-            if (form == null)
-                throw new ArgumentNullException(nameof(form));
+        ArgumentNullException.ThrowIfNull(form);
 
             var store = await _storeContext.GetCurrentStoreAsync();
 
@@ -243,11 +239,10 @@ namespace Nop.Web.Controllers
 
         protected virtual async Task<string> ParseCustomCustomerAttributesAsync(IFormCollection form)
         {
-            if (form == null)
-                throw new ArgumentNullException(nameof(form));
+        ArgumentNullException.ThrowIfNull(form);
 
             var attributesXml = "";
-            var attributes = await _customerAttributeService.GetAllCustomerAttributesAsync();
+        var attributes = await _customerAttributeService.GetAllAttributesAsync();
             foreach (var attribute in attributes)
             {
                 var controlId = $"{NopCustomerServicesDefaults.CustomerAttributePrefix}{attribute.Id}";
@@ -261,7 +256,7 @@ namespace Nop.Web.Controllers
                             {
                                 var selectedAttributeId = int.Parse(ctrlAttributes);
                                 if (selectedAttributeId > 0)
-                                    attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
+                            attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
                                         attribute, selectedAttributeId.ToString());
                             }
                         }
@@ -271,11 +266,11 @@ namespace Nop.Web.Controllers
                             var cblAttributes = form[controlId];
                             if (!StringValues.IsNullOrEmpty(cblAttributes))
                             {
-                                foreach (var item in cblAttributes.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var item in cblAttributes.ToString().Split(_separator, StringSplitOptions.RemoveEmptyEntries))
                                 {
                                     var selectedAttributeId = int.Parse(item);
                                     if (selectedAttributeId > 0)
-                                        attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
+                                attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
                                             attribute, selectedAttributeId.ToString());
                                 }
                             }
@@ -284,13 +279,13 @@ namespace Nop.Web.Controllers
                     case AttributeControlType.ReadonlyCheckboxes:
                         {
                             //load read-only (already server-side selected) values
-                            var attributeValues = await _customerAttributeService.GetCustomerAttributeValuesAsync(attribute.Id);
+                    var attributeValues = await _customerAttributeService.GetAttributeValuesAsync(attribute.Id);
                             foreach (var selectedAttributeId in attributeValues
                                 .Where(v => v.IsPreSelected)
                                 .Select(v => v.Id)
                                 .ToList())
                             {
-                                attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
+                        attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
                                     attribute, selectedAttributeId.ToString());
                             }
                         }
@@ -302,7 +297,7 @@ namespace Nop.Web.Controllers
                             if (!StringValues.IsNullOrEmpty(ctrlAttributes))
                             {
                                 var enteredText = ctrlAttributes.ToString().Trim();
-                                attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
+                        attributesXml = _customerAttributeParser.AddAttribute(attributesXml,
                                     attribute, enteredText);
                             }
                         }
@@ -455,8 +450,8 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var customerUserName = model.Username?.Trim();
-                var customerEmail = model.Email?.Trim();
+            var customerUserName = model.Username;
+            var customerEmail = model.Email;
                 var userNameOrEmail = _customerSettings.UsernamesEnabled ? customerUserName : customerEmail;
 
                 var loginResult = await _customerRegistrationService.ValidateCustomerAsync(userNameOrEmail, model.Password);
@@ -478,7 +473,9 @@ namespace Nop.Web.Controllers
                                 RememberMe = model.RememberMe,
                                 ReturnUrl = returnUrl
                             };
-                            HttpContext.Session.Set(NopCustomerDefaults.CustomerMultiFactorAuthenticationInfo, customerMultiFactorAuthenticationInfo);
+                    await HttpContext.Session.SetAsync(
+                        NopCustomerDefaults.CustomerMultiFactorAuthenticationInfo,
+                        customerMultiFactorAuthenticationInfo);
                             return RedirectToRoute("MultiFactorVerification");
                         }
                     case CustomerLoginResults.CustomerNotExist:
@@ -520,7 +517,8 @@ namespace Nop.Web.Controllers
             if (!await _multiFactorAuthenticationPluginManager.HasActivePluginsAsync())
                 return RedirectToRoute("Login");
 
-            var customerMultiFactorAuthenticationInfo = HttpContext.Session.Get<CustomerMultiFactorAuthenticationInfo>(NopCustomerDefaults.CustomerMultiFactorAuthenticationInfo);
+        var customerMultiFactorAuthenticationInfo = await HttpContext.Session.GetAsync<CustomerMultiFactorAuthenticationInfo>(
+            NopCustomerDefaults.CustomerMultiFactorAuthenticationInfo);
             var userName = customerMultiFactorAuthenticationInfo?.UserName;
             if (string.IsNullOrEmpty(userName))
                 return RedirectToRoute("Homepage");
@@ -567,7 +565,7 @@ namespace Nop.Web.Controllers
                     .SaveAttributeAsync<int?>(_workContext.OriginalCustomerIfImpersonated, NopCustomerDefaults.ImpersonatedCustomerIdAttribute, null);
 
                 //redirect back to customer details page (admin area)
-                return RedirectToAction("Edit", "Customer", new { id = customer.Id, area = AreaNames.Admin });
+            return RedirectToAction("Edit", "Customer", new { id = customer.Id, area = AreaNames.ADMIN });
             }
 
             //activity log
@@ -628,7 +626,7 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var customer = await _customerService.GetCustomerByEmailAsync(model.Email.Trim());
+            var customer = await _customerService.GetCustomerByEmailAsync(model.Email);
                 if (customer != null && customer.Active && !customer.Deleted)
                 {
                     //save token and current date
@@ -788,8 +786,10 @@ namespace Nop.Web.Controllers
                 //raise logged out event       
                 await _eventPublisher.PublishAsync(new CustomerLoggedOutEvent(customer));
 
+            customer = await _customerService.InsertGuestCustomerAsync();
+
                 //Save a new record
-                await _workContext.SetCurrentCustomerAsync(await _customerService.InsertGuestCustomerAsync());
+            await _workContext.SetCurrentCustomerAsync(customer);
             }
 
             var store = await _storeContext.GetCurrentStoreAsync();
@@ -820,8 +820,8 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var customerUserName = model.Username?.Trim();
-                var customerEmail = model.Email?.Trim();
+            var customerUserName = model.Username;
+            var customerEmail = model.Email;
 
                 var isApproved = _customerSettings.UserRegistrationType == UserRegistrationType.Standard;
                 var registrationRequest = new CustomerRegistrationRequest(customer,
@@ -920,6 +920,7 @@ namespace Nop.Web.Controllers
                                     Email = customerEmail,
                                     Active = isNewsletterActive,
                                     StoreId = store.Id,
+                                LanguageId = customer.LanguageId ?? store.DefaultLanguageId,
                                     CreatedOnUtc = DateTime.UtcNow
                                 });
 
@@ -1201,7 +1202,7 @@ namespace Nop.Web.Controllers
                     //username 
                     if (_customerSettings.UsernamesEnabled && _customerSettings.AllowUsersToChangeUsernames)
                     {
-                        var userName = model.Username.Trim();
+                    var userName = model.Username;
                         if (!customer.Username.Equals(userName, StringComparison.InvariantCultureIgnoreCase))
                         {
                             //change username
@@ -1214,7 +1215,7 @@ namespace Nop.Web.Controllers
                         }
                     }
                     //email
-                    var email = model.Email.Trim();
+                var email = model.Email;
                     if (!customer.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))
                     {
                         //change email
@@ -1312,6 +1313,7 @@ namespace Nop.Web.Controllers
                                     Email = customer.Email,
                                     Active = true,
                                     StoreId = store.Id,
+                                LanguageId = customer.LanguageId ?? store.DefaultLanguageId,
                                     CreatedOnUtc = DateTime.UtcNow
                                 });
                             }
@@ -1354,7 +1356,7 @@ namespace Nop.Web.Controllers
             {
                 return Json(new
                 {
-                    redirect = Url.Action("Info"),
+                redirect = Url.RouteUrl("CustomerInfo"),
                 });
             }
 
@@ -1362,7 +1364,7 @@ namespace Nop.Web.Controllers
 
             return Json(new
             {
-                redirect = Url.Action("Info"),
+            redirect = Url.RouteUrl("CustomerInfo"),
             });
         }
 
@@ -1477,7 +1479,7 @@ namespace Nop.Web.Controllers
                 return Challenge();
 
             //custom address attributes
-            var customAttributes = await _addressAttributeParser.ParseCustomAddressAttributesAsync(form);
+        var customAttributes = await _addressAttributeParser.ParseCustomAttributesAsync(form, NopCommonDefaults.AddressAttributeControlName);
             var customAttributeWarnings = await _addressAttributeParser.GetAttributeWarningsAsync(customAttributes);
             foreach (var error in customAttributeWarnings)
             {
@@ -1552,7 +1554,7 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("CustomerAddresses");
 
             //custom address attributes
-            var customAttributes = await _addressAttributeParser.ParseCustomAddressAttributesAsync(form);
+        var customAttributes = await _addressAttributeParser.ParseCustomAttributesAsync(form, NopCommonDefaults.AddressAttributeControlName);
             var customAttributeWarnings = await _addressAttributeParser.GetAttributeWarningsAsync(customAttributes);
             foreach (var error in customAttributeWarnings)
             {
@@ -1821,6 +1823,8 @@ namespace Nop.Web.Controllers
             //log
             await _gdprService.InsertLogAsync(customer, 0, GdprRequestType.DeleteCustomer, await _localizationService.GetResourceAsync("Gdpr.DeleteRequested"));
 
+        await _workflowMessageService.SendDeleteCustomerRequestStoreOwnerNotificationAsync(customer, _localizationSettings.DefaultAdminLanguageId);
+
             var model = await _customerModelFactory.PrepareGdprToolsModelAsync();
             model.Result = await _localizationService.GetResourceAsync("Gdpr.DeleteRequested.Success");
 
@@ -1976,5 +1980,4 @@ namespace Nop.Web.Controllers
         #endregion
 
         #endregion
-    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Nop.Core.Domain.Blogs;
+﻿using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Forums;
@@ -10,13 +8,13 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Vendors;
 
-namespace Nop.Services.Messages
+namespace Nop.Services.Messages;
+
+/// <summary>
+/// Workflow message service
+/// </summary>
+public partial interface IWorkflowMessageService
 {
-    /// <summary>
-    /// Workflow message service
-    /// </summary>
-    public partial interface IWorkflowMessageService
-    {
         #region Customer workflow
 
         /// <summary>
@@ -73,6 +71,17 @@ namespace Nop.Services.Messages
         /// The task result contains the queued email identifier
         /// </returns>
         Task<IList<int>> SendCustomerPasswordRecoveryMessageAsync(Customer customer, int languageId);
+
+    /// <summary>
+    /// Sends 'New request to delete customer' message to a store owner
+    /// </summary>
+    /// <param name="customer">Customer</param>
+    /// <param name="languageId">Message language identifier</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the queued email identifier
+    /// </returns>
+    Task<IList<int>> SendDeleteCustomerRequestStoreOwnerNotificationAsync(Customer customer, int languageId);
 
         #endregion
 
@@ -322,23 +331,21 @@ namespace Nop.Services.Messages
         /// Sends a newsletter subscription activation message
         /// </summary>
         /// <param name="subscription">Newsletter subscription</param>
-        /// <param name="languageId">Language identifier</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the queued email identifier
         /// </returns>
-        Task<IList<int>> SendNewsLetterSubscriptionActivationMessageAsync(NewsLetterSubscription subscription, int languageId);
+    Task<IList<int>> SendNewsLetterSubscriptionActivationMessageAsync(NewsLetterSubscription subscription);
 
         /// <summary>
         /// Sends a newsletter subscription deactivation message
         /// </summary>
         /// <param name="subscription">Newsletter subscription</param>
-        /// <param name="languageId">Language identifier</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the queued email identifier
         /// </returns>
-        Task<IList<int>> SendNewsLetterSubscriptionDeactivationMessageAsync(NewsLetterSubscription subscription, int languageId);
+    Task<IList<int>> SendNewsLetterSubscriptionDeactivationMessageAsync(NewsLetterSubscription subscription);
 
         #endregion
 
@@ -675,5 +682,4 @@ namespace Nop.Services.Messages
             string fromEmail = null, string fromName = null, string subject = null);
 
         #endregion
-    }
 }
