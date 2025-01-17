@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.2//EN
+N:Smith;Brooke;;;
+FN:Brooke Smith
+ORG:Albina Co.\, Inc.;
+TITLE:Marketing Specialist
+EMAIL;type=INTERNET;type=WORK;type=pref:brooke@albinaco.com
+TEL;type=CELL;type=VOICE;type=pref:503-601-9266
+TEL;type=WORK;type=VOICE:503-692-6010
+CATEGORIES:Albina
+UID:f62fff6e-134f-47ac-94a6-75fd51167c96
+X-ABUID:DE562C00-31BE-432D-9C71-17F1AAA9E854:ABPerson
+END:VCARD
