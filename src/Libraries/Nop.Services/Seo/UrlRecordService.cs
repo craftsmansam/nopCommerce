@@ -47,7 +47,8 @@ public partial class UrlRecordService : IUrlRecordService
 
     static UrlRecordService()
     {
-        _okChars = new HashSet<char>("abcdefghijklmnopqrstuvwxyz1234567890 _-");
+        //albina edit to add in forward slash to allow for nested urls
+        _okChars = new HashSet<char>("abcdefghijklmnopqrstuvwxyz1234567890 _-/");
 
         // stores unicode characters and their "normalized"
         // values to a hash table. Character codes are referenced
