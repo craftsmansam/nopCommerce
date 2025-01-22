@@ -209,6 +209,7 @@ public partial class EmailSender : IEmailSender
     public virtual void SendErrorEmail(Exception exception, EmailAccount emailAccount, HttpRequest contextRequest, IIdentity userIdentity)
         {
             var username = userIdentity?.IsAuthenticated ?? false ? userIdentity.Name : "anonymous";
+            var form = contextRequest?.HasFormContentType is null or false ? null : contextRequest.Form;
             var body = @$"Albina Public Website
 
 Full Error (including inner exception & stack trace):
@@ -217,7 +218,7 @@ Full Error (including inner exception & stack trace):
 URL Path: {contextRequest?.Path}
 URL Parameters: {contextRequest?.QueryString}
 URL Method: {contextRequest?.Method}
-Form: {contextRequest?.Form}
+Form: {form}
 User: {username}";
             var mm = new CraftsmanMailMessage(_albinaConfig.EmailTest)
             {
