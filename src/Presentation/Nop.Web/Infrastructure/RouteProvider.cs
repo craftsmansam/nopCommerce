@@ -751,6 +751,11 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
         //we use it to invoke [CheckLanguageSeoCode] and give a chance to find a localized route
         endpointRouteBuilder.MapFallbackToController("FallbackRedirect", "Common");
 
+        //albina error page
+        endpointRouteBuilder.MapControllerRoute(name: "Error",
+            pattern: $"error",
+            defaults: new { controller = "Common", action = "Error" });
+
         endpointRouteBuilder.MapControllerRoute("QuoteDetails",
      lang + "quotedetails/{quoteId:min(0)}",
      new { controller = "Quote", action = "QuoteDetails" });

@@ -427,5 +427,11 @@ public partial class CommonController : BasePublicController
         return InvokeHttp404();
     }
 
+    //error page albina
+    public virtual IActionResult Error()
+    {
+        return View();
+    }
+
     #endregion
 }
