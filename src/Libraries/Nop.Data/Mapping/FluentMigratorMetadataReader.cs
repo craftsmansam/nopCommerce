@@ -70,8 +70,19 @@ public partial class FluentMigratorMetadataReader : IMetadataReader
 
             if (entityDescriptor is null)
                 return null;
+            //adjusted here to pull in custom albina schema through linqtodb
+            var schema = entityDescriptor.SchemaName;
 
-            return new TableAttribute() { Schema = entityDescriptor.SchemaName, Name = entityDescriptor.EntityName };
+            var tableAttr = type.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(TableAttribute));
+            if (tableAttr != null)
+            {
+                var namedArgument = tableAttr.NamedArguments?.FirstOrDefault(x => x.MemberName == nameof(TableAttribute.Schema));
+                if (namedArgument != null)
+                {
+                    schema = namedArgument.Value.TypedValue.Value?.ToString();
+                }
+            }
+            return new TableAttribute(entityDescriptor.EntityName) { Schema = schema };
         });
 
         return [attribute];
