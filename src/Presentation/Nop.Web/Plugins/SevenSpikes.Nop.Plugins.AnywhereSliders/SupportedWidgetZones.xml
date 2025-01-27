@@ -44,4 +44,64 @@
   <WidgetZone>mega_menu_categories_before_dropdown_end_6</WidgetZone>
   <WidgetZone>mega_menu_categories_before_dropdown_end_7</WidgetZone>
   <WidgetZone>mega_menu_categories_before_dropdown_end_8</WidgetZone>
+
+
+  <WidgetZone>BendingMethodsCarousel</WidgetZone>
+  <WidgetZone>BendingMethodsInduction</WidgetZone>
+  <WidgetZone>BendingMethodsPlateRolling</WidgetZone>
+  <WidgetZone>BendingMethodsPlateRollingVideos</WidgetZone>
+  <WidgetZone>BendingMethodsRolling</WidgetZone>
+  <WidgetZone>BendingMethodsRollingVideos</WidgetZone>
+  <WidgetZone>BendingMethodsRotaryDraw</WidgetZone>
+  <WidgetZone>BendingMethodsRotaryDrawVideos</WidgetZone>
+  <WidgetZone>BendingProfilesAngleSlider</WidgetZone>
+  <WidgetZone>BendingProfilesBarSlider</WidgetZone>
+  <WidgetZone>BendingProfilesBeamSlider</WidgetZone>
+  <WidgetZone>BendingProfilesBeamSplittingSlider</WidgetZone>
+  <WidgetZone>BendingProfilesBulbFlatSlider</WidgetZone>
+  <WidgetZone>BendingProfilesCarousel</WidgetZone>
+  <WidgetZone>BendingProfilesChannelSlider</WidgetZone>
+  <WidgetZone>BendingProfilesPipeAndTubeSlider</WidgetZone>
+  <WidgetZone>BendingProfilesPlateEquipmentSlider</WidgetZone>
+  <WidgetZone>BendingProfilesPlateSlider</WidgetZone>
+  <WidgetZone>BendingProfilesRailSlider</WidgetZone>
+  <WidgetZone>BendingProfilesSquareAndRectangularSlider</WidgetZone>
+  <WidgetZone>BendingProfilesTeeSlider</WidgetZone>
+  <WidgetZone>CurvedSteelRoofTrussesSlider</WidgetZone>
+  <WidgetZone>CustomFabricationBottomSlider</WidgetZone>
+  <WidgetZone>CustomFabricationSlider</WidgetZone>
+  <WidgetZone>CustomFabricationVideoSlider</WidgetZone>
+  <WidgetZone>OemAgriculturalSlider</WidgetZone>
+  <WidgetZone>OemBikeRackSlider</WidgetZone>
+  <WidgetZone>OemBoilersSlider</WidgetZone>
+  <WidgetZone>OemBollardSlider</WidgetZone>
+  <WidgetZone>OemCoilsSlider</WidgetZone>
+  <WidgetZone>OemEnergySlider</WidgetZone>
+  <WidgetZone>OemFoodProcessingSlider</WidgetZone>
+  <WidgetZone>OemHandlesSlider</WidgetZone>
+  <WidgetZone>OemHighPuritySlider</WidgetZone>
+  <WidgetZone>OemHydraulicSlider</WidgetZone>
+  <WidgetZone>OemLateralsSlider</WidgetZone>
+  <WidgetZone>OemMarineSlider</WidgetZone>
+  <WidgetZone>OemPipeSpoolsSlider</WidgetZone>
+  <WidgetZone>OemPipingSystemsSlider</WidgetZone>
+  <WidgetZone>OemPlaygroundSlider</WidgetZone>
+  <WidgetZone>OemTanksSlider</WidgetZone>
+  <WidgetZone>OemTreehouseSlider</WidgetZone>
+  <WidgetZone>SpecialtyBendingCarousel</WidgetZone>
+  <WidgetZone>SpecialtyBendsMultiPlaneSlider</WidgetZone>
+  <WidgetZone>SpecialtyBendsOffAxisSlider</WidgetZone>
+  <WidgetZone>SpecialtyBendsReverseCompoundSlider</WidgetZone>
+  <WidgetZone>SpecialtyBendsSpiralSlider</WidgetZone>
+  <WidgetZone>SpecialtyBendsVariableRadiusSlider</WidgetZone>
+  <WidgetZone>theme_header_menu</WidgetZone>
+  <WidgetZone>WorkExamplesCarousel</WidgetZone>
+  <WidgetZone>WorkExamplesCurvedCanopiesSlider</WidgetZone>
+  <WidgetZone>WorkExamplesCurvedFurnitureSlider</WidgetZone>
+  <WidgetZone>WorkExamplesCurvedModernArtSlider</WidgetZone>
+  <WidgetZone>WorkExamplesCurvedSteelBridgesSlider</WidgetZone>
+  <WidgetZone>WorkExamplesGatesSlider</WidgetZone>
+  <WidgetZone>WorkExamplesSignageSlider</WidgetZone>
+  <WidgetZone>WorkExamplesSpiralHandrailsSlider</WidgetZone>
+  <WidgetZone>WorkExamplesSpiralStaircasesSlider</WidgetZone>
 </SupportedWidgetZones>
