@@ -71,8 +71,11 @@
     <meta name="generator" content="nopCommerce" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0" />
     <!link rel="preload" as="font" href="@Url.Content($"~/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/fonts/venture-font.woff")" crossorigin />
-    <!link href="https://fonts.googleapis.com/css?family=Fjalla+One&amp;subset=latin-ext&display=swap" rel="stylesheet" />
-    <!link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!link href="https://fonts.googleapis.com/css?family=Fjalla+One&amp;subset=latin-ext&display=swap" rel="preload" as="style" />
+    <!link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext&display=swap" rel="preload" as="style" />
+    <!link href="https://fonts.googleapis.com/css?family=Fjalla+One&amp;subset=latin-ext&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <!link href="https://fonts.googleapis.com/css?family=Lato&amp;subset=latin-ext&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     @NopHtml.GenerateHeadCustom()
     @*This is used so that themes can inject content into the header*@
     @await Html.PartialAsync("Head")

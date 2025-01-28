@@ -209,7 +209,7 @@ a img {
 	opacity: 0.99; /*firefox scale bug fix*/
 }
 strong {
-    font-weight: normal;
+    font-weight: bold;
 }
 em {
     font-style: normal;
@@ -1150,10 +1150,10 @@ body:after {
 .admin-header-links .impersonate {
 	display: inline-block;
 }
-.header { 
-    background: #2c2c2c;
-    color: #909090;
-	text-align: center; 
+.header {
+  background: #2c2c2c;
+  color: #000; /*albina custom*/
+  text-align: center;
 }
 .header:after { 
 	content: "";

@@ -132,7 +132,7 @@
         @if (Model.Orders.Count > 0)
         {
             <div class="order-list">
-                @foreach (var order in Model.Orders)
+                @foreach (var order in Model.Orders.OrderByDescending(x => x.CreatedOn))
                 {
                     <div class="section order-item">
                         <div class="title">
