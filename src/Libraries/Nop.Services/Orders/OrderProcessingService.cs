@@ -3103,15 +3103,17 @@ public partial class OrderProcessingService : IOrderProcessingService
     {
         ArgumentNullException.ThrowIfNull(cart);
 
-        var result = true;
-
-        //check whether order total equals zero
-        var shoppingCartTotalBase = (await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, useRewardPoints: useRewardPoints, usePaymentMethodAdditionalFee: false)).shoppingCartTotal;
-
-        if (shoppingCartTotalBase is decimal.Zero)
-            result = false;
-
-        return result;
+        // var result = true;
+        //
+        // //check whether order total equals zero
+        // var shoppingCartTotalBase = (await _orderTotalCalculationService.GetShoppingCartTotalAsync(cart, useRewardPoints: useRewardPoints, usePaymentMethodAdditionalFee: false)).shoppingCartTotal;
+        //
+        // if (shoppingCartTotalBase is decimal.Zero)
+        //     result = false;
+        //
+        // return result;
+        //albina edit to skip payment
+        return false;
     }
 
     /// <summary>
