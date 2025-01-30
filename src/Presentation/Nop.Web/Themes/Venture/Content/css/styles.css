@@ -190,7 +190,6 @@ script {
 
 body {
     max-width: 100%;
-	background-color: #f0f0f0;
 	overflow-x: hidden; /* responsive navigation & filters scroll bug fix*/
 	font: normal 15px 'Fjalla One', sans-serif;
     color: #2c2c2c;
