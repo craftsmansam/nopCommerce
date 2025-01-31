@@ -200,6 +200,9 @@
 .customer-pages-body .block .list .return-requests a:before {
     content: "S";
 }
+.customer-pages-body .block .list .customer-quotes a:before {
+    content: "I";
+}
 .customer-pages-body .block .list .downloadable-products a:before {
     content: "A";
 }
