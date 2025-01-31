@@ -147,6 +147,10 @@
         </div>
         <div class="add-info">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
+			@if (Model.ShortDescription.Contains("* not stocked"))
+			{
+				<span style="color:red;text-transform:none;">* not stocked - available factory direct</span>
+			}
             <div class="prices">
                 <div class="box-prices-wrapper">
                     <span class="price actual-price">@Model.ProductPrice.Price</span>
