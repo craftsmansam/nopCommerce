@@ -47,18 +47,29 @@
     <!-- We copy the entire \App_Data directory. But we ignore JSON files and data protection keys  -->
     <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Remove="App_Data\*.json" />
+    <Content Remove="Plugins\Payments.Manual\**" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
 
     <Compile Remove="Plugins\**;Themes\**" />
+
+    <Compile Remove="Plugins\Payments.Manual\**" />
     <Content Remove="Plugins\**;Themes\**" />
     <EmbeddedResource Remove="Plugins\**;Themes\**" />
+    <EmbeddedResource Remove="Plugins\Payments.Manual\**" />
     <None Remove="Plugins\**;Themes\**" />
+    <None Remove="Plugins\Payments.Manual\**" />
     <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" Exclude="Plugins\**\runtimes\**;Plugins\**\ref\**;Plugins\**\*.pdb" />
 
     <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Never" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
+    <None Remove="Plugins\Payments.Manual\Nop.Plugin.Payments.Manual.dll" />
+    <None Remove="Plugins\Payments.Manual\Nop.Web.deps.json" />
+    <None Remove="Plugins\Payments.Manual\Nop.Web.runtimeconfig.dev.json" />
+    <None Remove="Plugins\Payments.Manual\Nop.Web.runtimeconfig.json" />
+    <None Remove="Plugins\Payments.Manual\Nop.Web.staticwebassets.endpoints.json" />
+    <None Remove="Plugins\Payments.Manual\Nop.Web.staticwebassets.runtime.json" />
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
