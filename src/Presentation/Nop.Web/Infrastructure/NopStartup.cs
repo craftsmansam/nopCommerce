@@ -112,7 +112,7 @@ public partial class NopStartup : INopStartup
 
         //helpers classes
         services.AddScoped<ITinyMceHelper, TinyMceHelper>();
-        services.AddScoped<IUrlHelperFactory, CraftsmanUrlHelperFactory>();
+        //services.AddScoped<IUrlHelperFactory, CraftsmanUrlHelperFactory>();
     }
 
     /// <summary>

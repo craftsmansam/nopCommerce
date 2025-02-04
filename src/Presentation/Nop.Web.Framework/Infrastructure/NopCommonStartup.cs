@@ -57,6 +57,9 @@ public partial class NopCommonStartup : INopStartup
         //check whether database is installed
         application.UseInstallUrl();
 
+        //albina custom url modifier
+        application.UseUrlModifier();
+
         //use HTTP session
         application.UseSession();
 

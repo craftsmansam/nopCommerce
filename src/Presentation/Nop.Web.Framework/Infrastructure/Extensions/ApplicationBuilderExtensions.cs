@@ -28,6 +28,7 @@ using Nop.Services.Logging;
 using Nop.Services.Media.RoxyFileman;
 using Nop.Services.Messages;
 using Nop.Core.Domain.Messages;
+using Nop.Services.Craftsman;
 using Nop.Services.Plugins;
 using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
@@ -436,6 +437,15 @@ public static class ApplicationBuilderExtensions
         public static void UseInstallUrl(this IApplicationBuilder application)
         {
             application.UseMiddleware<InstallUrlMiddleware>();
+        }
+
+        /// <summary>
+        /// Configure middleware to modify url albina custom
+        /// </summary>
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+        public static void UseUrlModifier(this IApplicationBuilder application)
+        {
+            application.UseMiddleware<UrlModifierMiddleware>();
         }
 
         /// <summary>
