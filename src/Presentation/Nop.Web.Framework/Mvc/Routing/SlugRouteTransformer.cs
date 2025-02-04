@@ -227,7 +227,7 @@ public partial class SlugRouteTransformer : DynamicRouteValueTransformer
             //ensure the specified catalog path is equal to the active catalog seName
             //we do it here after localization check to avoid double redirect
             if (!catalogSeName.Equals(catalogUrlRecord.Slug, StringComparison.InvariantCultureIgnoreCase))
-                    {
+            {
                 //permanent redirect to new URL with active catalog seName and active slug
                 InternalRedirect(httpContext, values, $"/{catalogSeName}/{slug}", true);
                 return true;
@@ -263,7 +263,8 @@ public partial class SlugRouteTransformer : DynamicRouteValueTransformer
         /// <param name="action">Action name</param>
         /// <param name="slug">URL slug</param>
         /// <param name="parameters">Action parameters</param>
-        protected virtual void RouteToAction(RouteValueDictionary values, string controller, string action, string slug, params (string Key, object Value)[] parameters)
+        protected virtual void RouteToAction(RouteValueDictionary values, string controller, string action, string slug,
+            params (string Key, object Value)[] parameters)
         {
             values[NopRoutingDefaults.RouteValue.Controller] = controller;
             values[NopRoutingDefaults.RouteValue.Action] = action;
@@ -271,8 +272,8 @@ public partial class SlugRouteTransformer : DynamicRouteValueTransformer
             foreach (var (key, value) in parameters)
             {
                 values[key] = value;
-                }
             }
+        }
 
         #endregion
 
