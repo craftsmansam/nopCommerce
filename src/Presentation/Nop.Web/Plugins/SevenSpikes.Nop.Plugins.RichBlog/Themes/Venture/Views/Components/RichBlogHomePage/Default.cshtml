@@ -35,7 +35,7 @@
                     <a class="read-more" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })">@T("SevenSpikes.RichBlog.Public.ReadMore")</a>
                 </div>
                 <div class="post-details">
-                    <a class="post-title" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })" title="@post.Title">@post.Title</a>
+                    <a class="post-title" href="@Url.RouteUrl("BlogPost", new { SeName = post.SeName })">@post.Title</a>
                     <div class="post-description">
                         @Html.Raw(!String.IsNullOrEmpty(post.BodyOverview) ? post.BodyOverview : post.Body)
                     </div>

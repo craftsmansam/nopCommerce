@@ -57,7 +57,7 @@
     margin: auto;
 }
 .anywhere-slider .slick-prev {
-	  left: -750px; /*albina custom*/
+	left: -50px;
 }
 .slider-wrapper:hover .slick-prev {
     left: 0;
@@ -66,7 +66,7 @@
     content: "r";
 }
 .anywhere-slider .slick-next {
-    right: -750px; /*albina custom*/
+    right: -50px;
 }
 .slider-wrapper:hover .slick-next {
     right: 0;
