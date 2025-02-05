@@ -16,14 +16,13 @@
     $(document).ready(function () {
         $("#rich-blog-searchterms").kendoAutoComplete({
             highlightFirst: false,
-            height: 300,
             minLength: 3,
             dataTextField: "Title",
             filter: "contains",
             popup: {
                 appendTo: $("#rich-blog-search-form")
             },
-            template: '<span class="rich-blog-search-item" data-url="${ data.Url.replace("%2F", "/") }">${ data.Title }</span>',
+            template: '<span class="rich-blog-search-item" data-url="${ data.Url }">${ data.Title }</span>',
             select: function (e) {
                 var advancedSearchItemId = this.dataItem(e.item.index()).Id;
 

@@ -8,7 +8,7 @@
     var hasSublist = Model.SubItems.Count > 0;
     var hasSublistClass = hasSublist ? "has-sublist" : string.Empty;
     var withSubcategoriesClass = hasSublist ? "with-subcategories" : string.Empty;
-	var itemUrl = Plugin.PredefinedPageTypes.Contains(Model.Type) ? Url.RouteUrl(Model.Type.ToString()) : Model.Url.Replace("%2F", "/");
+    var itemUrl = Plugin.PredefinedPageTypes.Contains(Model.Type) ? Url.RouteUrl(Model.Type.ToString()) : Model.Url;
 
     var isCategory = Model.Type == MenuItemType.Categories;
     var rootCategoryClass = string.Empty;
