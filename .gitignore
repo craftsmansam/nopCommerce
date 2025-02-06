@@ -212,11 +212,7 @@ src/Presentation/Nop.Web/wwwroot/pdfs
 /src/Presentation/Nop.Web/Plugins/DiscountRules.CustomerRoles/Nop.Plugin.DiscountRules.CustomerRoles.deps.json
 /src/Presentation/Nop.Web/Plugins/DiscountRules.CustomerRoles
 /src/Presentation/Nop.Web/Plugins/Payments.Manual/Nop.Plugin.Payments.Manual.deps.json
-/src/Presentation/Nop.Web/Plugins/Payments.Manual/Nop.Plugin.Payments.Manual.dll
-/src/Presentation/Nop.Web/Plugins/Pickup.PickupInStore/Nop.Plugin.Pickup.PickupInStore.deps.json
-/src/Presentation/Nop.Web/Plugins/Pickup.PickupInStore/Nop.Plugin.Pickup.PickupInStore.dll
 /src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.deps.json
-/src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.dll
 /src/Presentation/Nop.Web/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Lucene
 /src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.runtimeconfig.dev.json
 /src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.runtimeconfig.json
