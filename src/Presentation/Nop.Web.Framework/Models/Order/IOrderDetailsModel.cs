@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Nop.Web.Framework.Models.Order;
+﻿namespace Nop.Web.Framework.Models.Order;
 
 /// <summary>
 /// Represents an order details common model
@@ -15,7 +12,6 @@ public interface IOrderDetailsModel
     public DateTime? DateRTS { get; }
     public DateTime? DateShipped { get; }
     public string OrderTotal { get; }
-    public string ShippingTrackingUrl { get; set; }
     public string ShopOrderConfirmationFilename { get; set; }
     public List<int> MtrDocumentIDs { get; set; }
     public int ShopOrderId { get; set; }

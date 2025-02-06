@@ -313,7 +313,6 @@ public partial class OrderModelFactory : IOrderModelFactory
 		if (shopOrder != null)
         {
             model.ShopOrderConfirmationFilename = shopOrder.ShopOrderConfirmationFilename;
-            model.ShippingTrackingUrl = shopOrder.ShippingTrackingUrl;
             model.ShopOrderId = shopOrder.Id;
                 
             var query = _shopOrderMtrRepository.Table.Where(x => x.ShopOrderNumber == shopOrder.ShopOrderNumber);

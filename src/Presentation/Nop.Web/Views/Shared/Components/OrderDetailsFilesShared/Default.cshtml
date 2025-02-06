@@ -1,5 +1,5 @@
 ﻿@model Nop.Web.Framework.Models.Order.IOrderDetailsModel
-@if (!string.IsNullOrWhiteSpace(Model.ShippingTrackingUrl) || !string.IsNullOrWhiteSpace(Model.ShopOrderConfirmationFilename) || (Model.MtrDocumentIDs?.Count ?? 0) > 0)
+@if (!string.IsNullOrWhiteSpace(Model.ShopOrderConfirmationFilename) || (Model.MtrDocumentIDs?.Count ?? 0) > 0)
 {
     <div class="order-details-area">
         <div class="section shipments">
@@ -28,13 +28,6 @@
                             <tr>
                                 <td class="product">Order Confirmation</td>
                                 <td class="unit-price"><a target="_blank" href="@Url.RouteUrl("OrderConf", new { shopOrderId = Model.ShopOrderId })">Open Document</a></td>
-                            </tr>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(Model.ShippingTrackingUrl))
-                        {
-                            <tr>
-                                <td class="product">Shipping Tracking</td>
-                                <td class="unit-price"><a target="_blank" href="@Model.ShippingTrackingUrl">Open Shipper Website</a></td>
                             </tr>
                         }
                     </tbody>
