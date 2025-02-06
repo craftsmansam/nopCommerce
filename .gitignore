@@ -185,7 +185,6 @@ src/Presentation/Nop.Web/node_modules/*
 !src/Presentation/Nop.Web/Plugins/bin
 src/Presentation/Nop.Web/Plugins/bin/*
 !src/Presentation/Nop.Web/Plugins/bin/placeholder.txt
-src/Presentation/Nop.Web/Plugins/*
 !src/Presentation/Nop.Web/Plugins/Uploaded
 src/Presentation/Nop.Web/Plugins/Uploaded/*
 !src/Presentation/Nop.Web/Plugins/Uploaded/placeholder.txt
@@ -219,3 +218,7 @@ src/Presentation/Nop.Web/wwwroot/pdfs
 /src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.deps.json
 /src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Plugin.Widgets.GoogleAnalytics.dll
 /src/Presentation/Nop.Web/Plugins/SevenSpikes.Nop.Plugins.RichBlog/Lucene
+/src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.runtimeconfig.dev.json
+/src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.runtimeconfig.json
+/src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.staticwebassets.endpoints.json
+/src/Presentation/Nop.Web/Plugins/Widgets.GoogleAnalytics/Nop.Web.staticwebassets.runtime.json
