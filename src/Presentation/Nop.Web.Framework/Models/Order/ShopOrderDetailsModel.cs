@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Craftsman.Data;
+﻿using Craftsman.Data;
 
 namespace Nop.Web.Framework.Models.Order
 {
@@ -17,7 +15,6 @@ namespace Nop.Web.Framework.Models.Order
         public string ProjectName { get; set; }
         public decimal QuotedPrice { get; set; }
         public string ShopOrderConfirmationFilename { get; set; }
-        public string ShippingTrackingUrl { get; set; }
 
         public List<int> MtrDocumentIDs { get; set; }
 

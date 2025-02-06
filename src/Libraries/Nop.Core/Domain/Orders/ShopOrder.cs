@@ -1,5 +1,4 @@
-﻿using System;
-using LinqToDB.Mapping;
+﻿using LinqToDB.Mapping;
 
 namespace Nop.Core.Domain.Orders
 {
@@ -40,11 +39,6 @@ namespace Nop.Core.Domain.Orders
         /// Gets or sets the status
         /// </summary>
         public string Status { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ShippingTrackingUrl
-        /// </summary>
-        public string ShippingTrackingUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the date RTS

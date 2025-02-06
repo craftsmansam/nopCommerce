@@ -44,7 +44,6 @@ namespace Nop.Web.Framework.Factories
                 ProjectName = shopOrder.ProjectName,
                 QuotedPrice = shopOrder.QuotedPrice,
                 ShopOrderConfirmationFilename = shopOrder.ShopOrderConfirmationFilename,
-                ShippingTrackingUrl = shopOrder.ShippingTrackingUrl,
 
                 MtrDocumentIDs = query.Select(x => x.Id).ToList()
             };

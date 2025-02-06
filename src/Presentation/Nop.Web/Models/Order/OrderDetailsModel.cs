@@ -1,6 +1,4 @@
-﻿using Nop.Web.Components;
-using Nop.Web.Framework.Models;
-using Nop.Web.Framework.Models.Order;
+﻿using Nop.Web.Framework.Models;
 using Nop.Web.Models.Common;
 using Nop.Web.Models.Media;
 
@@ -29,7 +27,6 @@ public partial record OrderDetailsModel : BaseNopEntityModel
     public string CustomOrderNumber { get; set; }
 
     public string ShopOrderConfirmationFilename { get; set; }
-    public string ShippingTrackingUrl { get; set; }
     public int ShopOrderId { get; set; }
 
     public List<int> MtrDocumentIDs { get; set; }
