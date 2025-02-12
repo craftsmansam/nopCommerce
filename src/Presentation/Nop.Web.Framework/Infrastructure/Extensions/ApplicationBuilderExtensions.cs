@@ -36,7 +36,7 @@ using Nop.Web.Framework.Globalization;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.WebOptimizer;
 using QuestPDF.Drawing;
-using WebMarkupMin.AspNetCore8;
+using WebMarkupMin.AspNetCoreLatest;
 using WebOptimizer;
 using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
@@ -78,9 +78,13 @@ public static class ApplicationBuilderExtensions
                 assembly = Assembly.GetAssembly(typeof(IMigrationManager));
                 migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
 
+            //insert new ACL permission if exists
+            var permissionService = engine.Resolve<IPermissionService>();
+            await permissionService.InsertPermissionsAsync();
+
                 var taskScheduler = engine.Resolve<ITaskScheduler>();
             await taskScheduler.InitializeAsync();
-                taskScheduler.StartScheduler();
+            await taskScheduler.StartSchedulerAsync();
             }
         }
 
@@ -372,7 +376,7 @@ public static class ApplicationBuilderExtensions
                 OnPrepareResponse = context =>
                 {
                     if (!DataSettingsManager.IsDatabaseInstalled() ||
-                        !EngineContext.Current.Resolve<IPermissionService>().AuthorizeAsync(StandardPermissionProvider.ManageMaintenance).Result)
+                    !EngineContext.Current.Resolve<IPermissionService>().AuthorizeAsync(StandardPermission.System.MANAGE_MAINTENANCE).Result)
                     {
                         context.Context.Response.StatusCode = StatusCodes.Status404NotFound;
                         context.Context.Response.ContentLength = 0;
@@ -497,19 +501,17 @@ public static class ApplicationBuilderExtensions
                 options.ApplyCurrentCultureToResponseHeaders = true;
 
                 //configure culture providers
+            var headerRequestCultureProvider = options.RequestCultureProviders.OfType<AcceptLanguageHeaderRequestCultureProvider>().FirstOrDefault();
+            if (headerRequestCultureProvider is not null)
+                options.RequestCultureProviders.Remove(headerRequestCultureProvider);
+
                 options.AddInitialRequestCultureProvider(new NopSeoUrlCultureProvider());
                 var cookieRequestCultureProvider = options.RequestCultureProviders.OfType<CookieRequestCultureProvider>().FirstOrDefault();
                 if (cookieRequestCultureProvider is not null)
                     cookieRequestCultureProvider.CookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.CultureCookie}";
-            if (!localizationSettings.AutomaticallyDetectLanguage)
-            {
-                var headerRequestCultureProvider = options
-                    .RequestCultureProviders
-                    .OfType<AcceptLanguageHeaderRequestCultureProvider>()
-                    .FirstOrDefault();
-                if (headerRequestCultureProvider is not null)
-                    options.RequestCultureProviders.Remove(headerRequestCultureProvider);
-            }
+
+            if (localizationSettings.AutomaticallyDetectLanguage)
+                options.RequestCultureProviders.Add(new NopAcceptLanguageHeaderRequestCultureProvider());
             });
         }
 

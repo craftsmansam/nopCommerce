@@ -424,6 +424,25 @@ public partial class ShoppingCartController : BasePublicController
             }
         }
 
+    protected virtual async Task<string> GetGiftCardValidationErrorAsync(IList<ShoppingCartItem> cart, string giftcardcouponcode)
+    {
+        if (string.IsNullOrWhiteSpace(giftcardcouponcode))
+            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
+
+        if (await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
+            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithAutoshipProducts");
+
+        var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
+
+        if (giftCard == null || !await _giftCardService.IsGiftCardValidAsync(giftCard))
+            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
+
+        if (await _productService.HasAnyGiftCardProductAsync(cart.Select(c => c.ProductId).ToArray()))
+            return await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithGiftCards");
+
+        return string.Empty;
+    }
+
         #endregion
 
         #region Shopping cart
@@ -829,7 +848,7 @@ public partial class ShoppingCartController : BasePublicController
             var price = string.Empty;
             //base price
             var basepricepangv = string.Empty;
-            if (!product.CustomerEntersPrice && await _permissionService.AuthorizeAsync(StandardPermissionProvider.DisplayPrices))
+        if (!product.CustomerEntersPrice && await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.DISPLAY_PRICES))
             {
                 var currentStore = await _storeContext.GetCurrentStoreAsync();
                 var currentCustomer = await _workContext.GetCurrentCustomerAsync();
@@ -1015,10 +1034,8 @@ public partial class ShoppingCartController : BasePublicController
 
             var fileBinary = await _downloadService.GetDownloadBitsAsync(httpPostedFile);
 
-            var qqFileNameParameter = "qqfilename";
             var fileName = httpPostedFile.FileName;
-        if (string.IsNullOrEmpty(fileName) && await Request.IsFormKeyExistsAsync(qqFileNameParameter))
-            fileName = await Request.GetFormValueAsync(qqFileNameParameter);
+
             //remove path (passed in IE)
             fileName = _fileProvider.GetFileName(fileName);
 
@@ -1097,10 +1114,8 @@ public partial class ShoppingCartController : BasePublicController
 
             var fileBinary = await _downloadService.GetDownloadBitsAsync(httpPostedFile);
 
-            var qqFileNameParameter = "qqfilename";
             var fileName = httpPostedFile.FileName;
-        if (string.IsNullOrEmpty(fileName) && await Request.IsFormKeyExistsAsync(qqFileNameParameter))
-            fileName = await Request.GetFormValueAsync(qqFileNameParameter);
+
             //remove path (passed in IE)
             fileName = _fileProvider.GetFileName(fileName);
 
@@ -1154,7 +1169,7 @@ public partial class ShoppingCartController : BasePublicController
 
         public virtual async Task<IActionResult> Cart()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableShoppingCart))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART))
                 return RedirectToRoute("Homepage");
 
             var store = await _storeContext.GetCurrentStoreAsync();
@@ -1168,7 +1183,7 @@ public partial class ShoppingCartController : BasePublicController
         [FormValueRequired("updatecart")]
         public virtual async Task<IActionResult> UpdateCart(IFormCollection form)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableShoppingCart))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART))
                 return RedirectToRoute("Homepage");
 
             var customer = await _workContext.GetCurrentCustomerAsync();
@@ -1370,13 +1385,10 @@ public partial class ShoppingCartController : BasePublicController
             await ParseAndSaveCheckoutAttributesAsync(cart, form);
 
             var model = new ShoppingCartModel();
-            if (!await _shoppingCartService.ShoppingCartIsRecurringAsync(cart))
-            {
-                if (!string.IsNullOrWhiteSpace(giftcardcouponcode))
-                {
-                    var giftCard = (await _giftCardService.GetAllGiftCardsAsync(giftCardCouponCode: giftcardcouponcode)).FirstOrDefault();
-                    var isGiftCardValid = giftCard != null && await _giftCardService.IsGiftCardValidAsync(giftCard);
-                    if (isGiftCardValid)
+
+        var validationError = await GetGiftCardValidationErrorAsync(cart, giftcardcouponcode);
+
+        if (string.IsNullOrEmpty(validationError))
                     {
                         await _customerService.ApplyGiftCardCouponCodeAsync(customer, giftcardcouponcode);
                         model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.Applied");
@@ -1384,19 +1396,7 @@ public partial class ShoppingCartController : BasePublicController
                     }
                     else
                     {
-                        model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
-                        model.GiftCardBox.IsApplied = false;
-                    }
-                }
-                else
-                {
-                    model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.WrongGiftCard");
-                    model.GiftCardBox.IsApplied = false;
-                }
-            }
-            else
-            {
-                model.GiftCardBox.Message = await _localizationService.GetResourceAsync("ShoppingCart.GiftCardCouponCode.DontWorkWithAutoshipProducts");
+            model.GiftCardBox.Message = validationError;
                 model.GiftCardBox.IsApplied = false;
             }
 
@@ -1490,7 +1490,7 @@ public partial class ShoppingCartController : BasePublicController
 
         public virtual async Task<IActionResult> Wishlist(Guid? customerGuid)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableWishlist))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
                 return RedirectToRoute("Homepage");
 
             var customer = customerGuid.HasValue ?
@@ -1511,7 +1511,7 @@ public partial class ShoppingCartController : BasePublicController
         [FormValueRequired("updatecart")]
         public virtual async Task<IActionResult> UpdateWishlist(IFormCollection form)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableWishlist))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
                 return RedirectToRoute("Homepage");
 
             var customer = await _workContext.GetCurrentCustomerAsync();
@@ -1575,10 +1575,10 @@ public partial class ShoppingCartController : BasePublicController
         [FormValueRequired("addtocartbutton")]
         public virtual async Task<IActionResult> AddItemsToCartFromWishlist(Guid? customerGuid, IFormCollection form)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableShoppingCart))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART))
                 return RedirectToRoute("Homepage");
 
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableWishlist))
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST))
                 return RedirectToRoute("Homepage");
 
             var customer = await _workContext.GetCurrentCustomerAsync();
@@ -1652,7 +1652,7 @@ public partial class ShoppingCartController : BasePublicController
 
         public virtual async Task<IActionResult> EmailWishlist()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("Homepage");
 
             var store = await _storeContext.GetCurrentStoreAsync();
@@ -1671,7 +1671,7 @@ public partial class ShoppingCartController : BasePublicController
         [ValidateCaptcha]
         public virtual async Task<IActionResult> EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
+        if (!await _permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_WISHLIST) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("Homepage");
 
             var customer = await _workContext.GetCurrentCustomerAsync();

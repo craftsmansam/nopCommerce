@@ -204,11 +204,9 @@ public partial class OrderController : BaseAdminController
         return RedirectToAction("List");
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> List(List<int> orderStatuses = null, List<int> paymentStatuses = null, List<int> shippingStatuses = null)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _orderModelFactory.PrepareOrderSearchModelAsync(new OrderSearchModel
         {
@@ -221,11 +219,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> OrderList(OrderSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _orderModelFactory.PrepareOrderListModelAsync(searchModel);
 
@@ -233,11 +229,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> ReportAggregates(OrderSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _orderModelFactory.PrepareOrderAggregatorModelAsync(searchModel);
 
@@ -246,6 +240,7 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("List")]
     [FormValueRequired("go-to-order-by-number")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> GoToOrderId(OrderSearchModel model)
     {
         var order = await _orderService.GetOrderByCustomOrderNumberAsync(model.GoDirectlyToCustomOrderNumber);
@@ -262,11 +257,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ExportXml")]
     [FormValueRequired("exportxml-all")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_IMPORT_EXPORT)]
     public virtual async Task<IActionResult> ExportXmlAll(OrderSearchModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var startDateValue = model.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -332,11 +325,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_IMPORT_EXPORT)]
     public virtual async Task<IActionResult> ExportXmlSelected(string selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var orders = new List<Order>();
         if (selectedIds != null)
         {
@@ -362,11 +353,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ExportExcel")]
     [FormValueRequired("exportexcel-all")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_IMPORT_EXPORT)]
     public virtual async Task<IActionResult> ExportExcelAll(OrderSearchModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var startDateValue = model.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -432,11 +421,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_IMPORT_EXPORT)]
     public virtual async Task<IActionResult> ExportExcelSelected(string selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var orders = new List<Order>();
         if (selectedIds != null)
         {
@@ -460,11 +447,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_IMPORT_EXPORT)]
     public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //a vendor cannot import orders
         if (await _workContext.GetCurrentVendorAsync() != null)
             return AccessDeniedView();
@@ -500,11 +485,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("cancelorder")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> CancelOrder(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -533,11 +516,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("captureorder")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> CaptureOrder(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -569,11 +550,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("markorderaspaid")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> MarkOrderAsPaid(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -602,11 +581,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("refundorder")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> RefundOrder(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -638,11 +615,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("refundorderoffline")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> RefundOrderOffline(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -671,11 +646,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("voidorder")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> VoidOrder(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -707,11 +680,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("voidorderoffline")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> VoidOrderOffline(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -738,11 +709,9 @@ public partial class OrderController : BaseAdminController
         }
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -760,11 +729,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [FormValueRequired("partialrefundorder")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online, OrderModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -823,11 +790,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("btnSaveOrderStatus")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> ChangeOrderStatus(int id, OrderModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -873,11 +838,9 @@ public partial class OrderController : BaseAdminController
 
     #region Edit, delete
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> Edit(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null || order.Deleted)
@@ -894,11 +857,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> Delete(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -917,11 +878,9 @@ public partial class OrderController : BaseAdminController
         return RedirectToAction("List");
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> PdfInvoice(int orderId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //a vendor should have access only to their orders
         if (!await HasAccessToOrderAsync(orderId))
             return RedirectToAction("List");
@@ -942,11 +901,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("PdfInvoice")]
     [FormValueRequired("pdf-invoice-all")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> PdfInvoiceAll(OrderSearchModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
         if (currentVendor != null)
@@ -1018,11 +975,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> PdfInvoiceSelected(string selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var orders = new List<Order>();
         if (selectedIds != null)
         {
@@ -1060,6 +1015,7 @@ public partial class OrderController : BaseAdminController
 
     //currently we use this method on the add product to order details pages
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> ProductDetails_AttributeChange(int productId, bool validateAttributeConditions, IFormCollection form)
     {
         var product = await _productService.GetProductByIdAsync(productId);
@@ -1098,11 +1054,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("btnSaveCC")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditCreditCardInfo(int id, OrderModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1147,11 +1101,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("btnSaveOrderTotals")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditOrderTotals(int id, OrderModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1191,11 +1143,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired("save-shipping-method")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditShippingMethod(int id, OrderModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1227,11 +1177,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnSaveOrderItem")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditOrderItem(int id, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1332,11 +1280,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnDeleteOrderItem")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> DeleteOrderItem(int id, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1400,11 +1346,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnResetDownloadCount")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> ResetDownloadCount(int id, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1435,11 +1379,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("Edit")]
     [FormValueRequired(FormValueRequirement.StartsWith, "btnPvActivateDownload")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> ActivateDownloadItem(int id, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1469,11 +1411,9 @@ public partial class OrderController : BaseAdminController
         return RedirectToAction("Edit", new { id = order.Id });
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> UploadLicenseFilePopup(int id, int orderItemId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1501,11 +1441,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost]
     [FormValueRequired("uploadlicense")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> UploadLicenseFilePopup(UploadLicenseModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(model.OrderId);
         if (order == null)
@@ -1536,11 +1474,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("UploadLicenseFilePopup")]
     [FormValueRequired("deletelicense")]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> DeleteLicenseFilePopup(UploadLicenseModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(model.OrderId);
         if (order == null)
@@ -1566,11 +1502,9 @@ public partial class OrderController : BaseAdminController
         return View(model);
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddProductToOrder(int orderId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId);
         if (order == null)
@@ -1587,11 +1521,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddProductToOrder(AddProductToOrderSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(searchModel.OrderId)
             ?? throw new ArgumentException("No order found with the specified id");
@@ -1606,11 +1538,9 @@ public partial class OrderController : BaseAdminController
         return Json(model);
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddProductToOrderDetails(int orderId, int productId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId)
             ?? throw new ArgumentException("No order found with the specified id");
@@ -1630,11 +1560,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddProductToOrderDetails(int orderId, int productId, AddProductToOrderModel model, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //a vendor does not have access to this functionality
         if (await _workContext.GetCurrentVendorAsync() != null)
             return RedirectToAction("Edit", "Order", new { id = orderId });
@@ -1775,11 +1703,9 @@ public partial class OrderController : BaseAdminController
 
     #region Addresses
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddressEdit(int addressId, int orderId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(orderId);
         if (order == null)
@@ -1800,11 +1726,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddressEdit(OrderAddressModel model, IFormCollection form)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(model.OrderId);
         if (order == null)
@@ -1859,11 +1783,9 @@ public partial class OrderController : BaseAdminController
 
     #region Shipments
 
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> ShipmentList()
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //prepare model
         var model = await _orderModelFactory.PrepareShipmentSearchModelAsync(new ShipmentSearchModel());
 
@@ -1871,11 +1793,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> ShipmentListSelect(ShipmentSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _orderModelFactory.PrepareShipmentListModelAsync(searchModel);
 
@@ -1883,11 +1803,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> ShipmentsByOrder(OrderShipmentSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(searchModel.OrderId)
             ?? throw new ArgumentException("No order found with the specified id");
@@ -1903,11 +1821,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> ShipmentsItemsByShipmentId(ShipmentItemSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(searchModel.ShipmentId)
             ?? throw new ArgumentException("No shipment found with the specified id");
@@ -1932,11 +1848,9 @@ public partial class OrderController : BaseAdminController
         return Json(model);
     }
 
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddShipment(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null)
@@ -1954,11 +1868,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
     [FormValueRequired("save", "save-continue")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> AddShipment(ShipmentModel model, IFormCollection form, bool continueEditing)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(model.OrderId);
         if (order == null)
@@ -2100,11 +2012,9 @@ public partial class OrderController : BaseAdminController
         return RedirectToAction("AddShipment", model);
     }
 
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> ShipmentDetails(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
         if (shipment == null)
@@ -2121,11 +2031,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> DeleteShipment(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
         if (shipment == null)
@@ -2168,11 +2076,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("settrackingnumber")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetTrackingNumber(ShipmentModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
         if (shipment == null)
@@ -2195,11 +2101,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setadmincomment")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetShipmentAdminComment(ShipmentModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
         if (shipment == null)
@@ -2217,11 +2121,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasshipped")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsShipped(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
         if (shipment == null)
@@ -2247,11 +2149,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("saveshippeddate")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditShippedDate(ShipmentModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
         if (shipment == null)
@@ -2282,11 +2182,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasreadyforpickup")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsReadyForPickup(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
         if (shipment == null)
@@ -2312,11 +2210,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("savereadyforpickupdate")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditReadyForPickupDate(ShipmentModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
         if (shipment == null)
@@ -2344,11 +2240,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("setasdelivered")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsDelivered(int id)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(id);
         if (shipment == null)
@@ -2374,11 +2268,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentDetails")]
     [FormValueRequired("savedeliverydate")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> EditDeliveryDate(ShipmentModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(model.Id);
         if (shipment == null)
@@ -2407,11 +2299,9 @@ public partial class OrderController : BaseAdminController
         }
     }
 
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> PdfPackagingSlip(int shipmentId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         //try to get a shipment with the specified id
         var shipment = await _shipmentService.GetShipmentByIdAsync(shipmentId);
         if (shipment == null)
@@ -2433,11 +2323,9 @@ public partial class OrderController : BaseAdminController
 
     [HttpPost, ActionName("ShipmentList")]
     [FormValueRequired("exportpackagingslips-all")]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> PdfPackagingSlipAll(ShipmentSearchModel model)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var startDateValue = model.StartDate == null ? null
             : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.StartDate.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync());
 
@@ -2489,11 +2377,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_VIEW)]
     public virtual async Task<IActionResult> PdfPackagingSlipSelected(string selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return AccessDeniedView();
-
         var shipments = new List<Shipment>();
         if (selectedIds != null)
         {
@@ -2528,11 +2414,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsShippedSelected(ICollection<int> selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
 
@@ -2560,11 +2444,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsReadyForPickupSelected(ICollection<int> selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
 
@@ -2592,11 +2474,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.SHIPMENTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> SetAsDeliveredSelected(ICollection<int> selectedIds)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
 
@@ -2628,11 +2508,9 @@ public partial class OrderController : BaseAdminController
     #region Order notes
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> OrderNotesSelect(OrderNoteSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //try to get an order with the specified id
         var order = await _orderService.GetOrderByIdAsync(searchModel.OrderId)
             ?? throw new ArgumentException("No order found with the specified id");
@@ -2647,11 +2525,9 @@ public partial class OrderController : BaseAdminController
         return Json(model);
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> OrderNoteAdd(int orderId, int downloadId, bool displayToCustomer, string message)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         if (string.IsNullOrEmpty(message))
             return ErrorJson(await _localizationService.GetResourceAsync("Admin.Orders.OrderNotes.Fields.Note.Validation"));
 
@@ -2686,11 +2562,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> OrderNoteDelete(int id, int orderId)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //try to get an order with the specified id
         _ = await _orderService.GetOrderByIdAsync(orderId)
             ?? throw new ArgumentException("No order found with the specified id");
@@ -2713,11 +2587,9 @@ public partial class OrderController : BaseAdminController
     #region Reports
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> BestsellersBriefReportByQuantityList(BestsellerBriefSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _orderModelFactory.PrepareBestsellerBriefListModelAsync(searchModel);
 
@@ -2725,11 +2597,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> BestsellersBriefReportByAmountList(BestsellerBriefSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //prepare model
         var model = await _orderModelFactory.PrepareBestsellerBriefListModelAsync(searchModel);
 
@@ -2737,11 +2607,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> OrderAverageReportList(OrderAverageReportSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //a vendor doesn't have access to this report
         if (await _workContext.GetCurrentVendorAsync() != null)
             return Content(string.Empty);
@@ -2753,11 +2621,9 @@ public partial class OrderController : BaseAdminController
     }
 
     [HttpPost]
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> OrderIncompleteReportList(OrderIncompleteReportSearchModel searchModel)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return await AccessDeniedDataTablesJson();
-
         //a vendor doesn't have access to this report
         if (await _workContext.GetCurrentVendorAsync() != null)
             return Content(string.Empty);
@@ -2768,11 +2634,9 @@ public partial class OrderController : BaseAdminController
         return Json(model);
     }
 
+    [CheckPermission(StandardPermission.Orders.ORDERS_VIEW)]
     public virtual async Task<IActionResult> LoadOrderStatistics(string period)
     {
-        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
-            return Content(string.Empty);
-
         //a vendor doesn't have access to this report
         if (await _workContext.GetCurrentVendorAsync() != null)
             return Content(string.Empty);
