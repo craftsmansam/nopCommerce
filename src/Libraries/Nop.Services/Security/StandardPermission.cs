@@ -148,5 +148,8 @@ public partial class StandardPermission
         public const string ENABLE_WISHLIST = $"{nameof(PublicStore)}.EnableWishlist";
         public const string PUBLIC_STORE_ALLOW_NAVIGATION = $"{nameof(PublicStore)}.PublicStoreAllowNavigation";
         public const string ACCESS_CLOSED_STORE = $"{nameof(PublicStore)}.AccessClosedStore";
+
+        public const string PICTURE_VAULT = $"{nameof(PublicStore)}.PictureVault";
+        public const string ALBINA_INVOICE = $"{nameof(PublicStore)}.AlbinaInvoice";
     }
 }
