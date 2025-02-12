@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Nop.Services.AlbinaUnsubscribe
+﻿namespace Nop.Services.AlbinaUnsubscribe
 {
     public interface IUnsubscribeService
     {

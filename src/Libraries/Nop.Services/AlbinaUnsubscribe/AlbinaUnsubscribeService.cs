@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using LinqToDB;
+﻿using LinqToDB;
 using LinqToDB.Data;
 using Nop.Data;
 

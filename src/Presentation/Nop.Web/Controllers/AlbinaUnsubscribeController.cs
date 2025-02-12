@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Craftsman.Mail;
+﻿using Craftsman.Mail;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Services.AlbinaUnsubscribe;
 
