@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Services.AlbinaInvoice;
 using Nop.Services.Security;
+using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Models.AlbinaInvoice;
 
 namespace Nop.Web.Controllers
@@ -27,10 +28,9 @@ namespace Nop.Web.Controllers
             _invoiceService = invoiceService;
         }
 
+        [CheckPermission(StandardPermission.PublicStore.ALBINA_INVOICE)]
         public async Task<IActionResult> InvoiceListAsync()
         {
-            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.AlbinaInvoice)))
-                return Challenge();
 
             var customer = await _workContext.GetCurrentCustomerAsync();
             var itemsTable = await _invoiceService.CustomerListInvoicesAsync(customer.SalesContactID);
@@ -48,10 +48,9 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        [CheckPermission(StandardPermission.PublicStore.ALBINA_INVOICE)]
         public async Task<IActionResult> ShowInvoiceAsync(string cscid, string id)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.AlbinaInvoice))
-                return Challenge();
 
             var customer = await _workContext.GetCurrentCustomerAsync();
 
