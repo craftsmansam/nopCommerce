@@ -620,7 +620,7 @@ using SkiaSharp;
      /// <returns>A task that represents the asynchronous operation</returns>
      public virtual async Task SaveFileAsync(string directoryPath, string fileName, string contentType, Stream fileStream)
      {
-         var uniqueFileName = GetUniqueFileName(directoryPath, Path.GetFileName(fileName));
+         //var uniqueFileName = GetUniqueFileName(directoryPath, Path.GetFileName(fileName));
          var destinationFile = Path.Combine(directoryPath, fileName);
 
          await using var stream = new FileStream(GetFullPath(destinationFile), FileMode.Create);
