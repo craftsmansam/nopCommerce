@@ -738,7 +738,8 @@ public partial class CommonModelFactory : ICommonModelFactory
             {
                 StoreName = store.Name,
                 Url = await _nopUrlHelper
-                    .RouteGenericUrlAsync<TEntity>(new { SeName = seName }, url.Scheme, url.IsDefaultPort ? url.Host : $"{url.Host}:{url.Port}"),
+                    .RouteGenericUrlAsync<TEntity>(new { SeName = seName }),
+                //preview will not work their way if security certificate is invalid in dev
             });
         }
 
