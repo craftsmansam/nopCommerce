@@ -155,6 +155,9 @@ public class AclMigration : Migration
         insertMappings("PublicStoreAllowNavigation", StandardPermission.PublicStore.PUBLIC_STORE_ALLOW_NAVIGATION);
         insertMappings("AccessClosedStore", StandardPermission.PublicStore.ACCESS_CLOSED_STORE);
 
+        insertMappings("PictureVault", StandardPermission.PublicStore.PICTURE_VAULT);
+        insertMappings("AlbinaInvoice", StandardPermission.PublicStore.ALBINA_INVOICE);
+
         insertMappings("EnableMultiFactorAuthentication", StandardPermission.Security.ENABLE_MULTI_FACTOR_AUTHENTICATION);
 
         //add new permissions for vendors

@@ -12,6 +12,7 @@ using Nop.Core.Domain.Media;
 using Nop.Services.Configuration;
 using Nop.Services.PictureVault;
 using Nop.Services.Security;
+using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Models.PictureVault;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
@@ -38,11 +39,9 @@ namespace Nop.Web.Controllers
             _settingService = settingService;
         }
 
+        [CheckPermission(StandardPermission.PublicStore.PICTURE_VAULT)]
         public async Task<IActionResult> BrowsePictureVaultAsync()
         {
-            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
-                return Challenge();
-
             var customer = await _workContext.GetCurrentCustomerAsync();
 
             var model = new BrowsePictureVaultModel();
@@ -52,11 +51,9 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        [CheckPermission(StandardPermission.PublicStore.PICTURE_VAULT)]
         public async Task<IActionResult> PictureVaultAsync(string po)
         {
-            if (!(await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault)))
-                return Challenge();
-
             var customer = await _workContext.GetCurrentCustomerAsync();
             var itemsTable = await _pictureVaultService.CustomerListPictureVaultItemsAsync(customer.SalesContactID, po);
 
@@ -121,11 +118,9 @@ namespace Nop.Web.Controllers
             return await ShowItemAsync(cscid, id, ShowPictureImplAsync);
         }
 
+        [CheckPermission(StandardPermission.PublicStore.ALBINA_INVOICE)]
         private async Task<IActionResult> ShowItemAsync(string cscid, string id, Func<MimeType, string, Task<IActionResult>> showImpl)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.PictureVault))
-                return Challenge();
-
             var customer = await _workContext.GetCurrentCustomerAsync();
 
             Check.RequireNotNull(customer.SalesContactID);

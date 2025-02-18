@@ -3,7 +3,7 @@
   "FriendlyName": "WebP/AVIF images",
   "SystemName": "FoxNetSoft.WebPImages",
   "Version": "2.04",
-  "SupportedVersions": [ "4.70" ],
+  "SupportedVersions": [ "4.80" ],
   "Author": "FoxNetSoft",
   "DisplayOrder": 1,
   "FileName": "FoxNetSoft.Plugin.Misc.WebPImages.dll",

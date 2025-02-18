@@ -5,7 +5,7 @@
 @{
     Layout = "_Root.Head";
 
-    var shoppingCartEnabled = await permissionService.AuthorizeAsync(StandardPermissionProvider.EnableShoppingCart);
+    var shoppingCartEnabled = await permissionService.AuthorizeAsync(StandardPermission.PublicStore.ENABLE_SHOPPING_CART);
 }
 
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
