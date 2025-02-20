@@ -738,110 +738,115 @@
         }
     }
 
-    function handleHomePageVideoPlayer() {
-        
-        function initYoutubePlayer() {
-            player = new YT.Player('video-iframe', {
-                events: {
-                    'onStateChange': function (state) {
-                        if (state.data === 0) {
+  function handleHomePageVideoPlayer() {
 
-                            isPlayerRunning = false;
+    function initYoutubePlayer() {
+      player = new YT.Player('video-iframe', {
+        events: {
+          'onStateChange': function (state) {
+            if (state.data === 0) {
 
-                            player.destroy();
-                        }
-                    }
-                }
-            });
-        }
+              isPlayerRunning = false;
 
-        function initVimeoPlayer(startTime) {
-            player = new Vimeo.Player('video-iframe');
-
-            player.setVolume(0);
-
-            if (startTime && startTime > 0) {
-
-                player.setCurrentTime(startTime);
+              player.destroy();
             }
+          }
+        }
+      });
+    }
 
-            player.on('ended', function () {
+    function initVimeoPlayer(startTime) {
+      player = new Vimeo.Player('video-iframe');
 
-                isPlayerRunning = false;
+      player.setVolume(0);
 
-                iFrame.remove();
-            });
+      if (startTime && startTime > 0) {
+
+        player.setCurrentTime(startTime);
+      }
+
+      player.on('ended', function () {
+
+        isPlayerRunning = false;
+
+        iFrame.remove();
+      });
+    }
+
+    //do the video player functionality by class to get every item since id must be unique
+    var playerElementCollection = $('.video-player');
+    playerElementCollection.each(function () {
+      var playerElement = $(this);
+
+      if (playerElement.length === 0) {
+
+        return;
+      }
+
+      var platformUrl = playerElement.attr('data-platform-url');
+      var videoId = playerElement.attr('data-id');
+      var startTime = playerElement.attr('data-start-time');
+
+      var isPlayerRunning = false;
+      var player;
+      var iFrame;
+      var videoSettings;
+
+      if (platformUrl.indexOf('youtube') !== -1) {
+
+        // Embed video options
+        videoSettings = {
+          autoplay: 1,
+          controls: 0,
+          rel: 0,
+          showinfo: 0,
+          iv_load_policy: 3,
+          mute: 1,
+          enablejsapi: 1,
+          start: startTime
+        };
+
+      } else if (platformUrl.indexOf('vimeo') !== -1) {
+
+        // Embed video options
+        videoSettings = {
+          autoplay: 1,
+          byline: 0,
+          portrait: 0,
+          title: 0,
+          background: 1
+        };
+      }
+
+      playerElement.on('click', function () {
+
+        if (isPlayerRunning) {
+
+          return;
         }
 
-        var playerElement = $('#video-player');
+        isPlayerRunning = true;
 
-        if (playerElement.length === 0) {
+        iFrame = $('<iframe>', {
+          src: platformUrl + videoId + '?' + $.param(videoSettings),
+          id: 'video-iframe',
+          frameborder: 0,
+          allowfullscreen: 1
+        });
 
-            return;
-        }
-
-        var platformUrl = playerElement.attr('data-platform-url');
-        var videoId = playerElement.attr('data-id');
-        var startTime = playerElement.attr('data-start-time');
-
-        var isPlayerRunning = false;
-        var player;
-        var iFrame;
-        var videoSettings;
+        iFrame.appendTo(playerElement).show('slow');
 
         if (platformUrl.indexOf('youtube') !== -1) {
 
-            // Embed video options
-            videoSettings = {
-                autoplay: 1,
-                controls: 0,
-                rel: 0,
-                showinfo: 0,
-                iv_load_policy: 3,
-                mute: 1,
-                enablejsapi: 1,
-                start: startTime
-            };
+          initYoutubePlayer();
 
         } else if (platformUrl.indexOf('vimeo') !== -1) {
 
-            // Embed video options
-            videoSettings = {
-                autoplay: 1,
-                byline: 0,
-                portrait: 0,
-                title: 0,
-                background: 1
-            };
+          initVimeoPlayer(startTime);
         }
-
-        playerElement.on('click', function () {
-
-            if (isPlayerRunning) {
-
-                return;
-            }
-
-            isPlayerRunning = true;
-
-            iFrame = $('<iframe>', {
-                src: platformUrl + videoId + '?' + $.param(videoSettings),
-                id: 'video-iframe',
-                frameborder: 0,
-                allowfullscreen: 1
-            });
-
-            iFrame.appendTo(playerElement).show('slow');
-
-            if (platformUrl.indexOf('youtube') !== -1) {
-
-                initYoutubePlayer();
-
-            } else if (platformUrl.indexOf('vimeo') !== -1) {
-                
-                initVimeoPlayer(startTime);
-            }
-        });
+      });
+    });
+      
     }
 
 })(jQuery, cookieHelper);
