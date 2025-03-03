@@ -934,6 +934,11 @@ public partial class CheckoutController : BasePublicController
                 return RedirectToRoute("CheckoutPaymentMethod");
             }
 
+            if (model.ShippingMethods.Count == 0)
+            {
+                return RedirectToRoute("CheckoutShippingAddress");
+            }
+
             return View(model);
         }
 
