@@ -2788,8 +2788,8 @@ public partial class WorkflowMessageService : IWorkflowMessageService
         var email = new QueuedEmail
         {
             Priority = QueuedEmailPriority.High,
-            From = !string.IsNullOrEmpty(fromEmail) ? fromEmail : emailAccount.Email,
-            FromName = !string.IsNullOrEmpty(fromName) ? fromName : emailAccount.DisplayName,
+            From = "admin@albinaco.com",
+            FromName = "Albina Site Notification",
             To = toEmailAddress,
             ToName = toName,
             ReplyTo = replyToEmailAddress,
