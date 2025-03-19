@@ -121,10 +121,10 @@ namespace Nop.Web.Controllers
 
                 foreach (var formFile in files)
                 {
-                    
                     var fileName = SaveFileToServer(formFile.OpenReadStream(), formFile.FileName);
                     attachments.Add(fileName);
                 }
+                
                 if (model.IncludeSpiral)
                 {
                     var spiralFileName = SpiralMathReportHelper.SpiralMathReportCacheFileName(_albinaConfig.SpiralMathReportCache, customer.CustomerGuid.ToString());
