@@ -1220,6 +1220,10 @@ label, label + * {
   background-position: -152px 0;
 }
 
+.follow-us .social .tiktok a {
+    background: url('../images/tiktok_site.png') no-repeat;
+}
+
 .newsletter-email {
   display: inline-block;
   overflow: hidden;

@@ -1802,6 +1802,12 @@ body:after {
 .social-sharing .instagram:before {
     content: 'p';
 }
+.social-sharing .tiktok:before {
+    background: url('../../../DefaultClean/Content/images/tiktok.png') no-repeat center;
+}
+.social-sharing .tiktok:hover::before {
+  background: url('../../../DefaultClean/Content/images/tiktok_hover.png') no-repeat center;
+}
 .social-sharing .youtube:before {
     content: 'G';
     font-size: 26px;
