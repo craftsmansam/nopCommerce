@@ -1,11 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Albina.SpiralMath;
-using Microsoft.AspNetCore.Http;
+﻿using Albina.SpiralMath;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Security;
@@ -109,8 +103,7 @@ namespace Nop.Web.Controllers
                 var subject = "Bending and Fabrication Quote Request from " + model.CompanyName;
                 var body = "Company Name: " + model.CompanyName + "\n\nContact Name: " + model.Contact + "\n\nPhone: " + model.Phone + 
                     "\n\nEmail: " + model.Email + "\n\nFax: " + model.Fax + "\n\nAddress: " + model.Address + "\n\nCity: " + model.City  +
-                    "\n\nState: " + model.State + "\n\nZip: " + model.ZipCode + "\n\nWhere did you hear about us: " + 
-                    model.WhereHeardList.Single(x => x.Value == model.WhereHeard).Text + "\n\nProject Description:\n" +
+                    "\n\nState: " + model.State + "\n\nZip: " + model.ZipCode + "\n\nProject Description:\n" +
                     model.ProjectDescription + "\n\nProject Name: " + model.ProjectName + "\n\nBid Deadline: " + model.BidDeadline +
                     "\n\nMaterial Size/Type: " + model.MaterialType + "\n\nQuantity: " + model.Quantity + "\n\nNotes: " + model.Notes;
                 var bodyFormatted = _htmlFormatter.FormatText(body, false, true, false, false, false, false);

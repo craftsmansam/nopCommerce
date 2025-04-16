@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.ComponentModel.DataAnnotations;
 using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.QuoteRequest
@@ -42,24 +40,6 @@ namespace Nop.Web.Models.QuoteRequest
 
         [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
-
-        [Display(Name = "Where did you hear about us?")]
-        public string WhereHeard { get; set; }
-
-        public IEnumerable<SelectListItem> WhereHeardList => 
-            new List<SelectListItem>()
-            {
-                new SelectListItem("", "0"),
-                new SelectListItem("ThomasNet", "1"),
-                new SelectListItem("Modern Steel", "2"),
-                new SelectListItem("Company Referral", "3"),
-                new SelectListItem("Tradeshow", "4"),
-                new SelectListItem("Mailers/Brochures", "5"),
-                new SelectListItem("Trade Publications", "6"),
-                new SelectListItem("Salesperson Contact (Brad Lund)", "7"),
-                new SelectListItem("Social Media (Facebook, twitter, linked-in)", "8"),
-                new SelectListItem("Other", "9")
-            };
 
         [Display(Name = "Description of Project")]
         public string ProjectDescription { get; set; }
