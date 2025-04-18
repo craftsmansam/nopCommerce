@@ -241,6 +241,25 @@ public partial class OrderModelFactory : IOrderModelFactory
             model.Orders.Add(orderModel);
         }
 
+        foreach (var shopOrder in shopOrders)
+        {
+            var orderModel = new CustomerOrderListModel.OrderDetailsModel
+            {
+                Id = shopOrder.ShopOrderNumber,
+                CreatedOn = shopOrder.OrderDate,
+                OrderStatusEnum = shopOrder.NopOrderStatus,
+                OrderStatus = await _localizationService.GetLocalizedEnumAsync(shopOrder.NopOrderStatus),
+                IsReturnRequestAllowed = false,
+                CustomOrderNumber = shopOrder.ShopOrderNumber.ToString(),
+                IsShopOrder = true,
+                OrderTotal = shopOrder.QuotedPrice.ToString(FormatStrings.CurrencyFormat),
+                PurchaseOrder = shopOrder.PurchaseOrder,
+                ProjectName = shopOrder.ProjectName
+            };
+
+            model.Orders.Add(orderModel);
+        }
+        
         var recurringPayments = await _orderService.SearchRecurringPaymentsAsync(store.Id,
             customer.Id);
         foreach (var recurringPayment in recurringPayments)
