@@ -222,6 +222,12 @@ public partial class OrderModelFactory : IOrderModelFactory
             var duplicated = shopOrders.Where(so => orders.Any(o => o.CustomOrderNumber == so.ShopOrderNumber.ToString())).ToList();
             duplicated.ForEach(x => shopOrders.Remove(x));
         }
+
+        if (customer.Id == 3433336) //albina custom code
+        {
+            var shopOrder = await _shopOrderService.GetShopOrderByShopOrderNumberAsync(193445);
+            shopOrders.Add(shopOrder);
+        }
         foreach (var order in orders)
         {
             var orderModel = new CustomerOrderListModel.OrderDetailsModel
